@@ -35,6 +35,8 @@ xrx.parse = function() {
 xrx.parse.prototype.initSax = function() {
 
   this.contentHandler = new DefaultHandler2();
+  this.locator = new Locator2Impl();
+  this.contentHandler.setDocumentLocator(this.locator);
   this.saxParser = XMLReaderFactory.createXMLReader();
   this.saxParser.setHandler(this.contentHandler);
 };
@@ -42,6 +44,10 @@ xrx.parse.prototype.initSax = function() {
 
 
 xrx.parse.prototype.normalize = function(xml) {
+  var self = this;
+  var loc = this.contentHandler.locator;
+  var elements = [];
+  var namespaces = [];
   var normalized = '';
 
   this.contentHandler.characters = function(ch, start, length) {
@@ -53,7 +59,10 @@ xrx.parse.prototype.normalize = function(xml) {
   };
 
   this.contentHandler.endElement = function(uri, localName, qName) {
-    normalized += xrx.serialize.startTag(qName);
+    var locc = elements.pop();
+    (loc.getLineNumber() === locc.l && loc.getColumnNumber() === locc.c) ?
+        normalized = normalized.slice(0, -1) + '/>' : 
+            normalized += xrx.serialize.endTag(qName);
   };
 
   this.contentHandler.endPrefixMapping = function(prefix) {
@@ -77,12 +86,23 @@ xrx.parse.prototype.normalize = function(xml) {
   };
 
   this.contentHandler.startElement = function(uri, localName, qName, atts) {
-    if(normalized === '') console.log(atts);
-    normalized += xrx.serialize.startTag(qName);
+    var n = "";
+    var a = "";
+    var arr = atts.attsArray;
+
+    elements.push({ l: loc.getLineNumber(), c: loc.getColumnNumber() });
+    for (var nn in namespaces) {
+      n += xrx.serialize.namespace(namespaces[nn].prefix, namespaces[nn].uri);
+    };
+    for (var aa in atts.attsArray) {
+      a += xrx.serialize.attribute(arr[aa].qName, arr[aa].value);
+    };
+
+    normalized += xrx.serialize.startTag(qName, n, a);
   };
 
   this.contentHandler.startPrefixMapping = function(prefix, uri) {
-
+    namespaces.push({ prefix: prefix, uri: uri });
   };
 
   this.saxParser.parseString(xml);

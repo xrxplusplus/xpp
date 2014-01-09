@@ -1,4 +1,0 @@
-<data att1="value1" att2="value2">
-  <empty/>
-  <whitespace>text<p>text</p> <p> </p> </whitespace>
-</data>

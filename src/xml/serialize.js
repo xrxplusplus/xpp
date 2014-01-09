@@ -14,8 +14,27 @@ xrx.serialize = {};
 
 
 
-xrx.serialize.startTag = function(qName) {
-  return '<' + qName + '>';
+xrx.serialize.attribute = function(qName, value) {
+  return ' ' + qName + '="' + value.replace(/\"/g, "'") + '"';
+}; 
+
+
+
+xrx.serialize.startTag = function(qName, namespaces, attributes) {
+  return '<' + qName + namespaces + attributes + '>';
+};
+
+
+
+xrx.serialize.endTag = function(qName) {
+  return '</' + qName + '>';
+};
+
+
+
+xrx.serialize.namespace = function(prefix, uri) {
+  var pr = prefix ? 'xmlns:' : 'xmlns';
+  return ' ' + pr + prefix + '="' + uri + '"';
 };
 
 

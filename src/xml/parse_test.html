@@ -5,6 +5,7 @@
 <script src='../../lib/closure-library/closure/goog/base.js'></script>
 <script type="text/javascript" src="../../lib/codemirror/lib/codemirror.js"></script>
 <link rel="stylesheet" href="../../lib/codemirror/lib/codemirror.css"/>
+<script type="text/javascript" src="../../lib/jssaxparser/LocatorImpls.js"></script>
 <script type="text/javascript" src="../../lib/jssaxparser/NamespaceSupport.js"></script>
 <script type="text/javascript" src="../../lib/jssaxparser/sax.js"></script>
 <script type="text/javascript" src="../../lib/jssaxparser/DefaultHandlers.js"></script>
@@ -22,10 +23,8 @@
 
 <script type="text/javascript">
 
-var parser = new xrx.parse();
-
-
-function test01basic() {
+function test01remote() {
+  var parser = new xrx.parse();
   var input;
   var request = new goog.net.XhrIo();
   var normalized;
@@ -36,15 +35,43 @@ function test01basic() {
     normalized = parser.normalize(input);
   });
 
-  request.send('../../data/hamlet.xml.txt', 'POST');
+  request.send('../../data/hamlet.xml.txt', 'GET');
 };
 
-function test02normalization() {
-  var xhr = goog.labs.net.xhr;
-  var input = xhr.get('./data/parse_test_input.xml.txt');
-  var output = xhr.get('./data/parse_test_output.xml.txt');
+function test02emptyElement() {
+  var parser = new xrx.parse();
+  var input = '<test>text<empty/>text</test>';
+  var output = parser.normalize(input);
+  assertEquals(input, output);
+};
 
-  
+function test03namespace() {
+  var parser = new xrx.parse();
+  var input = '<n:test xmlns:n="http://example.org/n" xmlns:m="http://example.org/m"></n:test>';
+  var output = parser.normalize(input);
+  assertEquals(input, output);
+};
+
+function test04defaultNamespace() {
+  var parser = new xrx.parse();
+  var input = '<test xmlns="http://example.org"/>';
+  var output = parser.normalize(input);
+  assertEquals(input, output);
+};
+
+function test05attributes() {
+  var parser = new xrx.parse();
+  var input = '<test attr1="value1" attr2="value2"/>';
+  var output = parser.normalize(input);
+  assertEquals(input, output);
+};
+
+function test06singelQuotes() {
+  var parser = new xrx.parse();
+  var input = "<test attr='\"'/>";
+  var output = '<test attr="\'"/>';
+  var normalized = parser.normalize(input);
+  assertEquals(normalized, output);
 };
 
 </script>
