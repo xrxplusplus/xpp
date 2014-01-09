@@ -7,7 +7,7 @@ goog.addDependency('../../../../src/core/xrx.js', ['xrx'], ['goog.dom', 'xrx.bin
 goog.addDependency('../../../../src/model/bind.js', ['xrx.bind'], ['xrx.model', 'xrx.xpath']);
 goog.addDependency('../../../../src/model/component.js', ['xrx.component'], ['goog.events.EventHandler', 'goog.ui.IdGenerator']);
 goog.addDependency('../../../../src/model/controller.js', ['xrx.controller'], ['xrx.update']);
-goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'xrx.model', 'xrx.node', 'xrx.pilot']);
+goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.model', 'xrx.node', 'xrx.pilot']);
 goog.addDependency('../../../../src/model/model.js', ['xrx.model'], ['xrx.component']);
 goog.addDependency('../../../../src/view/codemirror.js', ['xrx.codemirror'], ['xrx.model', 'xrx.view']);
 goog.addDependency('../../../../src/view/console.js', ['xrx.console'], ['goog.dom', 'xrx.serialize', 'xrx.view']);
@@ -23,6 +23,7 @@ goog.addDependency('../../../../src/view/view.js', ['xrx.view'], ['goog.string',
 goog.addDependency('../../../../src/xml/index.js', ['xrx.index'], ['goog.math.Long', 'xrx.node', 'xrx.tree']);
 goog.addDependency('../../../../src/xml/label.js', ['xrx.label'], []);
 goog.addDependency('../../../../src/xml/location.js', ['xrx.location'], []);
+goog.addDependency('../../../../src/xml/parse.js', ['xrx.parse'], ['xrx.serialize']);
 goog.addDependency('../../../../src/xml/pilot.js', ['xrx.pilot'], ['xrx.label', 'xrx.stream', 'xrx.token', 'xrx.token.AttrName', 'xrx.token.AttrValue', 'xrx.token.Attribute', 'xrx.token.EmptyTag', 'xrx.token.EndTag', 'xrx.token.Namespace', 'xrx.token.NotTag', 'xrx.token.NsPrefix', 'xrx.token.NsUri', 'xrx.token.Root', 'xrx.token.StartEmptyTag', 'xrx.token.StartTag', 'xrx.token.Tag', 'xrx.token.TagName']);
 goog.addDependency('../../../../src/xml/reader.js', ['xrx.reader'], []);
 goog.addDependency('../../../../src/xml/serialize.js', ['xrx.serialize'], ['xrx.stream', 'xrx.token']);

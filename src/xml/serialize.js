@@ -14,6 +14,12 @@ xrx.serialize = {};
 
 
 
+xrx.serialize.startTag = function(qName) {
+  return '<' + qName + '>';
+};
+
+
+
 xrx.serialize.indent = function(xml, indent) {
   var stream = new xrx.stream(xml);
   var level = 0;

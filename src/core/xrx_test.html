@@ -2,6 +2,8 @@
 <html>
 <head>
 <title>XRX++ Unit Tests - xrx</title>
+<script src='../../lib/codemirror/lib/codemirror.js'></script>
+<link rel="stylesheet" href="../../lib/codemirror/lib/codemirror.css"/>
 <script src='../../lib/closure-library/closure/goog/base.js'></script>
 <script src='../deps.js'></script>
 <script type="text/javascript">
@@ -9,6 +11,7 @@
   goog.require('goog.testing.jsunit');
   goog.require('xrx');
   goog.require('xrx.node');
+  goog.require('xrx.node.DocumentS');
   goog.require('xrx.pilot');
   goog.require('xrx.xpath');
 </script>
@@ -21,8 +24,7 @@
 <script type="text/javascript">
 
 var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
-var pilot = new xrx.pilot(xml);
-var node = new xrx.node.Document(pilot);
+var node = new xrx.node.DocumentS();
 
 function test01FnInstance() {
 

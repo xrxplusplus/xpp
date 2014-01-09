@@ -28,7 +28,6 @@ goog.require('xrx.token');
  *   checks
  * <li>the streamer expects the XML document or fragment serialized 
  *   as a string
- * <li>the string must be encoded in UTF-8
  * <li>whitespace must already be normalized and collapsed before 
  *   streaming starts
  * <li>the streamer expects the XML document without any indentation

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRX++ Unit Tests - xrx.parse</title>
+<script src='../../lib/closure-library/closure/goog/base.js'></script>
+<script type="text/javascript" src="../../lib/codemirror/lib/codemirror.js"></script>
+<link rel="stylesheet" href="../../lib/codemirror/lib/codemirror.css"/>
+<script type="text/javascript" src="../../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../../lib/jssaxparser/DefaultHandlers.js"></script>
+<script src='../deps.js'></script>
+<script type="text/javascript">
+  goog.require('goog.labs.net.xhr');
+  goog.require('goog.net.XhrIo');
+  goog.require('goog.result');
+  goog.require('goog.testing.jsunit');
+  goog.require('xrx');
+  goog.require('xrx.parse');
+</script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var parser = new xrx.parse();
+
+
+function test01basic() {
+  var input;
+  var request = new goog.net.XhrIo();
+  var normalized;
+
+  goog.events.listen(request, 'complete', function() {
+    input = request.getResponseText();
+
+    normalized = parser.normalize(input);
+  });
+
+  request.send('../../data/hamlet.xml.txt', 'POST');
+};
+
+function test02normalization() {
+  var xhr = goog.labs.net.xhr;
+  var input = xhr.get('./data/parse_test_input.xml.txt');
+  var output = xhr.get('./data/parse_test_output.xml.txt');
+
+  
+};
+
+</script>
+</body>
+</html>

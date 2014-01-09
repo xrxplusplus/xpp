@@ -100,6 +100,16 @@ xrx.component.prototype.getBindId = function() {
 
 
 /**
+ * Gets the source URI found in the component's data-xrx-src attribute.
+ * @return {?string} The source URI.
+ */
+xrx.component.prototype.getSrcUri = function() {
+  return this.getElement().getAttribute('data-xrx-src');
+};
+
+
+
+/**
  * Gets the bind referenced by the component.
  * @return {?xrx.bind} The bind.
  */
