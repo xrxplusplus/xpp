@@ -1,5 +1,5 @@
 /**
- * @fileoverview Class for XML serialization.
+ * @fileoverview A class for XML serialization.
  */
 
 goog.provide('xrx.serialize');
@@ -28,6 +28,12 @@ xrx.serialize.startTag = function(qName, namespaces, attributes) {
 
 xrx.serialize.endTag = function(qName) {
   return '</' + qName + '>';
+};
+
+
+
+xrx.serialize.startEndTag = function(qName, namespaces, attributes) {
+  return '<' + qName + namespaces + attributes;
 };
 
 

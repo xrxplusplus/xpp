@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRX++ Benchmark Tests - xrx.reader</title>
+<script src='../../lib/closure-library/closure/goog/base.js'></script>
+<link rel="stylesheet" type="text/css" 
+    href="../../lib/closure-library/closure/goog/testing/performancetable.css" />
+<script src='../../src/deps.js'></script>
+<script src='./reader_bench.js'></script>
+<script type="text/javascript">  
+  goog.require('goog.net.XhrIo');
+  goog.require('goog.testing.PerformanceTable');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent.product');
+  goog.require('xrx.reader');
+</script>
+
+<script>
+  if (goog.userAgent.product.CHROME &&
+      window.location.toString().indexOf('file:') == 0) {
+    document.write(
+        '<div class="warning">' +
+        'WARNING: Due to Chrome\'s security restrictions ' +
+        'this test will not be able to load files off your local disk ' +
+        'unless you start Chrome with:<br>' +
+        '<code>--allow-file-access-from-files</code></div><br>');
+  }
+</script>
+
+</head>
+<body>
+<div id="perfTable"></div>
+<script type="text/javascript">
+
+var table = new goog.testing.PerformanceTable(
+    goog.dom.getElement('perfTable'));
+
+function test01Forward() {
+  var request = new goog.net.XhrIo();
+  var xml;
+
+  goog.events.listen(request, 'complete', function() {
+    xml = request.getResponseText();
+
+    table.run(
+        goog.partial(readForward, xml),
+          'Forward 6MB (5.7MB)');
+  });
+
+  request.send('../../data/6MB.xml.txt', 'GET');
+};
+
+function test02Backward() {
+  var request = new goog.net.XhrIo();
+  var xml;
+
+  goog.events.listen(request, 'complete', function() {
+    xml = request.getResponseText();
+
+    table.run(
+        goog.partial(readBackward, xml),
+          'Backward 6MB.xml (5.7MB)');
+  });
+
+  request.send('../../data/6MB.xml.txt', 'GET');
+};
+
+</script>
+</body>
+</html>
+
+
+

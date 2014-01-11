@@ -10,6 +10,7 @@ var _allTests = [
     "./view/textarea_test.html",
     "./view/view_test.html",
     "./xml/label_test.html", // xml
+    "./xml/parse_test.html",
     "./xml/pilot_test.html",
     "./xml/reader_test.html",
     "./xml/stream_test.html",

@@ -76,6 +76,7 @@ function test1Forward350kb() {
 function test2Backward350kb() {
 
   table.run(
+:if expand("%") == ""|browse confirm w|else|confirm w|endif
       goog.partial(readBackward, getData('data-350kb')),
       'Backward 350kb');
 };

@@ -16,56 +16,9 @@ goog.require('xrx.token');
 
 /**
  * A class to stream over XML documents or XML fragments.
- * <br/>
- * <br/>
- * <b>IMPORTANT NOTE: This class represents a XML streamer and not a 
- *   XML parser! The streamer is different from a XML parser in the 
- *   following respects:</b>
- * <br/>
- * <br/>  
- * <li>the XML input document or fragment must be well-formed before 
- *   streaming starts. The streamer itself does not do any well-formed 
- *   checks
- * <li>the streamer expects the XML document or fragment serialized 
- *   as a string
- * <li>whitespace must already be normalized and collapsed before 
- *   streaming starts
- * <li>the streamer expects the XML document without any indentation
- * <br/><br/>
- * These restrictions are intended by design, finally to reach optimal
- * performance and to reach full XML support in browsers. For more 
- * background about parsing see e.g.:
- * <li><a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=4623219">
- *   XML Document Parsing: Operational and Performance Characteristics</a>
- * <br/>
- * <br/>
- * <b>String conversion, encoding conversion, whitespace
- *   normalization as well as indentation can best be prepared with the 
- *   XQuery and XPath 3.0 serialization feature. Example XQuery script:</b>
- * <pre>---
- *xquery version "3.0";
- *
- *declare option output:method "xml";
- *declare option output:encoding "UTF-8";
- *declare option output:indent "no";
- *
- *declare variable $xml := &lt;someXml/&gt;;
- *
- *fn:serialize($xml)
- *---</pre>
- * The output of this XQuery script is exactly what the streamer expects.
- * <br/>
- * <br/>
- * See also: 
- * <li><a href="http://www.w3.org/TR/xslt-xquery-serialization-30/">
- *   XSLT and XQuery Serialization 3.0</a>
- * <li><a href="../../src/agent/xrx2html.xql">XRX++ XQuery Agent</a>
- * <li><a href="../../src/agent/xrx2html.xsl">XRX++ XSLT Agent (For
- *   development only, only runs in modern browsers with full XML 
- *   support)</a>
  *   
  * @param {!string} xml A well-formed, normalized XML document or
- * XML fragment serialized as UTF-8 string.
+ * XML fragment. Make sure that the input is parsed with
  * @constructor
  */
 xrx.stream = function(xml) {
@@ -81,11 +34,33 @@ xrx.stream = function(xml) {
   
 
   /**
-   * Weather the stream is stopped.
+   * Whether the stream is stopped.
    * @type {boolean}
    * @private
    */
   this.stopped_ = false;
+
+
+
+  /**
+   * @private
+   */
+  this.features_ = {
+    TAG_NAME: false,
+    ATTRIBUTE: false,
+    ATTR_NAME: false,
+    ATTR_VALUE: false,
+    NAMESPACE: false,
+    NS_PREFIX: false,
+    NS_URI: false
+  }
+
+
+  /**
+   * Whether at least one feature is on.
+   * @private
+   */
+  this.oneFeatureOn_ = false;
 };
 
 
@@ -112,9 +87,70 @@ xrx.stream.prototype.rowEmptyTag = goog.abstractMethod;
 
 
 /**
- * Event, thrown whenever a namespace declaration is found.
+ * Event, thrown whenever a tag-name is found.
  */
-xrx.stream.prototype.namespace = goog.abstractMethod;
+xrx.stream.prototype.eventTagName = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a attribute is found.
+ */
+xrx.stream.prototype.eventAttribute = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a attribute name is found.
+ */
+xrx.stream.prototype.eventAttrName = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a attribute value is found.
+ */
+xrx.stream.prototype.eventAttrValue = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a namespace token is found.
+ */
+xrx.stream.prototype.eventNamespace = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a namespace prefix is found.
+ */
+xrx.stream.prototype.eventNsPrefix = goog.abstractMethod;
+
+
+
+/**
+ * Event, thrown whenever a namespace URI is found.
+ */
+xrx.stream.prototype.eventNsUri = goog.abstractMethod;
+
+
+
+/**
+ * Function to turn streaming features on an off.
+ * @param {!string} feature The name of the feature.
+ * @param {!boolean} flag On or off.
+ */
+xrx.stream.prototype.setFeature = function(feature, flag) {
+  if (this.features_[feature] === undefined) throw Error('Unknown feature.');
+  var on = false;
+
+  this.features_[feature] = flag || true;
+
+  for(var n in this.features_) {
+    if (this.features_[n] === true) on = true;
+  };
+  this.oneFeatureOn_ = on;
+};
 
 
 
@@ -194,6 +230,78 @@ xrx.stream.prototype.pos = function(opt_pos) {
 
 
 /**
+ * Throws events for the secondary tokens of a tag if the feature
+ * is turned on.
+ * TODO(jochen): can we avoid reparsing of tokens?
+ *
+ * @param token The current token.
+ * @param {!number} offset The current offset.
+ * @param {!number} length The current length.
+ */
+xrx.stream.prototype.features = function(token, offset, length) {
+
+  if (this.oneFeatureOn_ === true) {
+    var tag = this.xml().substr(offset, length);
+
+    // tag name feature on?
+    if (this.features_['TAG_NAME'] === true) {
+      var name = this.tagName(tag);
+      this.eventTagName(name.offset + offset, name.length);
+    }
+
+    // attribute or namespace feature on?
+    if (this.features_['NAMESPACE'] === true || 
+        this.features_['ATTRIBUTE'] === true ||
+        this.features_['ATTR_NAME'] === true ||
+        this.features_['ATTR_VALUE'] === true ||
+        this.features_['NS_PREFIX'] === true ||
+        this.features_['NS_URI'] === true) {
+      if ((token === xrx.token.START_TAG || token === xrx.token.EMPTY_TAG)) {
+        var atts = this.attributes(tag);
+        for (var pos in atts) {
+          var att = atts[pos];
+          if (goog.string.startsWith(att.xml(tag), 'xmlns:') ||
+              goog.string.startsWith(att.xml(tag), 'xmlns=')) {
+            if (this.features_['NAMESPACE'] === true) 
+                this.eventNamespace(att.offset + offset, att.length);
+
+            // namespace prefix feature on?
+            if (this.features_['NS_PREFIX'] === true) {
+              var nsPrefix = this.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
+              this.eventNsPrefix(nsPrefix.offset + offset, nsPrefix.length);
+            }
+
+            // namespace uri feature on?
+            if (this.features_['NS_URI'] === true) {
+              var nsUri = this.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
+              this.eventNsUri(nsUri.offset + offset, nsUri.length);
+            }
+
+          } else {
+            if (this.features_['ATTRIBUTE'] === true) 
+                this.eventAttribute(att.offset + offset, att.length);
+
+            // attribute name feature on?
+            if (this.features_['ATTR_NAME'] === true) {
+              var attrName = this.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
+              this.eventAttrName(attrName.offset + offset, attrName.length);
+            }
+
+            // attribute value feature on?
+            if (this.features_['ATTR_VALUE'] === true) {
+              var attrValue = this.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
+              this.eventAttrValue(attrValue.offset + offset, attrValue.length);
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+
+
+/**
  * Streams over a XML document or XML fragment in forward direction
  * and fires start-row, end-row, empty row and namespace events. 
  * The streaming starts at the beginning of the XML document / 
@@ -266,17 +374,7 @@ xrx.stream.prototype.forward = function(opt_offset) {
       default:
         break;
       };
-      // are there any namespace declarations?
-      var tag = this.xml().substr(offset, length);
-      if (goog.string.contains(tag, 'xmlns')) {
-        var atts = this.attributes(tag);
-        for (var pos in atts) {
-          var att = atts[pos];
-          if (goog.string.startsWith(att.xml(tag), 'xmlns')) {
-            this.namespace(att.offset + offset, att.length);
-          }
-        }
-      }
+      this.features(token, offset, length);
       break;
     // '<' seen: start tag or empty tag or end tag?
     case xrx.stream.State_.LT_SEEN:
@@ -305,7 +403,7 @@ xrx.stream.prototype.forward = function(opt_offset) {
  * and fires start-row, end-row, empty row and namespace events. The 
  * streaming starts at the end of the XML document / fragment by 
  * default or optionally at an offset.
- * TODO(jochen): do we need lenght2 in backward streaming events?
+ * TODO(jochen): do we need length2 in backward streaming events?
  * 
  * @param {?number} opt_offset The offset.
  */
@@ -343,19 +441,10 @@ xrx.stream.prototype.backward = function(opt_offset) {
         var off = reader.pos();
         var len1 = offset - reader.pos() + 1;
         this.rowStartTag(off, len1);
-        // are there any namespace declarations?
-        var tag = this.xml().substr(off, len1);
-        if (goog.string.contains(tag, 'xmlns')) {
-          var atts = this.attributes(tag);
-          for (var pos in atts) {
-            var att = atts[pos];
-            if (goog.string.startsWith(att.xml(tag), 'xmlns')) {
-              this.namespace(att.offset + off, att.length);
-            }
-          }
-        }
+        this.features(xrx.token.START_TAG, off, len1);
       } else {
         this.rowEndTag(reader.pos(), offset - reader.pos() + 1);
+        this.features(xrx.token.END_TAG, reader.pos(), offset - reader.pos() + 1);
       }
       reader.previous();
       if (reader.finished()) state = xrx.stream.State_.XML_END;
@@ -368,17 +457,7 @@ xrx.stream.prototype.backward = function(opt_offset) {
       var off = reader.pos();
       var len1 = offset - reader.pos() + 1;
       this.rowEmptyTag(off, len1);
-      // are there any namespace declarations?
-      var tag = this.xml().substr(off, len1);
-      if (goog.string.contains(tag, 'xmlns')) {
-        var atts = this.attributes(tag);
-        for (var pos in atts) {
-          var att = atts[pos];
-          if (goog.string.startsWith(att.xml(tag), 'xmlns')) {
-            this.namespace(att.offset + off, att.length);
-          }
-        }
-      }
+      this.features(xrx.token.EMPTY_TAG, off, len1);
       reader.previous();
       if (reader.finished()) state = xrx.stream.State_.XML_END;
       break;

@@ -1,4 +1,7 @@
-
+/**
+ * @fileoverview A class to create long-lived binary
+ * encodings for XML instances. 
+ */
 
 
 goog.provide('xrx.index');
@@ -31,14 +34,17 @@ xrx.index = function(xml, opt_format) {
 };
 
 
+
 xrx.index.prototype.length = function() {
   return this.rows_.length;
 };
 
 
+
 xrx.index.prototype.last = function() {
   return this.length() - 1;
 };
+
 
 
 xrx.index.prototype.reindex = function(xml) {

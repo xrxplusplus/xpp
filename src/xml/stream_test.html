@@ -351,11 +351,12 @@ function test13namespaceForward() {
   var count = 0;
   var namespaces = [];
   var stream = new xrx.stream(xml13);
+  stream.setFeature('NAMESPACE', true);
 
   stream.rowStartTag = function() {};
   stream.rowEndTag = function() {};
   stream.rowEmptyTag = function() {};
-  stream.namespace = function(offset, length) {
+  stream.eventNamespace = function(offset, length) {
     count += 1;
     namespaces.push(new xrx.token.Namespace(null, offset, length));
   };
@@ -372,11 +373,12 @@ function test14namespaceBackward() {
   var count = 0;
   var namespaces = [];
   var stream = new xrx.stream(xml14);
+  stream.setFeature('NAMESPACE', true);
 
   stream.rowStartTag = function() {};
   stream.rowEndTag = function() {};
   stream.rowEmptyTag = function() {};
-  stream.namespace = function(offset, length) {
+  stream.eventNamespace = function(offset, length) {
     count += 1;
     namespaces.push(new xrx.token.Namespace(null, offset, length));
   };
@@ -410,6 +412,125 @@ function test16nsUri() {
   assertEquals('http://example.org/NS/a', attrValue1.xml(xml14));
   assertEquals('http://example.org/NS/b', attrValue2.xml(xml14));
 };
+
+function test17featureTagName() {
+  var test = [];
+  var xml17 = '<e1>t<e2/>t<e3>t</e3></e1>';
+  var stream = new xrx.stream(xml17);
+  stream.setFeature('TAG_NAME', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventTagName = function(offset, length) {
+    test.push(xml17.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('e1e2e3e3e1e1e3e3e2e1', test.join(''));
+};
+
+function test18featureAttribute() {
+  var test = [];
+  var xml18 = '<a attr1="v1" attr2="v2"/>';
+  var stream = new xrx.stream(xml18);
+  stream.setFeature('ATTRIBUTE', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventAttribute = function(offset, length) {
+    test.push(xml18.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('attr1="v1"attr2="v2"attr1="v1"attr2="v2"', test.join(''));
+};
+
+function test19featureAttrName() {
+  var test = [];
+  var xml19 = '<a attr1="v1" attr2="v2"/>';
+  var stream = new xrx.stream(xml19);
+  stream.setFeature('ATTR_NAME', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventAttrName = function(offset, length) {
+    test.push(xml19.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('attr1attr2attr1attr2', test.join(''));
+
+};
+
+function test20featureAttrValue() {
+  var test = [];
+  var xml20 = '<a attr1="v1" attr2="v2"/>';
+  var stream = new xrx.stream(xml20);
+  stream.setFeature('ATTR_VALUE', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventAttrValue = function(offset, length) {
+    test.push(xml20.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('v1v2v1v2', test.join(''));
+
+};
+
+function test21featureNsPrefix() {
+  var test = [];
+  var xml21 = '<a xmlns:a="http://example.org/NS/a" attr="v"/>';
+  var stream = new xrx.stream(xml21);
+  stream.setFeature('NS_PREFIX', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventNsPrefix = function(offset, length) {
+    test.push(xml21.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('xmlns:axmlns:a', test.join(''));
+  
+};
+
+function test22featureNsUri() {
+  var test = [];
+  var xml22 = '<a xmlns:a="http://example.org/NS/a" attr="v"/>';
+  var stream = new xrx.stream(xml22);
+  stream.setFeature('NS_URI', true);
+
+  stream.rowStartTag = function() {};
+  stream.rowEmptyTag = function() {};
+  stream.rowEndTag = function() {};
+  stream.eventNsUri = function(offset, length) {
+    test.push(xml22.substr(offset, length));
+  };
+
+  stream.forward();
+  stream.backward();
+
+  assertEquals('http://example.org/NS/ahttp://example.org/NS/a', test.join(''));
+
+};
+
 
 </script>
 </body>
