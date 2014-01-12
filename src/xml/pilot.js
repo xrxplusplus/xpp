@@ -24,6 +24,7 @@ goog.require('xrx.token.StartEmptyTag');
 goog.require('xrx.token.StartTag');
 goog.require('xrx.token.Tag');
 goog.require('xrx.token.TagName');
+goog.require('xrx.tree');
 
 
 
@@ -37,13 +38,21 @@ goog.require('xrx.token.TagName');
 xrx.pilot = function(xml) {
 
 
+
   /**
-   * Initialize the XML stream.
+   * Initialize the XML tree.
+   */
+  this.tree_ = new xrx.tree(xml);
+
+
+
+  /**
+   * Reference the XML stream.
    * 
    * @type {xrx.stream}
    * @private
    */
-  this.stream_ = new xrx.stream(xml);
+  this.stream_ = this.tree_.stream();
 
 
 
@@ -51,7 +60,6 @@ xrx.pilot = function(xml) {
    * Path lastly used to traverse the XML tree 
    * (for debugging only).
    * 
-   * @param {}
    * @private
    */
   this.currentPath_;
@@ -96,27 +104,24 @@ xrx.pilot.prototype.stop = function() {
 
 
 /**
- * Forward tree traversing.
+ * Forward piloting.
  * 
- * @param {?} target The target token.
+ * @param context The context token.
+ * @param target The target token.
  */
 xrx.pilot.prototype.forward = function(context, target) {
   var tok, startAt = 0;
   var pilot = this;
-  var label; 
-  if(context === null) {
-    label = new xrx.label();
-  } else {
-    label = context.label().clone();
-    label.precedingSibling();
+
+  if(context != null) {
     startAt = context.offset();
   }
+
   var lastTag = context ? xrx.token.NOT_TAG : xrx.token.UNDEFINED;
 
-  pilot.stream_.rowStartTag = function(offset, length1, length2) {
-    lastTag === xrx.token.UNDEFINED || lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
-    
+  pilot.tree_.rowStartTag = function(label, offset, length1, length2) {
     var tmp;
+
     if (target.type() === xrx.token.NOT_TAG) {
       tmp = label.clone();
       tmp.push0();
@@ -133,11 +138,12 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
+
     lastTag = xrx.token.START_TAG;
   };
   
-  pilot.stream_.rowEndTag = function(offset, length1, length2) {
-    lastTag === xrx.token.START_TAG ? null : label.parent();
+  pilot.tree_.rowEndTag = function(label, offset, length1, length2) {
+
     if (target.compare(xrx.token.END_TAG, label)) {
       tok = new xrx.token.EndTag(label.clone());
       tok.offset(offset);
@@ -149,11 +155,12 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
+
     lastTag = xrx.token.END_TAG;
   };
   
-  pilot.stream_.rowEmptyTag = function(offset, length1, length2) {
-    lastTag === xrx.token.UNDEFINED || lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();    
+  pilot.tree_.rowEmptyTag = function(label, offset, length1, length2) {
+ 
     if (target.compare(xrx.token.EMPTY_TAG, label)) {
       tok = new xrx.token.EmptyTag(label.clone());
       tok.offset(offset);
@@ -165,10 +172,11 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
+
     lastTag = xrx.token.END_TAG;
   };
   
-  pilot.stream_.forward(startAt);
+  pilot.tree_.forward(startAt);
 
   return tok;
 };

@@ -1,6 +1,6 @@
 /**
- * @fileoverview A class to stream over XML documents or XML
- * fragments.
+ * @fileoverview A class to stream over the tokens of
+ * a XML instance.
  */
 
 goog.provide('xrx.stream');
@@ -15,7 +15,7 @@ goog.require('xrx.token');
 
 
 /**
- * A class to stream over XML documents or XML fragments.
+ * A class to stream over the tokens of a XML instance.
  *   
  * @param {!string} xml A well-formed, normalized XML document or
  * XML fragment. Make sure that the input is parsed with
@@ -94,7 +94,7 @@ xrx.stream.prototype.eventTagName = goog.abstractMethod;
 
 
 /**
- * Event, thrown whenever a attribute is found.
+ * Event, thrown whenever a attribute token is found.
  */
 xrx.stream.prototype.eventAttribute = goog.abstractMethod;
 
@@ -136,7 +136,8 @@ xrx.stream.prototype.eventNsUri = goog.abstractMethod;
 
 
 /**
- * Function to turn streaming features on an off.
+ * Function to turn events on and off.
+ * 
  * @param {!string} feature The name of the feature.
  * @param {!boolean} flag On or off.
  */
@@ -146,10 +147,37 @@ xrx.stream.prototype.setFeature = function(feature, flag) {
 
   this.features_[feature] = flag || true;
 
-  for(var n in this.features_) {
-    if (this.features_[n] === true) on = true;
+  for(var f in this.features_) {
+    if (this.features_[f] === true) on = true;
   };
   this.oneFeatureOn_ = on;
+};
+
+
+
+/**
+ * Convenience function to turn all events on or off.
+ * 
+ * @param {!boolean} flag On or off.
+ */
+xrx.stream.prototype.setFeatures = function(flag) {
+  
+  for(var f in this.features_) {
+    this.features_[f] = flag;
+  }
+  flag === true ? this.oneFeatureOn_ = true :
+    this.oneFeatureOn_ = false;
+};
+
+
+/**
+ * Whether a specific feature is turned on or off.
+ * 
+ * @param {!string} feature The feature to test.
+ * @return {!boolean} True when on otherwise false.
+ */
+xrx.stream.prototype.hasFeature = function(feature) {
+  return this.features_[feature] === true;
 };
 
 
@@ -239,58 +267,61 @@ xrx.stream.prototype.pos = function(opt_pos) {
  * @param {!number} length The current length.
  */
 xrx.stream.prototype.features = function(token, offset, length) {
+  var stream = this;
 
-  if (this.oneFeatureOn_ === true) {
-    var tag = this.xml().substr(offset, length);
+  if (stream.oneFeatureOn_ === true) {
+    var tag = stream.xml().substr(offset, length);
 
     // tag name feature on?
-    if (this.features_['TAG_NAME'] === true) {
-      var name = this.tagName(tag);
-      this.eventTagName(name.offset + offset, name.length);
+    if (stream.hasFeature('TAG_NAME')) {
+      var name = stream.tagName(tag);
+      stream.eventTagName(name.offset + offset, name.length);
     }
 
     // attribute or namespace feature on?
-    if (this.features_['NAMESPACE'] === true || 
-        this.features_['ATTRIBUTE'] === true ||
-        this.features_['ATTR_NAME'] === true ||
-        this.features_['ATTR_VALUE'] === true ||
-        this.features_['NS_PREFIX'] === true ||
-        this.features_['NS_URI'] === true) {
+    if (stream.hasFeature('NAMESPACE') || stream.hasFeature('ATTRIBUTE') ||
+        stream.hasFeature('ATTR_NAME') || stream.hasFeature('ATTR_VALUE') ||
+        stream.hasFeature('NS_PREFIX') || stream.hasFeature('NS_URI')) {
+
       if ((token === xrx.token.START_TAG || token === xrx.token.EMPTY_TAG)) {
-        var atts = this.attributes(tag);
+        var atts = stream.attributes(tag);
         for (var pos in atts) {
           var att = atts[pos];
           if (goog.string.startsWith(att.xml(tag), 'xmlns:') ||
               goog.string.startsWith(att.xml(tag), 'xmlns=')) {
-            if (this.features_['NAMESPACE'] === true) 
-                this.eventNamespace(att.offset + offset, att.length);
+
+            if (stream.hasFeature('NAMESPACE')) {
+              stream.eventNamespace(att.offset + offset, att.length);
+            }
 
             // namespace prefix feature on?
-            if (this.features_['NS_PREFIX'] === true) {
-              var nsPrefix = this.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
-              this.eventNsPrefix(nsPrefix.offset + offset, nsPrefix.length);
+            if (stream.hasFeature('NS_PREFIX')) {
+              var nsPrefix = stream.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
+              stream.eventNsPrefix(nsPrefix.offset + offset, nsPrefix.length);
             }
 
             // namespace uri feature on?
-            if (this.features_['NS_URI'] === true) {
-              var nsUri = this.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
-              this.eventNsUri(nsUri.offset + offset, nsUri.length);
+            if (stream.hasFeature('NS_URI')) {
+              var nsUri = stream.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
+              stream.eventNsUri(nsUri.offset + offset, nsUri.length);
             }
 
           } else {
-            if (this.features_['ATTRIBUTE'] === true) 
-                this.eventAttribute(att.offset + offset, att.length);
+
+            if (stream.hasFeature('ATTRIBUTE')) {
+              stream.eventAttribute(att.offset + offset, att.length);
+            }
 
             // attribute name feature on?
-            if (this.features_['ATTR_NAME'] === true) {
-              var attrName = this.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
-              this.eventAttrName(attrName.offset + offset, attrName.length);
+            if (stream.hasFeature('ATTR_NAME')) {
+              var attrName = stream.attr_(tag, 1, xrx.token.ATTR_NAME, att.offset);
+              stream.eventAttrName(attrName.offset + offset, attrName.length);
             }
 
             // attribute value feature on?
-            if (this.features_['ATTR_VALUE'] === true) {
-              var attrValue = this.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
-              this.eventAttrValue(attrValue.offset + offset, attrValue.length);
+            if (stream.hasFeature('ATTR_VALUE')) {
+              var attrValue = stream.attr_(tag, 1, xrx.token.ATTR_VALUE, att.offset);
+              stream.eventAttrValue(attrValue.offset + offset, attrValue.length);
             }
           }
         }

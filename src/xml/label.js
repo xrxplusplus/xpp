@@ -161,6 +161,16 @@ xrx.label.prototype.sameAs = function(label) {
 
 
 /**
+ * Tests whether a label is the root label.
+ * @return {!boolean} 
+ */
+xrx.label.prototype.isRoot = function() {
+  return this.label_.length === 0;
+};
+
+
+
+/**
  * 
  */
 xrx.label.prototype.isBefore = function(label) {

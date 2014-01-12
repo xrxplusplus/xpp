@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRX++ Unit Tests - xrx.tree</title>
+<script src='../../lib/closure-library/closure/goog/base.js'></script>
+<script src='../deps.js'></script>
+<script type="text/javascript">
+  goog.require('goog.testing.jsunit');
+  goog.require('xrx.tree');
+</script>
+</head>
+<body>
+<script type="text/javascript">
+
+function test01basic() {
+  var xml = '<test attr1="v1" attr2="v2"' + 
+      ' xmlns:a="http://example.org/a"' + 
+      ' xmlns:b="http://example.org/b"></test>';
+  var tree = new xrx.tree(xml);
+  tree.setFeatures(true);
+  tree.setFeature('ATTRIBUTE', false);
+  
+  var tagNames = [];
+  var attributes = [];
+  var attrNames = [];
+  var attrValues = [];
+  var namespaces = [];
+  var nsPrefixes = [];
+  var nsUris = [];
+
+  tree.rowStartTag = function() {};
+  tree.rowEndTag = function() {};
+  tree.rowEmptyTag = function() {};
+  tree.eventTagName = function(label) {
+    tagNames.push(label.clone());
+  };
+  tree.eventAttribute = function(label) {
+    attributes.push(label.clone());
+  };
+  tree.eventAttrName = function(label) {
+    attrNames.push(label.clone());
+  };
+  tree.eventAttrValue = function(label) {
+    attrValues.push(label.clone());
+  };
+  tree.eventNamespace = function(label) {
+    namespaces.push(label.clone());
+  };
+  tree.eventNsPrefix = function(label) {
+    nsPrefixes.push(label.clone());
+  };
+  tree.eventNsUri = function(label) {
+    nsUris.push(label.clone());
+  };
+  
+  tree.forward();
+  tree.backward();
+  
+  assertTrue(tagNames[0].sameAs(new xrx.label([1])));
+  assertTrue(tagNames[1].sameAs(new xrx.label([1])));
+
+  assertTrue(attributes[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(attributes[1].sameAs(new xrx.label([1, 2])));
+
+  assertTrue(attrNames[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(attrNames[1].sameAs(new xrx.label([1, 2])));
+
+  assertTrue(attrValues[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(attrValues[1].sameAs(new xrx.label([1, 2])));
+
+  assertTrue(namespaces[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(namespaces[1].sameAs(new xrx.label([1, 2])));
+
+  assertTrue(nsPrefixes[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(nsPrefixes[1].sameAs(new xrx.label([1, 2])));
+
+  assertTrue(nsUris[0].sameAs(new xrx.label([1, 1])));
+  assertTrue(nsUris[1].sameAs(new xrx.label([1, 2])));
+};
+
+</script>
+</body>
+</html>

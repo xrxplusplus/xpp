@@ -283,7 +283,7 @@ function stest15PathOnLocation() {
   assertEquals(true, xrx.pilot.prototype.onLocation == pilot.currentPath());
 };
 
-function stest16PathForward() {
+function test16PathForward() {
   var pilot = new xrx.pilot(xml);
 
   // move to '<b>', then to 'attr2=""'
@@ -291,8 +291,8 @@ function stest16PathForward() {
   var loc = pilot.startEmptyTag(null, tok);
   var attr = new xrx.token.Attribute(new xrx.label([1, 3, 2]));
   var attrLoc = pilot.attribute(null, attr);
-  //assertEquals('attr2=""', pilot.xml(attrLoc));
-  //assertEquals(true, xrx.pilot.prototype.forward == pilot.currentPath());
+  assertEquals('attr2=""', pilot.xml(attrLoc));
+  assertEquals(true, xrx.pilot.prototype.forward == pilot.currentPath());
 };
 
 function test17Goto() {
