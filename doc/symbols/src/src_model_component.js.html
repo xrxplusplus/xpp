@@ -107,24 +107,34 @@
 <span class='line'>100</span> 
 <span class='line'>101</span> 
 <span class='line'>102</span> </span><span class="COMM">/**
-<span class='line'>103</span>  * Gets the bind referenced by the component.
-<span class='line'>104</span>  * @return {?xrx.bind} The bind.
+<span class='line'>103</span>  * Gets the source URI found in the component's data-xrx-src attribute.
+<span class='line'>104</span>  * @return {?string} The source URI.
 <span class='line'>105</span>  */</span><span class="WHIT">
-<span class='line'>106</span> </span><span class="NAME">xrx.component.prototype.getBind</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>107</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">xrx.model.getComponent</span><span class="PUNC">(</span><span class="NAME">this.getBindId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="NAME">xrx.component.prototype.getSrcUri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getAttribute</span><span class="PUNC">(</span><span class="STRN">'data-xrx-src'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>108</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>109</span> 
 <span class='line'>110</span> 
 <span class='line'>111</span> 
 <span class='line'>112</span> </span><span class="COMM">/**
-<span class='line'>113</span>  * Returns the event handler for this component, lazily created the first time
-<span class='line'>114</span>  * this method is called.
-<span class='line'>115</span>  * @return {!goog.events.EventHandler} Event handler for this component.
-<span class='line'>116</span>  * @protected
-<span class='line'>117</span>  */</span><span class="WHIT">
-<span class='line'>118</span> </span><span class="NAME">xrx.component.prototype.getHandler</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>119</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.handler_</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
-<span class='line'>120</span> </span><span class="WHIT">      </span><span class="PUNC">(</span><span class="NAME">this.handler_</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">goog.events.EventHandler</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>122</span> 
-<span class='line'>123</span> </span></pre></body></html>
+<span class='line'>113</span>  * Gets the bind referenced by the component.
+<span class='line'>114</span>  * @return {?xrx.bind} The bind.
+<span class='line'>115</span>  */</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="NAME">xrx.component.prototype.getBind</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">xrx.model.getComponent</span><span class="PUNC">(</span><span class="NAME">this.getBindId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> 
+<span class='line'>120</span> 
+<span class='line'>121</span> 
+<span class='line'>122</span> </span><span class="COMM">/**
+<span class='line'>123</span>  * Returns the event handler for this component, lazily created the first time
+<span class='line'>124</span>  * this method is called.
+<span class='line'>125</span>  * @return {!goog.events.EventHandler} Event handler for this component.
+<span class='line'>126</span>  * @protected
+<span class='line'>127</span>  */</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="NAME">xrx.component.prototype.getHandler</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.handler_</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">      </span><span class="PUNC">(</span><span class="NAME">this.handler_</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">goog.events.EventHandler</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span> 
+<span class='line'>133</span> </span></pre></body></html>

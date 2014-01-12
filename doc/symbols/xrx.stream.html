@@ -221,6 +221,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
 	
+	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
+	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
@@ -344,7 +346,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/xrx.stream.html#constructor">xrx.stream</a></b>(xml)
 							</div>
-							<div class="description">A class to stream over XML documents or XML fragments.</div>
+							<div class="description">A class to stream over the tokens of a XML instance.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -369,9 +371,69 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/xrx.stream.html#namespace">namespace</a></b>
+								<b><a href="../symbols/xrx.stream.html#eventAttribute">eventAttribute</a></b>
 								</div>
-								<div class="description">Event, thrown whenever a namespace declaration is found.</div>
+								<div class="description">Event, thrown whenever a attribute token is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventAttrName">eventAttrName</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a attribute name is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventAttrValue">eventAttrValue</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a attribute value is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventNamespace">eventNamespace</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a namespace token is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventNsPrefix">eventNsPrefix</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a namespace prefix is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventNsUri">eventNsUri</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a namespace URI is found.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.stream.html#eventTagName">eventTagName</a></b>
+								</div>
+								<div class="description">Event, thrown whenever a tag-name is found.</div>
 							</td>
 						</tr>
 					
@@ -510,10 +572,29 @@ one or more document type declarations.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#features">features</a></b>(token, offset, length)
+								</div>
+								<div class="description">Throws events for the secondary tokens of a tag if the feature
+is turned on.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#forward">forward</a></b>(opt_offset)
 								</div>
 								<div class="description">Streams over a XML document or XML fragment in forward direction
 and fires start-row, end-row, empty row and namespace events.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#hasFeature">hasFeature</a></b>(feature)
+								</div>
+								<div class="description">Whether a specific feature is turned on or off.</div>
 							</td>
 						</tr>
 					
@@ -533,6 +614,15 @@ one or more processing instructions (PI).</div>
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#pos">pos</a></b>(opt_pos)
 								</div>
 								<div class="description">Returns or sets the position of the stream reader.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#setFeature">setFeature</a></b>(feature, flag)
+								</div>
+								<div class="description">Function to turn events on an off.</div>
 							</td>
 						</tr>
 					
@@ -594,55 +684,7 @@ returns the location of the name of the tag.</div>
 				</div>
 				
 				<div class="description">
-					A class to stream over XML documents or XML fragments.
-<br/>
-<br/>
-<b>IMPORTANT NOTE: This class represents a XML streamer and not a 
-  XML parser! The streamer is different from a XML parser in the 
-  following respects:</b>
-<br/>
-<br/>  
-<li>the XML input document or fragment must be well-formed before 
-  streaming starts. The streamer itself does not do any well-formed 
-  checks
-<li>the streamer expects the XML document or fragment serialized 
-  as a string
-<li>the string must be encoded in UTF-8
-<li>whitespace must already be normalized and collapsed before 
-  streaming starts
-<li>the streamer expects the XML document without any indentation
-<br/><br/>
-These restrictions are intended by design, finally to reach optimal
-performance and to reach full XML support in browsers. For more 
-background about parsing see e.g.:
-<li><a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=4623219">
-  XML Document Parsing: Operational and Performance Characteristics</a>
-<br/>
-<br/>
-<b>String conversion, encoding conversion, whitespace
-  normalization as well as indentation can best be prepared with the 
-  XQuery and XPath 3.0 serialization feature. Example XQuery script:</b>
-<pre>---
-xquery version "3.0";
-
-declare option output:method "xml";
-declare option output:encoding "UTF-8";
-declare option output:indent "no";
-
-declare variable $xml := &lt;someXml/&gt;;
-
-fn:serialize($xml)
----</pre>
-The output of this XQuery script is exactly what the streamer expects.
-<br/>
-<br/>
-See also: 
-<li><a href="http://www.w3.org/TR/xslt-xquery-serialization-30/">
-  XSLT and XQuery Serialization 3.0</a>
-<li><a href="../../src/agent/xrx2html.xql">XRX++ XQuery Agent</a>
-<li><a href="../../src/agent/xrx2html.xsl">XRX++ XSLT Agent (For
-  development only, only runs in modern browsers with full XML 
-  support)</a>
+					A class to stream over the tokens of a XML instance.
 					
 				</div>
 				
@@ -658,7 +700,7 @@ See also:
 								
 							</dt>
 								<dd>A well-formed, normalized XML document or
-XML fragment serialized as UTF-8 string.</dd>
+XML fragment. Make sure that the input is parsed with</dd>
 						
 						</dl>
 					
@@ -678,15 +720,147 @@ XML fragment serialized as UTF-8 string.</dd>
 					Field Detail
 				</div>
 				
-					<a name="namespace"> </a>
+					<a name="eventAttribute"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>namespace</b>
+					<b>eventAttribute</b>
 					
 					</div>
 					<div class="description">
-						Event, thrown whenever a namespace declaration is found.
+						Event, thrown whenever a attribute token is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventAttrName"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventAttrName</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a attribute name is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventAttrValue"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventAttrValue</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a attribute value is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventNamespace"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventNamespace</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a namespace token is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventNsPrefix"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventNsPrefix</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a namespace prefix is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventNsUri"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventNsUri</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a namespace URI is found.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eventTagName"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eventTagName</b>
+					
+					</div>
+					<div class="description">
+						Event, thrown whenever a tag-name is found.
 						
 						
 					</div>
@@ -987,7 +1161,7 @@ of the value of the n'th attribute.
 and fires start-row, end-row, empty row and namespace events. The 
 streaming starts at the end of the XML document / fragment by 
 default or optionally at an offset.
-TODO(jochen): do we need lenght2 in backward streaming events?
+TODO(jochen): do we need length2 in backward streaming events?
 						
 						
 					</div>
@@ -1126,6 +1300,56 @@ one or more document type declarations.
 
 					<hr />
 				
+					<a name="features"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>features</b>(token, offset, length)
+					
+					</div>
+					<div class="description">
+						Throws events for the secondary tokens of a tag if the feature
+is turned on.
+TODO(jochen): can we avoid reparsing of tokens?
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>token</b>
+									
+								</dt>
+								<dd>The current token.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{!number}</span> <b>offset</b>
+									
+								</dt>
+								<dd>The current offset.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{!number}</span> <b>length</b>
+									
+								</dt>
+								<dd>The current length.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="forward"> </a>
 					<div class="fixedFont">
 					
@@ -1159,6 +1383,49 @@ fragment by default or optionally at an offset.
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name="hasFeature"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{!boolean}</span>
+					<b>hasFeature</b>(feature)
+					
+					</div>
+					<div class="description">
+						Whether a specific feature is turned on or off.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{!string}</span> <b>feature</b>
+									
+								</dt>
+								<dd>The feature to test.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!boolean}</span> True when on otherwise false.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1239,6 +1506,48 @@ one or more processing instructions (PI).
 								<dd><span class="light fixedFont">{!number}</span> The position or the new position.</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setFeature"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setFeature</b>(feature, flag)
+					
+					</div>
+					<div class="description">
+						Function to turn events on an off.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{!string}</span> <b>feature</b>
+									
+								</dt>
+								<dd>The name of the feature.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{!boolean}</span> <b>flag</b>
+									
+								</dt>
+								<dd>On or off.</dd>
+							
+							</dl>
+						
+						
+						
+						
 						
 						
 						
@@ -1423,7 +1732,7 @@ returns the location of the name of the tag.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Oct 17 2013 17:08:43 GMT+0200 (MESZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
 		</div>
 	</body>
 </html>
