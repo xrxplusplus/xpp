@@ -138,47 +138,77 @@ xrx.tree.prototype.setFeatures = function(flag) {
 
 
 /**
- * Stream over the labels of a XML instance in forward direction.
+ * @private
  */
-xrx.tree.prototype.forward = function(offset) {
+xrx.tree.prototype.secondaryLabel = function(label, primaryLabel) {
+
+  if (label.isRoot()) {
+    label = primaryLabel.clone();
+    label.child();
+  } else {
+    label.nextSibling();
+  }
+  return label;
+};
+
+
+
+/**
+ * Stream over the labels of a XML instance in forward or 
+ * backward direction.
+ * @private
+ */
+xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
   var tree = this;
-  var label = new xrx.label();
+  var label = opt_label || new xrx.label([1]);
   var attrLabel = new xrx.label();
   var nsLabel = new xrx.label();
   var lastTag;
 
-  if (offset) { this.stream_.pos(offset); }
-  
-  var secondaryLabel = function(label, primaryLabel) {
-
-    if (label.isRoot()) {
-      label = primaryLabel.clone();
-      label.child();
-    } else {
-      label.nextSibling();
-    }
-    return label;
-  };
-
   this.stream_.rowStartTag = function(offset, length1, length2) {
-    !lastTag || lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+    if (lastTag) { 
+      if (forward) {
+        lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+      } else {
+        if (lastTag !== xrx.label.END_TAG) label.parent();
+      }
+    }
+
     tree.rowStartTag(label.clone(), offset, length1, length2);
+
     lastTag = xrx.token.START_TAG;
     attrLabel = new xrx.label();
     nsLabel = new xrx.label();
   };
 
   this.stream_.rowEmptyTag = function(offset, length1, length2) {
-    !lastTag || lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+    if (lastTag) {
+      if (forward) {
+        lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+      } else {
+        // note: this is valid for the preceding-sibling and the ancestor axis
+        lastTag === xrx.token.END_TAG ? label.child() : label.precedingSibling();
+      }
+    }
+
     tree.rowEmptyTag(label.clone(), offset, length1, length2);
+
     lastTag = xrx.token.END_TAG;
     attrLabel = new xrx.label();
     nsLabel = new xrx.label();
   };
 
   this.stream_.rowEndTag = function(offset, length1, length2) {
-    if (lastTag !== xrx.token.START_TAG) label.parent();
+    if (lastTag) {
+      if (forward) {
+        if (lastTag !== xrx.token.START_TAG) label.parent();
+      } else {
+        if (lastTag === xrx.token.END_TAG) label.child();
+      }
+    }
+
     tree.rowEndTag(label.clone(), offset, length1, length2);
+
     lastTag = xrx.token.END_TAG;
   };
 
@@ -187,38 +217,47 @@ xrx.tree.prototype.forward = function(offset) {
   };
 
   this.stream_.eventAttribute = function(offset, length) {
-    attrLabel = secondaryLabel(attrLabel, label);
+    attrLabel = tree.secondaryLabel(attrLabel, label);
     tree.eventAttribute(attrLabel, offset, length);
   };
 
   this.stream_.eventAttrName = function(offset, length) {
-    if (!tree.hasFeature('ATTRIBUTE')) attrLabel = secondaryLabel(attrLabel, label);
+    if (!tree.hasFeature('ATTRIBUTE')) attrLabel = tree.secondaryLabel(attrLabel, label);
     tree.eventAttrName(attrLabel, offset, length);
   };
 
   this.stream_.eventAttrValue = function(offset, length) {
     if (!tree.hasFeature('ATTRIBUTE') && !tree.hasFeature('ATTR_NAME')) 
-        attrLabel = secondaryLabel(attrLabel, label);
+        attrLabel = tree.secondaryLabel(attrLabel, label);
     tree.eventAttrValue(attrLabel, offset, length);
   };
   
   this.stream_.eventNamespace = function(offset, length) {
-    nsLabel = secondaryLabel(nsLabel, label);
+    nsLabel = tree.secondaryLabel(nsLabel, label);
     tree.eventNamespace(nsLabel, offset, length);
   };
   
   this.stream_.eventNsPrefix = function(offset, length) {
-    if (!tree.hasFeature('NAMESPACE')) nsLabel = secondaryLabel(nsLabel, label);
+    if (!tree.hasFeature('NAMESPACE')) nsLabel = tree.secondaryLabel(nsLabel, label);
     tree.eventNsPrefix(nsLabel, offset, length);
   };
   
   this.stream_.eventNsUri = function(offset, length) {
     if (!tree.hasFeature('NAMESPACE') && !tree.hasFeature('NS_PREFIX')) 
-      nsLabel = secondaryLabel(nsLabel, label);
+      nsLabel = tree.secondaryLabel(nsLabel, label);
     tree.eventNsUri(nsLabel, offset, length);
   };
   
-  this.stream_.forward();
+  this.stream_.forward(opt_offset);
+};
+
+
+
+/**
+ * Stream over the labels of a XML instance in forward direction.
+ */
+xrx.tree.prototype.forward = function(opt_label, opt_offset) {
+  this.traverse(opt_label, opt_offset, true);
 };
 
 
@@ -226,6 +265,7 @@ xrx.tree.prototype.forward = function(offset) {
 /**
  * Stream over the labels of a XML instance in backward direction.
  */
-xrx.tree.prototype.backward = function() {
-  
+xrx.tree.prototype.backward = function(opt_label, opt_offset) {
+  this.traverse(opt_label, opt_offset, false);
 };
+

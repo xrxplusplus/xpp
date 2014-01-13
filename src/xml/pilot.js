@@ -110,14 +110,10 @@ xrx.pilot.prototype.stop = function() {
  * @param target The target token.
  */
 xrx.pilot.prototype.forward = function(context, target) {
-  var tok, startAt = 0;
+  var tok;
+  var startLabel = context ? context.label() : undefined;
+  var startOffset = context ? context.offset() : undefined;
   var pilot = this;
-
-  if(context != null) {
-    startAt = context.offset();
-  }
-
-  var lastTag = context ? xrx.token.NOT_TAG : xrx.token.UNDEFINED;
 
   pilot.tree_.rowStartTag = function(label, offset, length1, length2) {
     var tmp;
@@ -176,7 +172,7 @@ xrx.pilot.prototype.forward = function(context, target) {
     lastTag = xrx.token.END_TAG;
   };
   
-  pilot.tree_.forward(startAt);
+  pilot.tree_.forward(startLabel, startOffset);
 
   return tok;
 };

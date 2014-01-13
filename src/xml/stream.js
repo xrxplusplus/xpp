@@ -258,7 +258,7 @@ xrx.stream.prototype.pos = function(opt_pos) {
 
 
 /**
- * Throws events for the secondary tokens of a tag if the feature
+ * Throws events for the secondary tokens of a tag for the features
  * is turned on.
  * TODO(jochen): can we avoid reparsing of tokens?
  *
