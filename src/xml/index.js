@@ -10,7 +10,7 @@ goog.provide('xrx.index');
 
 goog.require('goog.math.Long');
 goog.require('xrx.node');
-goog.require('xrx.tree');
+goog.require('xrx.traverse');
 
 
 
@@ -48,16 +48,16 @@ xrx.index.prototype.last = function() {
 
 
 xrx.index.prototype.reindex = function(xml) {
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
   var row;
   var index = this;
   var parent;
 
-  tree.namespace = function() {
+  traverse.namespace = function() {
     row = index.head();
   };
 
-  tree.rowStartTag = function(label, offset, length) {
+  traverse.rowStartTag = function(label, offset, length) {
     parent = label.clone();
     parent.parent();
 
@@ -70,7 +70,7 @@ xrx.index.prototype.reindex = function(xml) {
     index.labelBuffer_[label.toString()] = index.last();
   };
 
-  tree.rowEmptyTag = function(label, offset, length) {
+  traverse.rowEmptyTag = function(label, offset, length) {
     parent = label.clone();
     parent.parent();
 
@@ -82,11 +82,11 @@ xrx.index.prototype.reindex = function(xml) {
     index.setLength(row, length);
   };
 
-  tree.rowEndTag = function(label, offset, length) {
+  traverse.rowEndTag = function(label, offset, length) {
     delete index.labelBuffer_[label.toString()];
   };
 
-  tree.forward();
+  traverse.forward();
 };
 
 

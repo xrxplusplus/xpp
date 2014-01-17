@@ -20,11 +20,11 @@ goog.addDependency('../../../../src/view/richxmlMode.js', ['xrx.richxml.mode'], 
 goog.addDependency('../../../../src/view/richxmlTagname.js', ['xrx.richxml.tagname'], ['goog.dom', 'goog.style', 'xrx.i18n', 'xrx.richxml']);
 goog.addDependency('../../../../src/view/textarea.js', ['xrx.textarea'], []);
 goog.addDependency('../../../../src/view/view.js', ['xrx.view'], ['goog.string', 'xrx.control']);
-goog.addDependency('../../../../src/xml/index.js', ['xrx.index'], ['goog.math.Long', 'xrx.node', 'xrx.tree']);
+goog.addDependency('../../../../src/xml/index.js', ['xrx.index'], ['goog.math.Long', 'xrx.node', 'xrx.traverse']);
 goog.addDependency('../../../../src/xml/label.js', ['xrx.label'], []);
 goog.addDependency('../../../../src/xml/location.js', ['xrx.location'], []);
 goog.addDependency('../../../../src/xml/parse.js', ['xrx.parse'], ['xrx.serialize']);
-goog.addDependency('../../../../src/xml/pilot.js', ['xrx.pilot'], ['xrx.label', 'xrx.stream', 'xrx.token', 'xrx.token.AttrName', 'xrx.token.AttrValue', 'xrx.token.Attribute', 'xrx.token.EmptyTag', 'xrx.token.EndTag', 'xrx.token.Namespace', 'xrx.token.NotTag', 'xrx.token.NsPrefix', 'xrx.token.NsUri', 'xrx.token.Root', 'xrx.token.StartEmptyTag', 'xrx.token.StartTag', 'xrx.token.Tag', 'xrx.token.TagName']);
+goog.addDependency('../../../../src/xml/pilot.js', ['xrx.pilot'], ['xrx.label', 'xrx.stream', 'xrx.token', 'xrx.token.AttrName', 'xrx.token.AttrValue', 'xrx.token.Attribute', 'xrx.token.EmptyTag', 'xrx.token.EndTag', 'xrx.token.Namespace', 'xrx.token.NotTag', 'xrx.token.NsPrefix', 'xrx.token.NsUri', 'xrx.token.Root', 'xrx.token.StartEmptyTag', 'xrx.token.StartTag', 'xrx.token.Tag', 'xrx.token.TagName', 'xrx.traverse']);
 goog.addDependency('../../../../src/xml/reader.js', ['xrx.reader'], []);
 goog.addDependency('../../../../src/xml/serialize.js', ['xrx.serialize'], ['xrx.stream', 'xrx.token']);
 goog.addDependency('../../../../src/xml/stream.js', ['xrx.stream'], ['goog.string', 'xrx.location', 'xrx.reader', 'xrx.token']);
@@ -43,7 +43,7 @@ goog.addDependency('../../../../src/xml/token/startTag.js', ['xrx.token.StartTag
 goog.addDependency('../../../../src/xml/token/tag.js', ['xrx.token.Tag'], ['xrx.token']);
 goog.addDependency('../../../../src/xml/token/tagName.js', ['xrx.token.TagName'], ['xrx.token']);
 goog.addDependency('../../../../src/xml/token/token.js', ['xrx.token'], ['xrx.label']);
-goog.addDependency('../../../../src/xml/tree.js', ['xrx.tree'], ['xrx.label', 'xrx.stream']);
+goog.addDependency('../../../../src/xml/traverse.js', ['xrx.traverse'], ['xrx.label', 'xrx.stream']);
 goog.addDependency('../../../../src/xml/update.js', ['xrx.update'], ['xrx.stream', 'xrx.token']);
 goog.addDependency('../../../../src/xpath/binaryExpr.js', ['xrx.xpath.BinaryExpr'], ['xrx.node', 'xrx.xpath.DataType', 'xrx.xpath.Expr']);
 goog.addDependency('../../../../src/xpath/context.js', ['xrx.xpath.Context'], []);

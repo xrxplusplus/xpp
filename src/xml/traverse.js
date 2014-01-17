@@ -3,7 +3,7 @@
  * a XML instance.
  */
 
-goog.provide('xrx.tree');
+goog.provide('xrx.traverse');
 
 
 goog.require('xrx.stream');
@@ -14,7 +14,7 @@ goog.require('xrx.label');
 /**
  * A class to stream over the labels of a XML instance.
  */
-xrx.tree = function(xml) {
+xrx.traverse = function(xml) {
 
 
 
@@ -26,7 +26,7 @@ xrx.tree = function(xml) {
 /**
  * 
  */
-xrx.tree.prototype.stream = function() {
+xrx.traverse.prototype.stream = function() {
   return this.stream_;
 };
 
@@ -35,70 +35,70 @@ xrx.tree.prototype.stream = function() {
 /**
  * Event, thrown whenever a start-tag row is found.
  */
-xrx.tree.prototype.rowStartTag = goog.abstractMethod;
+xrx.traverse.prototype.rowStartTag = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a empty-tag row is found.
  */
-xrx.tree.prototype.rowEmptyTag = goog.abstractMethod;
+xrx.traverse.prototype.rowEmptyTag = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a end-tag row is found.
  */
-xrx.tree.prototype.rowEndTag = goog.abstractMethod;
+xrx.traverse.prototype.rowEndTag = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a tag-name is found.
  */
-xrx.tree.prototype.eventTagName = goog.abstractMethod;
+xrx.traverse.prototype.eventTagName = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a attribute token is found.
  */
-xrx.tree.prototype.eventAttribute = goog.abstractMethod;
+xrx.traverse.prototype.eventAttribute = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a attribute name is found.
  */
-xrx.tree.prototype.eventAttrName = goog.abstractMethod;
+xrx.traverse.prototype.eventAttrName = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a attribute value is found.
  */
-xrx.tree.prototype.eventAttrValue = goog.abstractMethod;
+xrx.traverse.prototype.eventAttrValue = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a namespace token is found.
  */
-xrx.tree.prototype.eventNamespace = goog.abstractMethod;
+xrx.traverse.prototype.eventNamespace = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a namespace prefix is found.
  */
-xrx.tree.prototype.eventNsPrefix = goog.abstractMethod;
+xrx.traverse.prototype.eventNsPrefix = goog.abstractMethod;
 
 
 
 /**
  * Event, thrown whenever a namespace URI is found.
  */
-xrx.tree.prototype.eventNsUri = goog.abstractMethod;
+xrx.traverse.prototype.eventNsUri = goog.abstractMethod;
 
 
 
@@ -109,7 +109,7 @@ xrx.tree.prototype.eventNsUri = goog.abstractMethod;
  * @param {!string} feature The name of the feature.
  * @param {!boolean} flag On or off.
  */
-xrx.tree.prototype.setFeature = function(feature, flag) {
+xrx.traverse.prototype.setFeature = function(feature, flag) {
   this.stream_.setFeature(feature, flag);
 };
 
@@ -120,7 +120,7 @@ xrx.tree.prototype.setFeature = function(feature, flag) {
  * @param {!string} feature The feature to test.
  * @return {!boolean} True when on otherwise false.
  */
-xrx.tree.prototype.hasFeature = function(feature) {
+xrx.traverse.prototype.hasFeature = function(feature) {
   return this.stream_.hasFeature(feature);
 };
 
@@ -131,7 +131,7 @@ xrx.tree.prototype.hasFeature = function(feature) {
  * 
  * @param {!boolean} flag On or off.
  */
-xrx.tree.prototype.setFeatures = function(flag) {
+xrx.traverse.prototype.setFeatures = function(flag) {
   this.stream_.setFeatures(flag);
 };
 
@@ -140,7 +140,7 @@ xrx.tree.prototype.setFeatures = function(flag) {
 /**
  * @private
  */
-xrx.tree.prototype.secondaryLabel = function(label, primaryLabel) {
+xrx.traverse.prototype.secondaryLabel = function(label, primaryLabel) {
 
   if (label.isRoot()) {
     label = primaryLabel.clone();
@@ -158,7 +158,7 @@ xrx.tree.prototype.secondaryLabel = function(label, primaryLabel) {
  * backward direction.
  * @private
  */
-xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
+xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
   var tree = this;
   var label = opt_label || new xrx.label([1]);
   var attrLabel = new xrx.label();
@@ -170,7 +170,7 @@ xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
       if (forward) {
         lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
       } else {
-        if (lastTag !== xrx.label.END_TAG) label.parent();
+        if (lastTag !== xrx.token.END_TAG) label.parent();
       }
     }
 
@@ -193,7 +193,7 @@ xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
 
     tree.rowEmptyTag(label.clone(), offset, length1, length2);
 
-    lastTag = xrx.token.END_TAG;
+    forward ? lastTag = xrx.token.END_TAG : lastTag = xrx.token.START_TAG;
     attrLabel = new xrx.label();
     nsLabel = new xrx.label();
   };
@@ -203,7 +203,7 @@ xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
       if (forward) {
         if (lastTag !== xrx.token.START_TAG) label.parent();
       } else {
-        if (lastTag === xrx.token.END_TAG) label.child();
+        lastTag === xrx.token.END_TAG ? label.child() : label.precedingSibling();
       }
     }
 
@@ -248,7 +248,7 @@ xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
     tree.eventNsUri(nsLabel, offset, length);
   };
   
-  this.stream_.forward(opt_offset);
+  forward ? this.stream_.forward(opt_offset) : this.stream_.backward(opt_offset);
 };
 
 
@@ -256,7 +256,7 @@ xrx.tree.prototype.traverse = function(opt_label, opt_offset, forward) {
 /**
  * Stream over the labels of a XML instance in forward direction.
  */
-xrx.tree.prototype.forward = function(opt_label, opt_offset) {
+xrx.traverse.prototype.forward = function(opt_label, opt_offset) {
   this.traverse(opt_label, opt_offset, true);
 };
 
@@ -265,7 +265,8 @@ xrx.tree.prototype.forward = function(opt_label, opt_offset) {
 /**
  * Stream over the labels of a XML instance in backward direction.
  */
-xrx.tree.prototype.backward = function(opt_label, opt_offset) {
+xrx.traverse.prototype.backward = function(opt_label, opt_offset) {
   this.traverse(opt_label, opt_offset, false);
 };
+
 
