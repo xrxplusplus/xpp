@@ -146,14 +146,12 @@ xrx.node.prototype.isAfter = goog.abstractMethod;
 /**
  * Name functions
  */
-/*
 xrx.node.prototype.getName = goog.abstractMethod;
 xrx.node.prototype.getNameLocal = goog.abstractMethod;
 xrx.node.prototype.getNamespaceUri = goog.abstractMethod;
 xrx.node.prototype.getNamePrefix = goog.abstractMethod;
 xrx.node.prototype.getNamePrefixed = goog.abstractMethod;
 xrx.node.prototype.getNameExpanded = goog.abstractMethod;
-*/
 
 
 /**

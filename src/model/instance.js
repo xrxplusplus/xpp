@@ -8,7 +8,8 @@ goog.provide('xrx.instance');
 
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require("goog.net.XhrIo");
+goog.require('goog.net.XhrIo');
+goog.require('xrx.index');
 goog.require('xrx.model');
 goog.require('xrx.node');
 goog.require('xrx.pilot');
@@ -25,8 +26,9 @@ xrx.instance = function(element) {
 
   this.xml_;
 
+
+
   this.recalculate();
-  goog.dom.setTextContent(this.getElement(), '');
 };
 goog.inherits(xrx.instance, xrx.model);
 
@@ -45,7 +47,6 @@ xrx.instance.prototype.getDataInline = function() {
  * 
  */
 xrx.instance.prototype.getDataRemote = function() {
-
   var request = new goog.net.XhrIo();
 
   goog.events.listen(request, 'complete', function() {
@@ -89,3 +90,13 @@ xrx.instance.prototype.document = function(id) {
   return node;
 };
 
+
+
+/**
+ *
+ */
+xrx.instance.prototype.getIndex = function() {
+  if (!this.index_) this.index_ = new xrx.index(this.xml_);
+
+  return this.index_;
+};

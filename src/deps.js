@@ -7,7 +7,7 @@ goog.addDependency('../../../../src/core/xrx.js', ['xrx'], ['goog.dom', 'xrx.bin
 goog.addDependency('../../../../src/model/bind.js', ['xrx.bind'], ['xrx.model', 'xrx.xpath']);
 goog.addDependency('../../../../src/model/component.js', ['xrx.component'], ['goog.events.EventHandler', 'goog.ui.IdGenerator']);
 goog.addDependency('../../../../src/model/controller.js', ['xrx.controller'], ['xrx.update']);
-goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.model', 'xrx.node', 'xrx.pilot']);
+goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.index', 'xrx.model', 'xrx.node', 'xrx.pilot']);
 goog.addDependency('../../../../src/model/model.js', ['xrx.model'], ['xrx.component']);
 goog.addDependency('../../../../src/view/codemirror.js', ['xrx.codemirror'], ['xrx.model', 'xrx.view']);
 goog.addDependency('../../../../src/view/console.js', ['xrx.console'], ['goog.dom', 'xrx.serialize', 'xrx.view']);
@@ -62,6 +62,7 @@ goog.addDependency('../../../../src/xpath/node/comment.js', ['xrx.node.Comment']
 goog.addDependency('../../../../src/xpath/node/document.js', ['xrx.node.Document'], ['xrx.node', 'xrx.token', 'xrx.xpath.NodeSet']);
 goog.addDependency('../../../../src/xpath/node/documentS.js', ['xrx.node.DocumentS'], ['xrx.node.Document', 'xrx.nodeS']);
 goog.addDependency('../../../../src/xpath/node/element.js', ['xrx.node.Element'], ['xrx.node', 'xrx.node.Attribute', 'xrx.pilot', 'xrx.stream', 'xrx.token', 'xrx.xpath.NodeSet']);
+goog.addDependency('../../../../src/xpath/node/elementB.js', ['xrx.node.ElementB'], ['xrx.node']);
 goog.addDependency('../../../../src/xpath/node/elementS.js', ['xrx.node.ElementS'], ['xrx.node.Element', 'xrx.nodeS']);
 goog.addDependency('../../../../src/xpath/node/namespace.js', ['xrx.node.Namespace'], ['xrx.node', 'xrx.token', 'xrx.xpath.NodeSet']);
 goog.addDependency('../../../../src/xpath/node/node.js', ['xrx.node'], ['xrx.token', 'xrx.xdm']);
