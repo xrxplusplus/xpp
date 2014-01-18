@@ -405,17 +405,6 @@ xrx.pilot.prototype.emptyTag = function(context, target, opt_update) {
 };
 
 
-/**
- * Shared utility function for all secondary tokens.
- * @private
- */
-xrx.pilot.prototype.secondaryToken_ = function(context, target, streamFunc, tokenConstr) {
-
-  
-  return token;
-};
-
-
 
 /**
  * Get the location and optionally update a xrx.token.TagName.
