@@ -1,6 +1,6 @@
 /**
- * @fileoverview A class implementing the element node
- * type for streaming XPath evaluation.
+ * @fileoverview A class representing a element node
+ * implementation working on a streaming XML model.
  */
 
 goog.provide('xrx.node.ElementS');

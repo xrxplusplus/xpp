@@ -13,7 +13,7 @@ goog.require('xrx.node');
 /**
  * @constructor
  */
-xrx.nodeS = function(type, token, instance) {
+xrx.nodeB = function(type, token, instance) {
   goog.base(this, type, token, instance);
 };
 goog.inherits(xrx.nodeB, xrx.node);

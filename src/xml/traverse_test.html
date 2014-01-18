@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>XRX++ Unit Tests - xrx.tree</title>
+<title>XRX++ Unit Tests - xrx.traverse</title>
 <script src='../../lib/closure-library/closure/goog/base.js'></script>
 <script src='../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.array');
   goog.require('goog.testing.jsunit');
   goog.require('xrx.label');
-  goog.require('xrx.tree');
+  goog.require('xrx.traverse');
 </script>
 </head>
 <body>
@@ -45,25 +45,38 @@ function test01forward() {
     13: [1]
   };
   var labels = [];
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
 
-  tree.rowStartTag = function(label) {
+  traverse.rowStartTag = function(label) {
     labels.push(label);
   };
 
-  tree.rowEndTag = function(label) {
+  traverse.rowEndTag = function(label) {
     labels.push(label);
   };
 
-  tree.rowEmptyTag = function(label) {
+  traverse.rowEmptyTag = function(label) {
     labels.push(label);
   };
 
   // test forward
-  tree.forward();
-  for (var i = 0; i <= 13; i++) {
-    assertTrue(new xrx.label(test[i]).sameAs(labels[i]));
-  }
+  traverse.forward();
+
+  assertTrue(new xrx.label(test[0]).sameAs(labels[0]));
+  assertTrue(new xrx.label(test[1]).sameAs(labels[1]));
+  assertTrue(new xrx.label(test[2]).sameAs(labels[2]));
+  assertTrue(new xrx.label(test[3]).sameAs(labels[3]));
+  assertTrue(new xrx.label(test[4]).sameAs(labels[4]));
+  assertTrue(new xrx.label(test[5]).sameAs(labels[5]));
+  assertTrue(new xrx.label(test[6]).sameAs(labels[6]));
+  assertTrue(new xrx.label(test[7]).sameAs(labels[7]));
+  assertTrue(new xrx.label(test[8]).sameAs(labels[8]));
+  assertTrue(new xrx.label(test[9]).sameAs(labels[9]));
+  assertTrue(new xrx.label(test[10]).sameAs(labels[10]));
+  assertTrue(new xrx.label(test[11]).sameAs(labels[11]));
+  assertTrue(new xrx.label(test[12]).sameAs(labels[12]));
+  assertTrue(new xrx.label(test[13]).sameAs(labels[13]));
+
 };
 
 function test02backward() {
@@ -82,61 +95,63 @@ function test02backward() {
   var xml = '<start><empty/><empty/><start><start></end><empty/><start><empty/></end></end></end>';
   //         [1]    [1,1]   [1,2]   [1,3]  [1,3,1][1,3,1][1,3,2][1,3,3][1,3,3,1][1,3,3][1,3][1]
   var test = {
-    0:  [1],
-    1:  [1,1],
-    2:  [1,2],
-    3:  [1,3],
+    0:  [1,3,3],
+    1:  [1,3,3,1],
+    2:  [1,3,3],
+    3:  [1,3,2],
     4:  [1,3,1],
     5:  [1,3,1],
-    6:  [1,3,2],
-    7:  [1,3,3],
-    8:  [1,3,3,1],
-    9:  [1,3,3],
-    10: [1,3],
-    11: [1]
+    6:  [1,3],
+    7:  [1,2],
+    8:  [1,1],
+    9:  [1]
   };
   var labels = [];
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
 
-  tree.rowStartTag = function(label, offset, length) {
+  traverse.rowStartTag = function(label, offset, length) {
     labels.push(label);
-    console.log(xml.substr(offset, length));
   };
 
-  tree.rowEndTag = function(label, offset, length) {
+  traverse.rowEndTag = function(label, offset, length) {
     labels.push(label);
-    console.log(xml.substr(offset, length));
   };
 
-  tree.rowEmptyTag = function(label, offset, length) {
+  traverse.rowEmptyTag = function(label, offset, length) {
     labels.push(label);
-    console.log(xml.substr(offset, length));
   };
 
   // test backward
-  tree.backward(new xrx.label([1,3,3]), 79);
-  console.log(labels);
-  for (var i = 9; i >= 0; i--) {
-    assertTrue(new xrx.label(test[i]).sameAs(labels[i]));
-  }
+  traverse.backward(new xrx.label([1,3,3]), 72);
+
+  assertTrue(new xrx.label(test[0]).sameAs(labels[0]));
+  assertTrue(new xrx.label(test[1]).sameAs(labels[1]));
+  assertTrue(new xrx.label(test[2]).sameAs(labels[2]));
+  assertTrue(new xrx.label(test[3]).sameAs(labels[3]));
+  assertTrue(new xrx.label(test[4]).sameAs(labels[4]));
+  assertTrue(new xrx.label(test[5]).sameAs(labels[5]));
+  assertTrue(new xrx.label(test[6]).sameAs(labels[6]));
+  assertTrue(new xrx.label(test[7]).sameAs(labels[7]));
+  assertTrue(new xrx.label(test[8]).sameAs(labels[8]));
+  assertTrue(new xrx.label(test[9]).sameAs(labels[9]));
 };
 
 function test03offsetStartTag() {
   var xml = '<test><a></a></test>';
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
   var endLabels = [];
 
-  tree.rowStartTag = function(label) {
+  traverse.rowStartTag = function(label) {
   };
 
-  tree.rowEndTag = function(label) {
+  traverse.rowEndTag = function(label) {
     endLabels.push(label);
   };
 
-  tree.rowEmptyTag = function(label) {
+  traverse.rowEmptyTag = function(label) {
   };
 
-  tree.forward(new xrx.label([1, 1]), 5);
+  traverse.forward(new xrx.label([1, 1]), 5);
 
   assertEquals(2, endLabels.length);
   assertTrue(endLabels[0].sameAs(new xrx.label([1, 1])));
@@ -145,20 +160,20 @@ function test03offsetStartTag() {
 
 function test04offsetEmptyTag() {
   var xml = '<test><a/></test>';
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
   var endLabels = [];
 
-  tree.rowStartTag = function(label) {
+  traverse.rowStartTag = function(label) {
   };
 
-  tree.rowEndTag = function(label) {
+  traverse.rowEndTag = function(label) {
     endLabels.push(label);
   };
 
-  tree.rowEmptyTag = function(label) {
+  traverse.rowEmptyTag = function(label) {
   };
 
-  tree.forward(new xrx.label([1, 1]), 5);
+  traverse.forward(new xrx.label([1, 1]), 5);
 
   assertEquals(1, endLabels.length);
   assertTrue(endLabels[0].sameAs(new xrx.label([1])));
@@ -166,20 +181,20 @@ function test04offsetEmptyTag() {
 
 function test05offsetEndTag() {
   var xml = '<test><a></a></test>';
-  var tree = new xrx.tree(xml);
+  var traverse = new xrx.traverse(xml);
   var endLabels = [];
 
-  tree.rowStartTag = function(label) {
+  traverse.rowStartTag = function(label) {
   };
 
-  tree.rowEndTag = function(label) {
+  traverse.rowEndTag = function(label) {
     endLabels.push(label);
   };
 
-  tree.rowEmptyTag = function(label) {
+  traverse.rowEmptyTag = function(label) {
   };
 
-  tree.forward(new xrx.label([1]), 12);
+  traverse.forward(new xrx.label([1]), 12);
 
   assertEquals(1, endLabels.length);
   assertTrue(endLabels[0].sameAs(new xrx.label([1])));
@@ -189,9 +204,9 @@ function test06features() {
   var xml = '<test attr1="v1" attr2="v2"' + 
       ' xmlns:a="http://example.org/a"' + 
       ' xmlns:b="http://example.org/b"></test>';
-  var tree = new xrx.tree(xml);
-  tree.setFeatures(true);
-  tree.setFeature('ATTRIBUTE', false);
+  var traverse = new xrx.traverse(xml);
+  traverse.setFeatures(true);
+  traverse.setFeature('ATTRIBUTE', false);
   
   var tagNames = [];
   var attributes = [];
@@ -201,33 +216,33 @@ function test06features() {
   var nsPrefixes = [];
   var nsUris = [];
 
-  tree.rowStartTag = function() {};
-  tree.rowEndTag = function() {};
-  tree.rowEmptyTag = function() {};
-  tree.eventTagName = function(label) {
+  traverse.rowStartTag = function() {};
+  traverse.rowEndTag = function() {};
+  traverse.rowEmptyTag = function() {};
+  traverse.eventTagName = function(label) {
     tagNames.push(label.clone());
   };
-  tree.eventAttribute = function(label) {
+  traverse.eventAttribute = function(label) {
     attributes.push(label.clone());
   };
-  tree.eventAttrName = function(label) {
+  traverse.eventAttrName = function(label) {
     attrNames.push(label.clone());
   };
-  tree.eventAttrValue = function(label) {
+  traverse.eventAttrValue = function(label) {
     attrValues.push(label.clone());
   };
-  tree.eventNamespace = function(label) {
+  traverse.eventNamespace = function(label) {
     namespaces.push(label.clone());
   };
-  tree.eventNsPrefix = function(label) {
+  traverse.eventNsPrefix = function(label) {
     nsPrefixes.push(label.clone());
   };
-  tree.eventNsUri = function(label) {
+  traverse.eventNsUri = function(label) {
     nsUris.push(label.clone());
   };
   
-  tree.forward();
-  tree.backward();
+  traverse.forward();
+  traverse.backward();
   
   assertTrue(tagNames[0].sameAs(new xrx.label([1])));
   assertTrue(tagNames[1].sameAs(new xrx.label([1])));
@@ -255,3 +270,4 @@ function test06features() {
 </script>
 </body>
 </html>
+

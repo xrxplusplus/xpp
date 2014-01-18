@@ -24,13 +24,13 @@ goog.require('xrx.token.StartEmptyTag');
 goog.require('xrx.token.StartTag');
 goog.require('xrx.token.Tag');
 goog.require('xrx.token.TagName');
-goog.require('xrx.tree');
+goog.require('xrx.traverse');
 
 
 
 /**
- * Constructs a new pilot. A pilot is able to traverse a XML tree
- * in forward and backward direction.
+ * Constructs a new pilot. A pilot is able to traverse a labeled 
+ * XML instance in forward and backward direction.
  * 
  * @param {!string} xml A XML string. 
  * @constructor
@@ -40,9 +40,9 @@ xrx.pilot = function(xml) {
 
 
   /**
-   * Initialize the XML tree.
+   * Initialize XML traversing.
    */
-  this.tree_ = new xrx.tree(xml);
+  this.traverse_ = new xrx.traverse(xml);
 
 
 
@@ -52,12 +52,12 @@ xrx.pilot = function(xml) {
    * @type {xrx.stream}
    * @private
    */
-  this.stream_ = this.tree_.stream();
+  this.stream_ = this.traverse_.stream();
 
 
 
   /**
-   * Path lastly used to traverse the XML tree 
+   * Path lastly used to traverse the XML instance 
    * (for debugging only).
    * 
    * @private
@@ -72,7 +72,7 @@ xrx.pilot.prototype.stream = function() {
 
 
 /**
- * Returns the path lastly used to traverse the XML tree 
+ * Returns the path lastly used to traverse the XML instance 
  * (for debugging only).
  * @return {?}
  */
@@ -104,7 +104,7 @@ xrx.pilot.prototype.stop = function() {
 
 
 /**
- * Forward piloting.
+ * Forward traversing.
  * 
  * @param context The context token.
  * @param target The target token.
@@ -115,7 +115,7 @@ xrx.pilot.prototype.forward = function(context, target) {
   var startOffset = context ? context.offset() : undefined;
   var pilot = this;
 
-  pilot.tree_.rowStartTag = function(label, offset, length1, length2) {
+  pilot.traverse_.rowStartTag = function(label, offset, length1, length2) {
     var tmp;
 
     if (target.type() === xrx.token.NOT_TAG) {
@@ -138,7 +138,7 @@ xrx.pilot.prototype.forward = function(context, target) {
     lastTag = xrx.token.START_TAG;
   };
   
-  pilot.tree_.rowEndTag = function(label, offset, length1, length2) {
+  pilot.traverse_.rowEndTag = function(label, offset, length1, length2) {
 
     if (target.compare(xrx.token.END_TAG, label)) {
       tok = new xrx.token.EndTag(label.clone());
@@ -155,7 +155,7 @@ xrx.pilot.prototype.forward = function(context, target) {
     lastTag = xrx.token.END_TAG;
   };
   
-  pilot.tree_.rowEmptyTag = function(label, offset, length1, length2) {
+  pilot.traverse_.rowEmptyTag = function(label, offset, length1, length2) {
  
     if (target.compare(xrx.token.EMPTY_TAG, label)) {
       tok = new xrx.token.EmptyTag(label.clone());
@@ -172,7 +172,7 @@ xrx.pilot.prototype.forward = function(context, target) {
     lastTag = xrx.token.END_TAG;
   };
   
-  pilot.tree_.forward(startLabel, startOffset);
+  pilot.traverse_.forward(startLabel, startOffset);
 
   return tok;
 };
@@ -180,7 +180,7 @@ xrx.pilot.prototype.forward = function(context, target) {
 
 
 /**
- * Backward tree traversing.
+ * Backward traversing.
  * 
  * @param {?} target The target token.
  */
@@ -564,7 +564,7 @@ xrx.pilot.prototype.attributes = function(context, target, opt_update) {
   
   // reset the stream reader position, important!
   this.stream_.pos(pos); 
-  console.log(attributes);
+
   return opt_update === undefined ? attributes : 
       xrx.update.attributes(this.stream_, attributes, opt_update);
 };

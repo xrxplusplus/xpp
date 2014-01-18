@@ -15,7 +15,7 @@ var _allTests = [
     "./xml/reader_test.html",
     "./xml/stream_test.html",
     "./xml/token/token_test.html",
-    "./xml/tree_test.html",
+    "./xml/traverse_test.html",
     "./xml/update_test.html",
     "./xpath/functionCall_test.html", // xpath 
     "./xpath/kindTest_test.html",
