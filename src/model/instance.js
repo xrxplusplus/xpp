@@ -28,6 +28,10 @@ xrx.instance = function(element) {
 
 
 
+  this.stream_;
+
+
+
   this.recalculate();
 };
 goog.inherits(xrx.instance, xrx.model);
@@ -66,6 +70,7 @@ xrx.instance.prototype.getDataRemote = function() {
  */
 xrx.instance.prototype.recalculate = function() {
   this.getSrcUri() ? this.getDataRemote() : this.getDataInline();
+  this.stream_ = new xrx.stream(this.xml_);
 };
 
 
@@ -76,6 +81,15 @@ xrx.instance.prototype.recalculate = function() {
 xrx.instance.prototype.xml = function(xml) {
   if (xml) this.xml_ = xml;
   return this.xml_;
+};
+
+
+
+/**
+ * @return {!xrx.stream} The XML stream.
+ */
+xrx.instance.prototype.getStream = function() {
+  return this.stream_;
 };
 
 

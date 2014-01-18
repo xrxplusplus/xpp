@@ -20,7 +20,7 @@ goog.addDependency('../../../../src/view/richxmlMode.js', ['xrx.richxml.mode'], 
 goog.addDependency('../../../../src/view/richxmlTagname.js', ['xrx.richxml.tagname'], ['goog.dom', 'goog.style', 'xrx.i18n', 'xrx.richxml']);
 goog.addDependency('../../../../src/view/textarea.js', ['xrx.textarea'], []);
 goog.addDependency('../../../../src/view/view.js', ['xrx.view'], ['goog.string', 'xrx.control']);
-goog.addDependency('../../../../src/xml/index.js', ['xrx.index'], ['goog.math.Long', 'xrx.node', 'xrx.traverse']);
+goog.addDependency('../../../../src/xml/index.js', ['xrx.index'], ['goog.math.Long', 'xrx.label', 'xrx.token', 'xrx.traverse']);
 goog.addDependency('../../../../src/xml/label.js', ['xrx.label'], []);
 goog.addDependency('../../../../src/xml/location.js', ['xrx.location'], []);
 goog.addDependency('../../../../src/xml/parse.js', ['xrx.parse'], ['xrx.serialize']);
@@ -61,8 +61,8 @@ goog.addDependency('../../../../src/xpath/node/attributeS.js', ['xrx.node.Attrib
 goog.addDependency('../../../../src/xpath/node/comment.js', ['xrx.node.Comment'], ['xrx.node']);
 goog.addDependency('../../../../src/xpath/node/document.js', ['xrx.node.Document'], ['xrx.node', 'xrx.token', 'xrx.xpath.NodeSet']);
 goog.addDependency('../../../../src/xpath/node/documentS.js', ['xrx.node.DocumentS'], ['xrx.node.Document', 'xrx.nodeS']);
-goog.addDependency('../../../../src/xpath/node/element.js', ['xrx.node.Element'], ['xrx.node', 'xrx.node.Attribute', 'xrx.pilot', 'xrx.stream', 'xrx.token', 'xrx.xpath.NodeSet']);
-goog.addDependency('../../../../src/xpath/node/elementB.js', ['xrx.node.ElementB'], ['xrx.node']);
+goog.addDependency('../../../../src/xpath/node/element.js', ['xrx.node.Element'], ['goog.string', 'xrx.node', 'xrx.node.Attribute', 'xrx.pilot', 'xrx.stream', 'xrx.token', 'xrx.xpath.NodeSet']);
+goog.addDependency('../../../../src/xpath/node/elementB.js', ['xrx.node.ElementB'], ['xrx.node', 'xrx.node.Element']);
 goog.addDependency('../../../../src/xpath/node/elementS.js', ['xrx.node.ElementS'], ['xrx.node.Element', 'xrx.nodeS']);
 goog.addDependency('../../../../src/xpath/node/namespace.js', ['xrx.node.Namespace'], ['xrx.node', 'xrx.token', 'xrx.xpath.NodeSet']);
 goog.addDependency('../../../../src/xpath/node/node.js', ['xrx.node'], ['xrx.token', 'xrx.xdm']);

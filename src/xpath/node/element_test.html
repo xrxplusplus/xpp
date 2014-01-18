@@ -15,18 +15,43 @@
 </script>
 </head>
 <body>
-<div id="i1" class="xrx-instance">&lt;x xmlns="http://example.org/x"&gt;&lt;y:y xmlns:y="http:example.org/y"/&gt;&lt;z/&gt;&lt;/x&gt;</div>
+
+<div id="i1" class="xrx-instance">&lt;x xmlns="http://example.org/x"&gt;&lt;y:y xmlns:y="http://example.org/y"/&gt;&lt;z/&gt;&lt;/x&gt;</div>
+
 <script type="text/javascript">
 
-function test01nameFunctions() {
+function test02nameFunctions() {
   var instance = new xrx.instance(goog.dom.getElement('i1'));
   var token1 = new xrx.token.EmptyTag(new xrx.label([1,1]));
   var token2 = new xrx.token.EmptyTag(new xrx.label([1,2]));
   var elementB1 = new xrx.node.ElementB(instance, token1);
   var elementB2 = new xrx.node.ElementB(instance, token2);
 
-  assertEquals(elementB1.getName(), 'y:y');
-  assertEquals(elementB2.getName(), 'z'); 
+  var nameB1 = elementB1.getName();
+  var nameB2 = elementB2.getName();
+
+  var localNameB1 = xrx.node.Element.getNameLocal(nameB1);
+  var localNameB2 = xrx.node.Element.getNameLocal(nameB2);
+  
+  var prefixB1 = xrx.node.Element.getNamePrefix(nameB1);
+  var prefixB2 = xrx.node.Element.getNamePrefix(nameB2);
+  
+  var namespaceUriB1 = elementB1.getNamespaceUri(prefixB1);
+  var namespaceUriB2 = elementB2.getNamespaceUri(prefixB2);
+  
+  var expandedNameB1 = xrx.node.Element.getNameExpanded(namespaceUriB1, localNameB1);
+  var expandedNameB2 = xrx.node.Element.getNameExpanded(namespaceUriB2, localNameB2);
+
+  assertEquals(nameB1, 'y:y');
+  assertEquals(nameB2, 'z');
+  assertEquals(localNameB1, 'y');
+  assertEquals(localNameB2, 'z');
+  assertEquals(prefixB1, 'xmlns:y');
+  assertEquals(prefixB2, 'xmlns');
+  assertEquals(namespaceUriB1, 'http://example.org/y');
+  assertEquals(namespaceUriB2, 'http://example.org/x');
+  assertEquals(expandedNameB1, 'http://example.org/y#y');
+  assertEquals(expandedNameB2, 'http://example.org/x#z');
 };
 
 </script>

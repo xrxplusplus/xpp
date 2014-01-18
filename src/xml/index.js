@@ -8,12 +8,18 @@ goog.provide('xrx.index');
 
 
 
+goog.require('goog.array');
 goog.require('goog.math.Long');
-goog.require('xrx.node');
+goog.require('xrx.label');
+goog.require('xrx.token');
 goog.require('xrx.traverse');
 
 
 
+/**
+ * A class to create long-lived binary encodings for
+ * XML instances.
+ */
 xrx.index = function(xml, opt_format) {
 
 
@@ -30,60 +36,104 @@ xrx.index = function(xml, opt_format) {
 
 
 
+  this.tNamespace_ = [];
+
+
+
   this.reindex(xml);
 };
 
 
 
+/**
+ * 
+ */
 xrx.index.prototype.length = function() {
   return this.rows_.length;
 };
 
 
 
+/**
+ * 
+ */
 xrx.index.prototype.last = function() {
   return this.length() - 1;
 };
 
 
+/**
+ * 
+ */
+xrx.index.Namespace = function(opt_label, opt_prefix, opt_uri) {
 
+
+
+  this.label = opt_label;
+
+
+
+  this.parentLabel;
+
+
+
+  this.prefix = opt_prefix;
+
+
+
+  this.uri = opt_uri;
+};
+
+/**
+ * 
+ */
 xrx.index.prototype.reindex = function(xml) {
   var traverse = new xrx.traverse(xml);
   var row;
   var index = this;
   var parent;
 
-  traverse.namespace = function() {
-    row = index.head();
-  };
-
-  traverse.rowStartTag = function(label, offset, length) {
+  traverse.setFeature('NS_PREFIX', true);
+  traverse.setFeature('NS_URI', true);
+  
+  var update = function(row, type, label, offset, length) {
     parent = label.clone();
     parent.parent();
 
-    row = index.head();
-    index.setType(row, xrx.node.ELEMENT);
+    index.setType(row, type);
     index.setPosition(row, label.last());
-    index.setParent(row, parent);
+    index.setParent(row, index.labelBuffer_[parent.toString()]);
     index.setOffset(row, offset);
     index.setLength(row, length);
+  };
+
+  traverse.rowStartTag = function(label, offset, length) {
+
+    update(index.head(), xrx.token.START_TAG, label, offset, length);
     index.labelBuffer_[label.toString()] = index.last();
   };
 
   traverse.rowEmptyTag = function(label, offset, length) {
-    parent = label.clone();
-    parent.parent();
 
-    row = index.head();
-    index.setType(row, xrx.node.ELEMENT);
-    index.setPosition(row, label.last());
-    index.setParent(row, parent);
-    index.setOffset(row, offset);
-    index.setLength(row, length);
+    update(index.head(), xrx.token.EMPTY_TAG, label, offset, length);
   };
 
   traverse.rowEndTag = function(label, offset, length) {
+
+    update(index.head(), xrx.token.END_TAG, label, offset, length);
     delete index.labelBuffer_[label.toString()];
+  };
+
+  traverse.eventNsPrefix = function(label, offset, length) {
+    var ns = new xrx.index.Namespace(label.clone(), xml.substr(offset, length));
+    var parent = label.clone();
+    parent.parent();
+    ns.parentLabel = parent;
+    index.tNamespace_.push(ns);
+  };
+
+  traverse.eventNsUri = function(label, offset, length) {
+    index.tNamespace_[index.tNamespace_.length - 1].uri = xml.substr(offset, length);
   };
 
   traverse.forward();
@@ -162,27 +212,39 @@ xrx.index.update = function(row, integer, format) {
 /**
  * @private
  */
-xrx.index.row.prototype.get = function(integer, format) {
-  var long = goog.math.Long.fromInt(integer);
+xrx.index.row.prototype.get = function(item, format) {
+  var i = xrx.index.format[format][item];
+  var mask = xrx.index.mask[format][item];
 
-  long = long.shiftLeft(format.shift);
-  this[format.bits] = this[format.bits].or(long);
+  return this[i.bits].and(mask).shiftRight(i.shift).toInt();
 };
 
 
 
+/**
+ * return {!integer} The token type.
+ */
 xrx.index.row.prototype.getType = function(format) {
-  var mask = xrx.index.mask[format].TYPE;
-  var long = this.low_.and(mask).shiftRight(59);
-
-  return long.toInt();
+  return this.get('TYPE', format);
 };
 
 
 
+/**
+ * 
+ */
 xrx.index.prototype.setType = function(row, type) {
   xrx.index.update(row, type, 
       xrx.index.format[this.format_].TYPE);
+};
+
+
+
+/**
+ * return {!integer}
+ */
+xrx.index.row.prototype.getPosition = function(format) {
+  return this.get('POSITION', format);
 };
 
 
@@ -194,9 +256,21 @@ xrx.index.prototype.setPosition = function(row, position) {
 
 
 
+xrx.index.row.prototype.getParent = function(format) {
+  return this.get('PARENT', format);
+};
+
+
+
 xrx.index.prototype.setParent = function(row, position) {
   xrx.index.update(row, position, 
       xrx.index.format[this.format_].PARENT); 
+};
+
+
+
+xrx.index.row.prototype.getOffset = function(format) {
+  return this.get('OFFSET', format);
 };
 
 
@@ -208,6 +282,12 @@ xrx.index.prototype.setOffset = function(row, offset) {
 
 
 
+xrx.index.row.prototype.getLength = function(format) {
+  return this.get('LENGTH', format);
+};
+
+
+
 xrx.index.prototype.setLength = function(row, length) {
   xrx.index.update(row, length, 
       xrx.index.format[this.format_].LENGTH);
@@ -215,14 +295,52 @@ xrx.index.prototype.setLength = function(row, length) {
 
 
 
-xrx.index.prototype.tagName = function(target) {
-  var start = 0;
-  var row;
+xrx.index.prototype.getLabel = function(pos) {
+  var row = this.rows_[pos];
+  var next;
+  var label = [];
 
-  while(row = this.rows_[start]) {
-    row.getType(this.format_);
+  label.unshift(row.getPosition(this.format_));
+  if (pos === 0 || pos === this.last()) return new xrx.label(label);
+
+  for(;;) {
+    next = row.getParent(this.format_);
+    row = this.rows_[next];
+    label.unshift(row.getPosition(this.format_));
+    if (next === 0) break;
+  }
+
+  return new xrx.label(label);
+};
+
+
+
+xrx.index.prototype.getToken = function(token, opt_start) {
+  var start = opt_start || 0;
+  var row;
+  var tag;
+
+  while(start <= this.last()) {
+    row = this.rows_[start]
+    if (token.typeOf(row.getType(this.format_)) && 
+        this.getLabel(start).sameAs(token.label())) break;
     start++;
   }
+
+  tag = new xrx.token(row.getType(this.format_), this.getLabel(start),
+      row.getOffset(this.format_), row.getLength(this.format_));
+  
+  return xrx.token.native(tag);
+};
+
+
+
+xrx.index.prototype.getNamespace = function(token, prefix) {
+
+  return goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
+    return ns.prefix === prefix && (token.label().sameAs(ns.parentLabel) ||
+        token.label().isDescendantOf(ns.parentLabel));
+  });
 };
 
 

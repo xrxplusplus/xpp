@@ -8,6 +8,7 @@ goog.provide('xrx.node.ElementB');
 
 
 goog.require('xrx.node');
+goog.require('xrx.node.Element');
 
 
 
@@ -27,8 +28,19 @@ goog.inherits(xrx.node.ElementB, xrx.node);
 
 
 xrx.node.ElementB.prototype.getName = function() {
-  var tagName = this.instance_.getIndex().tagName(this.token_, this.row_);
+  var inst = this.instance_;
+  var tag = inst.getIndex().getToken(this.token_);
+  var loc = inst.getStream().tagName(tag.xml(inst.xml()));
+  loc.offset += tag.offset();
 
-  return null;//token.xml(this.instance_.xml());
+  return loc.xml(inst.xml());
 };
 
+
+
+xrx.node.ElementB.prototype.getNamespaceUri = function(prefix) {
+  var inst = this.instance_;
+  var ns = inst.getIndex().getNamespace(this.token_, prefix);
+
+  return ns.uri;
+};

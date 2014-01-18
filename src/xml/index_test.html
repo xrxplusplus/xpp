@@ -7,16 +7,33 @@
 <script type="text/javascript">
   goog.require('goog.testing.jsunit');
   goog.require('xrx.index');
+  goog.require('xrx.label');
 </script>
 </head>
 <body>
 <script type="text/javascript">
 
-var xml           =         '<a>1<b>2</b>3<c/>4<d><e>5</e>6</d></a>';
+var xml = '<start><empty/><empty/><start><start></end></end><start><empty/></end><start></end><empty/></end>';
+//         [1]    [1,1]   [1,2]   [1,3]  [1,3,1][1,3,1][1,3][1,4]  [1,4,1] [1,4] [1,5]  [1,5] [1,6]   [1]
 var index = new xrx.index(xml);
 
-function test01() {
-  console.log(index);
+function test01basic() {
+  
+  assertEquals(14, index.length());
+  assertTrue(index.getLabel(0).sameAs(new xrx.label([1])));
+  assertTrue(index.getLabel(1).sameAs(new xrx.label([1,1])));
+  assertTrue(index.getLabel(2).sameAs(new xrx.label([1,2])));
+  assertTrue(index.getLabel(3).sameAs(new xrx.label([1,3])));
+  assertTrue(index.getLabel(4).sameAs(new xrx.label([1,3,1])));
+  assertTrue(index.getLabel(5).sameAs(new xrx.label([1,3,1])));
+  assertTrue(index.getLabel(6).sameAs(new xrx.label([1,3])));
+  assertTrue(index.getLabel(7).sameAs(new xrx.label([1,4])));
+  assertTrue(index.getLabel(8).sameAs(new xrx.label([1,4,1])));
+  assertTrue(index.getLabel(9).sameAs(new xrx.label([1,4])));
+  assertTrue(index.getLabel(10).sameAs(new xrx.label([1,5])));
+  assertTrue(index.getLabel(11).sameAs(new xrx.label([1,5])));
+  assertTrue(index.getLabel(12).sameAs(new xrx.label([1,6])));
+  assertTrue(index.getLabel(13).sameAs(new xrx.label([1])));
 };
 
 

@@ -533,7 +533,7 @@ xrx.stream.prototype.backward = function(opt_offset) {
  * 
  * @param {!string} xml The tag.
  * @param {?xrx.reader} opt_reader Optional reader object.
- * @return {!string} The tag-name.
+ * @return {!xrx.location} The tag-name.
  */
 xrx.stream.prototype.tagName = function(xml, opt_reader) {
   var state = xrx.stream.State_.TAG_START;
