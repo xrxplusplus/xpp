@@ -322,6 +322,7 @@ xrx.nodeS.prototype.backward = function() {
  * @private
  */
 xrx.nodeS.prototype.find = function(test, axisTest, reverse) {
+  console.log(test);
   var nodeset = new xrx.xpath.NodeSet();
   var instance = this.instance_;
   var elmnt;

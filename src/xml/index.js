@@ -334,20 +334,10 @@ xrx.index.prototype.getLabel = function(pos) {
 
 
 
-xrx.index.prototype.getToken = function(token, opt_start) {
-  var start = opt_start || 0;
-  var row;
-  var tag;
-
-  while(start <= this.last()) {
-    row = this.rows_[start]
-    if (token.typeOf(row.getType(this.format_)) && 
-        this.getLabel(start).sameAs(token.label())) break;
-    start++;
-  }
-
-  tag = new xrx.token(row.getType(this.format_), this.getLabel(start),
-      row.getOffset(this.format_), row.getLength1(this.format_));
+xrx.index.prototype.getToken = function(row) {
+  var r = this.rows_[row];
+  var tag = new xrx.token(r.getType(this.format_), this.getLabel(row),
+      r.getOffset(this.format_), r.getLength1(this.format_));
   
   return xrx.token.native(tag);
 };

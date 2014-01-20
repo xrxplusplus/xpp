@@ -1,6 +1,6 @@
 /**
- * @fileoverview A class to stream over the labels of
- * a XML instance.
+ * @fileoverview A class to stream over a labeled XML
+ * instance.
  */
 
 goog.provide('xrx.traverse');
@@ -12,7 +12,7 @@ goog.require('xrx.label');
 
 
 /**
- * A class to stream over the labels of a XML instance.
+ * A class to stream over a labeled XML instance.
  */
 xrx.traverse = function(xml) {
 
@@ -159,7 +159,7 @@ xrx.traverse.prototype.secondaryLabel = function(label, primaryLabel) {
  * @private
  */
 xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
-  var tree = this;
+  var traverse = this;
   var label = opt_label || new xrx.label([1]);
   var attrLabel = new xrx.label();
   var nsLabel = new xrx.label();
@@ -174,7 +174,7 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
       }
     }
 
-    tree.rowStartTag(label.clone(), offset, length1, length2);
+    traverse.rowStartTag(label.clone(), offset, length1, length2);
 
     lastTag = xrx.token.START_TAG;
     attrLabel = new xrx.label();
@@ -191,7 +191,7 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
       }
     }
 
-    tree.rowEmptyTag(label.clone(), offset, length1, length2);
+    traverse.rowEmptyTag(label.clone(), offset, length1, length2);
 
     forward ? lastTag = xrx.token.END_TAG : lastTag = xrx.token.START_TAG;
     attrLabel = new xrx.label();
@@ -207,45 +207,45 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
       }
     }
 
-    tree.rowEndTag(label.clone(), offset, length1, length2);
+    traverse.rowEndTag(label.clone(), offset, length1, length2);
 
     lastTag = xrx.token.END_TAG;
   };
 
   this.stream_.eventTagName = function(offset, length) {
-    tree.eventTagName(label.clone(), offset, length);
+    traverse.eventTagName(label.clone(), offset, length);
   };
 
   this.stream_.eventAttribute = function(offset, length) {
-    attrLabel = tree.secondaryLabel(attrLabel, label);
-    tree.eventAttribute(attrLabel, offset, length);
+    attrLabel = traverse.secondaryLabel(attrLabel, label);
+    traverse.eventAttribute(attrLabel, offset, length);
   };
 
   this.stream_.eventAttrName = function(offset, length) {
-    if (!tree.hasFeature('ATTRIBUTE')) attrLabel = tree.secondaryLabel(attrLabel, label);
-    tree.eventAttrName(attrLabel, offset, length);
+    if (!traverse.hasFeature('ATTRIBUTE')) attrLabel = traverse.secondaryLabel(attrLabel, label);
+    traverse.eventAttrName(attrLabel, offset, length);
   };
 
   this.stream_.eventAttrValue = function(offset, length) {
-    if (!tree.hasFeature('ATTRIBUTE') && !tree.hasFeature('ATTR_NAME')) 
-        attrLabel = tree.secondaryLabel(attrLabel, label);
-    tree.eventAttrValue(attrLabel, offset, length);
+    if (!traverse.hasFeature('ATTRIBUTE') && !traverse.hasFeature('ATTR_NAME')) 
+        attrLabel = traverse.secondaryLabel(attrLabel, label);
+    traverse.eventAttrValue(attrLabel, offset, length);
   };
   
   this.stream_.eventNamespace = function(offset, length) {
-    nsLabel = tree.secondaryLabel(nsLabel, label);
-    tree.eventNamespace(nsLabel, offset, length);
+    nsLabel = traverse.secondaryLabel(nsLabel, label);
+    traverse.eventNamespace(nsLabel, offset, length);
   };
   
   this.stream_.eventNsPrefix = function(offset, length) {
-    if (!tree.hasFeature('NAMESPACE')) nsLabel = tree.secondaryLabel(nsLabel, label);
-    tree.eventNsPrefix(nsLabel, offset, length);
+    if (!traverse.hasFeature('NAMESPACE')) nsLabel = traverse.secondaryLabel(nsLabel, label);
+    traverse.eventNsPrefix(nsLabel, offset, length);
   };
   
   this.stream_.eventNsUri = function(offset, length) {
-    if (!tree.hasFeature('NAMESPACE') && !tree.hasFeature('NS_PREFIX')) 
-      nsLabel = tree.secondaryLabel(nsLabel, label);
-    tree.eventNsUri(nsLabel, offset, length);
+    if (!traverse.hasFeature('NAMESPACE') && !traverse.hasFeature('NS_PREFIX')) 
+      nsLabel = traverse.secondaryLabel(nsLabel, label);
+    traverse.eventNsUri(nsLabel, offset, length);
   };
   
   forward ? this.stream_.forward(opt_offset) : this.stream_.backward(opt_offset);

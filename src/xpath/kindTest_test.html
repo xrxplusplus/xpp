@@ -26,7 +26,7 @@ function test01Text() {
   var node = new xrx.node.DocumentS(instance);
 
   var result = xrx.xpath.evaluate(expr, node, null, xrx.xpath.XPathResultType.ANY_TYPE);
-
+  console.log(xrx.xpath);
   assertEquals(7, result.snapshotLength);
   assertEquals('1', result.iterateNext().token().xml(instance.xml()));
   assertEquals('2', result.iterateNext().token().xml(instance.xml()));

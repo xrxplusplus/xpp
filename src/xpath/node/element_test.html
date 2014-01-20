@@ -12,20 +12,23 @@
   goog.require('xrx.node.Element');
   goog.require('xrx.node.ElementS');
   goog.require('xrx.node.ElementB');
+  goog.require('xrx.xpath');
+  goog.require('xrx.xpath.NameTest');
+  goog.require('xrx.xpath.KindTest');
 </script>
 </head>
 <body>
 
 <div id="i1" class="xrx-instance">&lt;x xmlns="http://example.org/x"&gt;&lt;y:y xmlns:y="http://example.org/y"/&gt;&lt;z/&gt;&lt;/x&gt;</div>
 
+<div id="i2" class="xrx-instance">&lt;a&gt;&lt;b&gt;&lt;c/&gt;&lt;/b&gt;&lt;d/&gt;&lt;e/&gt;&lt;/a&gt;</div>
+
 <script type="text/javascript">
 
 function test02nameFunctions() {
   var instance = new xrx.instance(goog.dom.getElement('i1'));
-  var token1 = new xrx.token.EmptyTag(new xrx.label([1,1]));
-  var token2 = new xrx.token.EmptyTag(new xrx.label([1,2]));
-  var elementB1 = new xrx.node.ElementB(instance, token1);
-  var elementB2 = new xrx.node.ElementB(instance, token2);
+  var elementB1 = new xrx.node.ElementB(instance, 1);
+  var elementB2 = new xrx.node.ElementB(instance, 2);
 
   var nameB1 = elementB1.getName();
   var nameB2 = elementB2.getName();
@@ -52,6 +55,22 @@ function test02nameFunctions() {
   assertEquals(namespaceUriB2, 'http://example.org/x');
   assertEquals(expandedNameB1, 'http://example.org/y#y');
   assertEquals(expandedNameB2, 'http://example.org/x#z');
+};
+
+
+function test03nodeAncestor() {
+  var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
+
+
+  var c = new xrx.node.ElementB(instance, 2);
+
+  var ancestorNode = c.getNodeAncestor(new xrx.xpath.KindTest('node'));
+  var ancestorElement = c.getNodeAncestor(new xrx.xpath.NameTest('*'));
+  var ancestorText = c.getNodeAncestor(new xrx.xpath.KindTest('text'));
+  var ancestorAttribute = c.getNodeAncestor(new xrx.xpath.NameTest('@*'));
 };
 
 </script>

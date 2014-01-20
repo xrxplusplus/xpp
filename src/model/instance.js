@@ -107,7 +107,7 @@ xrx.instance.prototype.document = function(id) {
 
 
 /**
- *
+ * @return {!xrx.index}
  */
 xrx.instance.prototype.getIndex = function() {
   if (!this.index_) this.index_ = new xrx.index(this.xml_);

@@ -19,7 +19,8 @@ var _allTests = [
     "./xml/update_test.html",
     "./xpath/functionCall_test.html", // xpath 
     "./xpath/kindTest_test.html",
-    "./xpath/node/node_test.html",
     "./xpath/step_test.html",
-    "./xpath/xpath_test.html"
+    "./xpath/xpath_test.html",
+    "./xpath/node/node_test.html", // node
+    "./xpath/node/element_test.html"
     ];

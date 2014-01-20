@@ -134,6 +134,11 @@ xrx.node.prototype.getValueAsBool = function() {
 
 
 
+
+/**
+ * INTERFACE
+ */
+
 /**
  * Identity and positional functions
  */
