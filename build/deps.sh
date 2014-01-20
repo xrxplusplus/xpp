@@ -2,7 +2,7 @@
 
 echo "###################################"
 echo "#                                 #"
-echo "# Update XPath Dependency File    #"
+echo "# Update Dependency File          #"
 echo "#                                 #"
 echo "###################################"
 cd src

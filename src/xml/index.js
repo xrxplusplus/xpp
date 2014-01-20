@@ -62,6 +62,69 @@ xrx.index.prototype.last = function() {
 };
 
 
+
+/**
+ * 
+ */
+xrx.index.prototype.getRow = function(pos) {
+  return this.rows_[pos];
+};
+
+
+
+/**
+ *
+ */
+xrx.index.Iter = function(index, opt_start) {
+
+
+
+  this.index_ = index;
+
+
+
+  this.pos_ = opt_start || 0;
+};
+
+
+
+/**
+ *
+ */
+xrx.index.Iter.prototype.getRow = function() {
+
+  return this.index_.getRow(this.pos_);
+};
+
+
+
+/**
+ *
+ */
+xrx.index.Iter.prototype.next = function() {
+
+  return this.index_.getRow(++this.pos_);
+};
+
+
+
+/**
+ *
+ */
+xrx.index.Iter.prototype.previous = function() {
+
+  return this.index_.getRow(--this.pos_);
+};
+
+
+
+xrx.index.Iter.prototype.getPos = function() {
+
+  return this.pos_;
+};
+
+
+
 /**
  * 
  */
@@ -218,8 +281,9 @@ xrx.index.update = function(row, integer, format) {
  * @private
  */
 xrx.index.row.prototype.get = function(item, format) {
-  var i = xrx.index.format[format][item];
-  var mask = xrx.index.mask[format][item];
+  var f = format || '128Bit';
+  var i = xrx.index.format[f][item];
+  var mask = xrx.index.mask[f][item];
 
   return this[i.bits].and(mask).shiftRight(i.shift).toInt();
 };

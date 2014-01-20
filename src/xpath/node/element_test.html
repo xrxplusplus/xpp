@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
 
-function test02nameFunctions() {
+function test01nameFunctions() {
   var instance = new xrx.instance(goog.dom.getElement('i1'));
   var elementB1 = new xrx.node.ElementB(instance, 1);
   var elementB2 = new xrx.node.ElementB(instance, 2);
@@ -57,20 +57,72 @@ function test02nameFunctions() {
   assertEquals(expandedNameB2, 'http://example.org/x#z');
 };
 
+function test02identityFunctions() {
+  
+};
+
+/**
+ * Node Functions
+ */
+var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
+var element = goog.dom.createElement('div');
+goog.dom.setTextContent(element, xml);
+var instance = new xrx.instance(element);
 
 function test03nodeAncestor() {
-  var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
-  var element = goog.dom.createElement('div');
-  goog.dom.setTextContent(element, xml);
-  var instance = new xrx.instance(element);
+  var e = new xrx.node.ElementB(instance, 5);
 
+  var ancestorNode = e.getNodeAncestor(new xrx.xpath.KindTest('node'));
+  var ancestorElement = e.getNodeAncestor(new xrx.xpath.NameTest('*'));
+  var ancestorText = e.getNodeAncestor(new xrx.xpath.KindTest('text'));
+  var ancestorAttribute = e.getNodeAncestor(new xrx.xpath.NameTest('@*'));
 
-  var c = new xrx.node.ElementB(instance, 2);
+  assertEquals(3, ancestorNode.getLength());
+  assertEquals(2, ancestorElement.getLength());
+  assertEquals(0, ancestorText.getLength());
+  assertEquals(0, ancestorAttribute.getLength());
+};
 
-  var ancestorNode = c.getNodeAncestor(new xrx.xpath.KindTest('node'));
-  var ancestorElement = c.getNodeAncestor(new xrx.xpath.NameTest('*'));
-  var ancestorText = c.getNodeAncestor(new xrx.xpath.KindTest('text'));
-  var ancestorAttribute = c.getNodeAncestor(new xrx.xpath.NameTest('@*'));
+function test04nodeChild() {
+  var a = new xrx.node.ElementB(instance, 0);
+
+  var childNode = a.getNodeChild(new xrx.xpath.KindTest('node'));
+  var childElement = a.getNodeChild(new xrx.xpath.NameTest('*'));
+  var childText = a.getNodeChild(new xrx.xpath.KindTest('text'));
+  var childAttribute = a.getNodeChild(new xrx.xpath.NameTest('@*'));
+
+  assertEquals(7, childNode.getLength());
+  assertEquals(4, childElement.getLength());
+  assertEquals(3, childText.getLength());
+  assertEquals(0, childAttribute.getLength()); 
+};
+
+function test05nodeDescendant() {
+  var a = new xrx.node.ElementB(instance, 0);
+
+  var descendantNode = a.getNodeDescendant(new xrx.xpath.KindTest('node'));
+  var descendantElement = a.getNodeDescendant(new xrx.xpath.NameTest('*'));
+  var descendantText = a.getNodeDescendant(new xrx.xpath.KindTest('text'));
+  var descendantAttribute = a.getNodeDescendant(new xrx.xpath.NameTest('@*'));
+
+  assertEquals(12, descendantNode.getLength());
+  assertEquals(5, descendantElement.getLength());
+  assertEquals(7, descendantText.getLength());
+  assertEquals(0, descendantAttribute.getLength()); 
+};
+
+function test05nodeFollowing() {
+  var a = new xrx.node.ElementB(instance, 0);
+
+  var followingNode = a.getNodeFollowing(new xrx.xpath.KindTest('node'));
+  var followingElement = a.getNodeFollowing(new xrx.xpath.NameTest('*'));
+  var followingText = a.getNodeFollowing(new xrx.xpath.KindTest('text'));
+  var followingAttribute = a.getNodeFollowing(new xrx.xpath.NameTest('@*'));
+
+  assertEquals(12, followingNode.getLength());
+  assertEquals(5, followingElement.getLength());
+  assertEquals(7, followingText.getLength());
+  assertEquals(0, followingAttribute.getLength()); 
 };
 
 </script>

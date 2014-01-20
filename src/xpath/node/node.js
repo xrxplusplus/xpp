@@ -169,17 +169,6 @@ xrx.node.prototype.getXml = goog.abstractMethod;
 
 
 /**
- * Value conversion functions
- * (should be moved out of here)
- */
-/*
-xrx.node.prototype.getValueAsString = goog.abstractMethod;
-xrx.node.prototype.getValueAsNumber = goog.abstractMethod;
-xrx.node.prototype.getValueAsBool = goog.abstractMethod;
-*/
-
-
-/**
  * Node functions
  */
 xrx.node.prototype.getNodeAncestor = goog.abstractMethod;
@@ -191,3 +180,4 @@ xrx.node.prototype.getNodeFollowingSibling = goog.abstractMethod;
 xrx.node.prototype.getNodeParent = goog.abstractMethod;
 xrx.node.prototype.getNodePreceding = goog.abstractMethod;
 xrx.node.prototype.getNodePrecedingSibling = goog.abstractMethod;
+

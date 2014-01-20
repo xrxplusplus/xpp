@@ -29,7 +29,7 @@ xrx.xpath.NameTest = function(name, opt_namespaceUri) {
    * @type {string}
    * @private
    */
-  this.namespaceUri_ = opt_namespaceUri;
+  this.namespaceUri_ = opt_namespaceUri || '';
 };
 
 
@@ -43,10 +43,10 @@ xrx.xpath.NameTest.prototype.matches = function(node) {
       type !== xrx.node.ATTRIBUTE) {
     return false;
   }
-  if (this.name_ !== '*' && this.name_ !== node.expandedName()) {
+  if (this.name_ !== '*' && this.name_ !== node.getName()) {
     return false;
   } else {
-    return this.namespaceUri_ === node.namespaceUri();
+    return this.namespaceUri_ === node.getNamespaceUri();
   }
 };
 

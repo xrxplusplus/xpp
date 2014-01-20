@@ -18,12 +18,9 @@ goog.require('xrx.xpath.NodeSet');
 
 
 /** 
- * @constructor
+ * 
  */
-xrx.node.Element = function(token, instance) {
-  goog.base(this, xrx.node.ELEMENT, token, instance);
-};
-goog.inherits(xrx.node.Element, xrx.node);
+xrx.node.Element = {};
 
 
 
