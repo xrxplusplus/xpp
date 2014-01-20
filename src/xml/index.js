@@ -84,6 +84,8 @@ xrx.index.Namespace = function(opt_label, opt_prefix, opt_uri) {
   this.uri = opt_uri;
 };
 
+
+
 /**
  * 
  */
@@ -96,7 +98,7 @@ xrx.index.prototype.reindex = function(xml) {
   traverse.setFeature('NS_PREFIX', true);
   traverse.setFeature('NS_URI', true);
   
-  var update = function(row, type, label, offset, length) {
+  var update = function(row, type, label, offset, length1, length2) {
     parent = label.clone();
     parent.parent();
 
@@ -104,23 +106,24 @@ xrx.index.prototype.reindex = function(xml) {
     index.setPosition(row, label.last());
     index.setParent(row, index.labelBuffer_[parent.toString()]);
     index.setOffset(row, offset);
-    index.setLength(row, length);
+    index.setLength1(row, length1);
+    index.setLength2(row, length2);
   };
 
-  traverse.rowStartTag = function(label, offset, length) {
+  traverse.rowStartTag = function(label, offset, length1, length2) {
 
-    update(index.head(), xrx.token.START_TAG, label, offset, length);
+    update(index.head(), xrx.token.START_TAG, label, offset, length1, length2);
     index.labelBuffer_[label.toString()] = index.last();
   };
 
-  traverse.rowEmptyTag = function(label, offset, length) {
+  traverse.rowEmptyTag = function(label, offset, length1, length2) {
 
-    update(index.head(), xrx.token.EMPTY_TAG, label, offset, length);
+    update(index.head(), xrx.token.EMPTY_TAG, label, offset, length1, length2);
   };
 
-  traverse.rowEndTag = function(label, offset, length) {
+  traverse.rowEndTag = function(label, offset, length1, length2) {
 
-    update(index.head(), xrx.token.END_TAG, label, offset, length);
+    update(index.head(), xrx.token.END_TAG, label, offset, length1, length2);
     delete index.labelBuffer_[label.toString()];
   };
 
@@ -159,8 +162,8 @@ xrx.index.format['128Bit'] = {
   POSITION: { bits: 'low_', shift: 41, size: 18 },
   PARENT: { bits: 'low_', shift: 24, size: 17 },
   OFFSET: { bits: 'low_', shift: 0, size: 24 },
-  LENGTH: { bits: 'high_', shift: 40, size: 20 }
-  // 44 bites free for XML Schema support
+  LENGTH1: { bits: 'high_', shift: 43, size: 20 },
+  LENGTH2: { bits: 'high_', shift: 23, size: 20 }
 };
 
 
@@ -180,11 +183,13 @@ xrx.index.mask.fromFormat = function(format, item) {
 
 
 xrx.index.mask['128Bit'] = {
+
   TYPE: xrx.index.mask.fromFormat('128Bit', 'TYPE'),
   POSITION: xrx.index.mask.fromFormat('128Bit', 'POSITION'),
   PARENT: xrx.index.mask.fromFormat('128Bit', 'PARENT'),
   OFFSET: xrx.index.mask.fromFormat('128Bit', 'OFFSET'),
-  LENGTH: xrx.index.mask.fromFormat('128Bit', 'LENGTH')
+  LENGTH1: xrx.index.mask.fromFormat('128Bit', 'LENGTH1'),
+  LENGTH2: xrx.index.mask.fromFormat('128Bit', 'LENGTH2')
 };
 
 
@@ -282,16 +287,30 @@ xrx.index.prototype.setOffset = function(row, offset) {
 
 
 
-xrx.index.row.prototype.getLength = function(format) {
-  return this.get('LENGTH', format);
+xrx.index.row.prototype.getLength1 = function(format) {
+  return this.get('LENGTH1', format);
 };
 
 
 
-xrx.index.prototype.setLength = function(row, length) {
+xrx.index.prototype.setLength1 = function(row, length) {
   xrx.index.update(row, length, 
-      xrx.index.format[this.format_].LENGTH);
+      xrx.index.format[this.format_].LENGTH1);
 };
+
+
+
+xrx.index.row.prototype.getLength2 = function(format) {
+  return this.get('LENGTH2', format);
+};
+
+
+
+xrx.index.prototype.setLength2 = function(row, length) {
+  xrx.index.update(row, length, 
+      xrx.index.format[this.format_].LENGTH2);
+};
+
 
 
 
@@ -328,19 +347,88 @@ xrx.index.prototype.getToken = function(token, opt_start) {
   }
 
   tag = new xrx.token(row.getType(this.format_), this.getLabel(start),
-      row.getOffset(this.format_), row.getLength(this.format_));
+      row.getOffset(this.format_), row.getLength1(this.format_));
   
   return xrx.token.native(tag);
 };
 
 
 
+/**
+ * return {!xrx.index.row}
+ */
 xrx.index.prototype.getNamespace = function(token, prefix) {
 
   return goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
     return ns.prefix === prefix && (token.label().sameAs(ns.parentLabel) ||
         token.label().isDescendantOf(ns.parentLabel));
   });
+};
+
+
+
+xrx.index.prototype.rowStartTag = goog.abstractMethod;
+xrx.index.prototype.rowEmptyTag = goog.abstractMethod;
+xrx.index.prototype.rowEndTag = goog.abstractMethod;
+
+
+
+xrx.index.prototype.forward = function() {
+  var index = this;
+  var pos = 0;
+  var row;
+
+  while(pos <= index.last()) {
+    row = index.rows_[pos];
+
+    switch(row.getType(index.format_)) {
+    case xrx.token.START_TAG:
+      index.rowStartTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    case xrx.token.EMPTY_TAG:
+      index.rowEmptyTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    case xrx.token.END_TAG:
+      index.rowEndTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    default:
+      break;
+    }
+    pos ++;
+  }
+};
+
+
+
+xrx.index.prototype.backward = function() {
+  var index = this;
+  var pos = index.last();
+  var row;
+
+  while(pos >= 0) {
+    row = index.rows_[pos];
+
+    switch(row.getType(index.format_)) {
+    case xrx.token.START_TAG:
+      index.rowStartTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    case xrx.token.EMPTY_TAG:
+      index.rowEmptyTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    case xrx.token.END_TAG:
+      index.rowEndTag(pos, index.getLabel(pos), row.getOffset(index.format_), 
+          row.getLength1(index.format_), row.getLength2(index.format_));
+      break;
+    default:
+      break;
+    }
+    pos--;
+  }
 };
 
 
