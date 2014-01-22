@@ -1,6 +1,6 @@
 /**
  * @fileoverview A class representing a numeric, array like 
- * XML labeling scheme.
+ * XML labeling scheme known as Dewey ID.
  */
 
 goog.provide('xrx.label');
@@ -57,6 +57,16 @@ xrx.label.prototype.first = function() {
  */
 xrx.label.prototype.last = function() {
   return this.label_[this.length() - 1];
+};
+
+
+
+/**
+ * Adds a value to the end of the label array.
+ * @return {!number}
+ */
+xrx.label.prototype.push = function(value) {
+  this.label_.push(value);
 };
 
 
@@ -132,7 +142,6 @@ xrx.label.prototype.nextSibling = function() {
 
 /**
  * Helper function for xrx.token.NOT_TAG.
- * @deprecated
  */
 xrx.label.prototype.push0 = function() {
   this.label_.push(0);
@@ -171,7 +180,9 @@ xrx.label.prototype.isRoot = function() {
 
 
 /**
- * 
+ * Tests whether the label appears before another label
+ * in document order.
+ * @return {!boolean} 
  */
 xrx.label.prototype.isBefore = function(label) {
 
@@ -184,6 +195,11 @@ xrx.label.prototype.isBefore = function(label) {
 
 
 
+/**
+ * Tests whether the label appears after another label
+ * in document order.
+ * @return {!boolean} 
+ */
 xrx.label.prototype.isAfter = function(label) {
 
   for(var i = 0; i < this.length(); i++) {
@@ -195,6 +211,11 @@ xrx.label.prototype.isAfter = function(label) {
 
 
 
+/**
+ * Tests whether the label is the child label of another
+ * label.
+ * @return {!boolean} 
+ */
 xrx.label.prototype.isChildOf = function(label) {
 
   if (this.length() - 1 !== label.length()) return false;
@@ -248,6 +269,17 @@ xrx.label.prototype.isPrecedingSiblingOf = function(label) {
     if (this.label_[i] !== label.value(i)) return false;
   }
   if (this.label_[len - 1] >= label.value(len - 1)) return false;
+  return true;
+};
+
+xrx.label.prototype.isFollowingSiblingOf = function(label) {
+
+  if (this.length() !== label.length()) return false;
+  var len = this.length();
+  for (var i = 0; i < len - 1; i++) {
+    if (this.label_[i] !== label.value(i)) return false;
+  }
+  if (this.label_[len - 1] <= label.value(len - 1)) return false;
   return true;
 };
 

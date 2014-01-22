@@ -284,7 +284,7 @@ xrx.stream.prototype.features = function(token, offset, length) {
         stream.hasFeature('NS_PREFIX') || stream.hasFeature('NS_URI')) {
 
       if ((token === xrx.token.START_TAG || token === xrx.token.EMPTY_TAG)) {
-        var atts = stream.attributes(tag);
+        var atts = stream.secondaries(tag);
         for (var pos in atts) {
           var att = atts[pos];
           if (goog.string.startsWith(att.xml(tag), 'xmlns:') ||
@@ -591,13 +591,58 @@ xrx.stream.prototype.attribute = function(xml, pos, opt_offset) {
 
 /**
  * Streams over a start-tag or a empty tag and returns an array of 
- * locations of all attributes found in the tag or null if no 
- * attributes were found.
+ * locations of all attributes found in the tag.
  * 
  * @param {!string} xml The start-tag or empty tag.
- * @return {Array.<string>|null} The attribute array.
+ * @return {Array.<xrx.location>} The location array.
  */
 xrx.stream.prototype.attributes = function(xml) {
+  var locs = {};
+  var location = new xrx.location();
+
+  for(var i = 1;;i++) {
+    var newLocation = this.attribute(xml, i, location.offset + location.length);
+    if (!newLocation) break;
+    
+    if(newLocation.xml(xml).match(/^xmlns(:|=)/) === null) locs[i] = newLocation;
+  }
+
+  return locs;
+};
+
+
+
+/**
+ * Streams over a start-tag or a empty tag and returns an array of 
+ * locations of all namespaces found in the tag.
+ * 
+ * @param {!string} xml The start-tag or empty tag.
+ * @return {Array.<xrx.location>} The location array.
+ */
+xrx.stream.prototype.namespaces = function(xml) {
+  var locs = {};
+  var location = new xrx.location();
+
+  for(var i = 1;;i++) {
+    var newLocation = this.attribute(xml, i, location.offset + location.length);
+    if (!newLocation) break;
+    
+    if(newLocation.xml(xml).match(/^xmlns(:|=)/) !== null) locs[i] = newLocation;
+  }
+
+  return locs;
+};
+
+
+
+/**
+ * Streams over a start-tag or a empty tag and returns an array of 
+ * locations of all attributes and namespaces found in the tag.
+ * 
+ * @param {!string} xml The start-tag or empty tag.
+ * @return {Array.<xrx.location>} The location array.
+ */
+xrx.stream.prototype.secondaries = function(xml) {
   var locs = {};
   var location = new xrx.location();
 

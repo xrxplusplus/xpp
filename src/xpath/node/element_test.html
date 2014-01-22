@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>XRX++ Unit Tests - xrx.node.Element</title>
+<title>XRX++ Unit Tests - xrx.node.Element, xrx.node.ElementS, xrx.node.ElementB</title>
 <script src='../../../lib/closure-library/closure/goog/base.js'></script>
 <script src='../../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
   goog.require('xrx.instance');
-  goog.require('xrx.label');
   goog.require('xrx.node.Element');
   goog.require('xrx.node.ElementS');
   goog.require('xrx.node.ElementB');
@@ -19,31 +18,31 @@
 </head>
 <body>
 
-<div id="i1" class="xrx-instance">&lt;x xmlns="http://example.org/x"&gt;&lt;y:y xmlns:y="http://example.org/y"/&gt;&lt;z/&gt;&lt;/x&gt;</div>
-
-<div id="i2" class="xrx-instance">&lt;a&gt;&lt;b&gt;&lt;c/&gt;&lt;/b&gt;&lt;d/&gt;&lt;e/&gt;&lt;/a&gt;</div>
-
 <script type="text/javascript">
 
 function test01nameFunctions() {
-  var instance = new xrx.instance(goog.dom.getElement('i1'));
+  var xml = '<x xmlns="http://example.org/x"><y:y xmlns:y="http://example.org/y"/><z/></x>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
+
   var elementB1 = new xrx.node.ElementB(instance, 1);
   var elementB2 = new xrx.node.ElementB(instance, 2);
 
   var nameB1 = elementB1.getName();
   var nameB2 = elementB2.getName();
 
-  var localNameB1 = xrx.node.Element.getNameLocal(nameB1);
-  var localNameB2 = xrx.node.Element.getNameLocal(nameB2);
+  var localNameB1 = xrx.node.getNameLocal(nameB1);
+  var localNameB2 = xrx.node.getNameLocal(nameB2);
   
-  var prefixB1 = xrx.node.Element.getNamePrefix(nameB1);
-  var prefixB2 = xrx.node.Element.getNamePrefix(nameB2);
+  var prefixB1 = xrx.node.getNamePrefix(nameB1);
+  var prefixB2 = xrx.node.getNamePrefix(nameB2);
   
   var namespaceUriB1 = elementB1.getNamespaceUri(prefixB1);
   var namespaceUriB2 = elementB2.getNamespaceUri(prefixB2);
   
-  var expandedNameB1 = xrx.node.Element.getNameExpanded(namespaceUriB1, localNameB1);
-  var expandedNameB2 = xrx.node.Element.getNameExpanded(namespaceUriB2, localNameB2);
+  var expandedNameB1 = xrx.node.getNameExpanded(namespaceUriB1, localNameB1);
+  var expandedNameB2 = xrx.node.getNameExpanded(namespaceUriB2, localNameB2);
 
   assertEquals(nameB1, 'y:y');
   assertEquals(nameB2, 'z');
@@ -58,71 +57,97 @@ function test01nameFunctions() {
 };
 
 function test02identityFunctions() {
-  
+  var xml = '<a>1<b/>2<c id="test"/>3<d/>4</a>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
+
+  var e1 = new xrx.node.ElementB(instance, 0);
+  var e2 = new xrx.node.ElementB(instance, 0);
+  var e3 = new xrx.node.ElementB(instance, 1);
+
+  assertEquals(true, e1.isSameAs(e2));
+  assertEquals(true, e3.isAfter(e2));
+  assertEquals(true, e1.isBefore(e3));
 };
 
-/**
- * Node Functions
- */
-var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
-var element = goog.dom.createElement('div');
-goog.dom.setTextContent(element, xml);
-var instance = new xrx.instance(element);
+function test03contentFunctions() {
+  var xml = '<a>1<b>2</b>3<c/>4<d/></a>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
 
-function test03nodeAncestor() {
-  var e = new xrx.node.ElementB(instance, 5);
+  var e0 = new xrx.node.ElementB(instance, 0);
+  var e1 = new xrx.node.ElementB(instance, 1);
+  var e3 = new xrx.node.ElementB(instance, 3);
 
-  var ancestorNode = e.getNodeAncestor(new xrx.xpath.KindTest('node'));
-  var ancestorElement = e.getNodeAncestor(new xrx.xpath.NameTest('*'));
-  var ancestorText = e.getNodeAncestor(new xrx.xpath.KindTest('text'));
-  var ancestorAttribute = e.getNodeAncestor(new xrx.xpath.NameTest('@*'));
-
-  assertEquals(3, ancestorNode.getLength());
-  assertEquals(2, ancestorElement.getLength());
-  assertEquals(0, ancestorText.getLength());
-  assertEquals(0, ancestorAttribute.getLength());
+  assertEquals('<a>1<b>2</b>3<c/>4<d/></a>', e0.getXml());
+  assertEquals('<b>2</b>', e1.getXml());
+  assertEquals('<c/>', e3.getXml());
+  assertEquals('1234', e0.getStringValue());
+  assertEquals('2', e1.getStringValue());
+  assertEquals('', e3.getStringValue());
 };
 
-function test04nodeChild() {
-  var a = new xrx.node.ElementB(instance, 0);
+function axisTest(key, func, expected) {
+  var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
+  var e = new xrx.node.ElementB(instance, key);
+  var test = {
+    node: e[func](new xrx.xpath.KindTest('node')),
+    element: e[func](new xrx.xpath.NameTest('*')),
+    text: e[func](new xrx.xpath.KindTest('text')),
+    attribute: e[func](new xrx.xpath.NameTest('@*'))
+  }
 
-  var childNode = a.getNodeChild(new xrx.xpath.KindTest('node'));
-  var childElement = a.getNodeChild(new xrx.xpath.NameTest('*'));
-  var childText = a.getNodeChild(new xrx.xpath.KindTest('text'));
-  var childAttribute = a.getNodeChild(new xrx.xpath.NameTest('@*'));
-
-  assertEquals(7, childNode.getLength());
-  assertEquals(4, childElement.getLength());
-  assertEquals(3, childText.getLength());
-  assertEquals(0, childAttribute.getLength()); 
+  assertEquals(expected.node, test.node.getLength());
+  assertEquals(expected.element, test.element.getLength());
+  assertEquals(expected.text, test.text.getLength());
+  assertEquals(expected.attribute, test.attribute.getLength());
 };
 
-function test05nodeDescendant() {
-  var a = new xrx.node.ElementB(instance, 0);
 
-  var descendantNode = a.getNodeDescendant(new xrx.xpath.KindTest('node'));
-  var descendantElement = a.getNodeDescendant(new xrx.xpath.NameTest('*'));
-  var descendantText = a.getNodeDescendant(new xrx.xpath.KindTest('text'));
-  var descendantAttribute = a.getNodeDescendant(new xrx.xpath.NameTest('@*'));
+function test04nodeFunctions() {
 
-  assertEquals(12, descendantNode.getLength());
-  assertEquals(5, descendantElement.getLength());
-  assertEquals(7, descendantText.getLength());
-  assertEquals(0, descendantAttribute.getLength()); 
+  // ancestor
+  axisTest(5, 'getNodeAncestor', { node: 3, element: 2, text: 0, attribute: 0 });
+
+  // child
+  axisTest(0, 'getNodeChild', { node: 7, element: 4, text: 3, attribute: 0 });
+
+  // descendant
+  axisTest(0, 'getNodeDescendant', { node: 12, element: 5, text: 7, attribute: 0 });
+
+  // following
+  axisTest(1, 'getNodeFollowing', { node: 9, element: 4, text: 5, attribute: 0 });
+
+  // following sibling
+  axisTest(1, 'getNodeFollowingSibling', { node: 5, element: 3, text: 2, attribute: 0 });
+
+  // parent
+  axisTest(6, 'getNodeParent', { node: 1, element: 1, text: 0, attribute: 0 });
+
+  // preceding
+  axisTest(8, 'getNodePreceding', { node: 12, element: 4, text: 7, attribute: 0 });
+
+  // preceding sibling
+  axisTest(8, 'getNodePrecedingSibling', { node: 6, element: 3, text: 3, attribute: 0 });
+
 };
 
-function test05nodeFollowing() {
-  var a = new xrx.node.ElementB(instance, 0);
+function test05attributeFunction() {
+  var xml = '<a><b xmlns="http://example.org" attr1="v1" attr2="v2"/></a>';
+  var element = goog.dom.createElement('div');
+  goog.dom.setTextContent(element, xml);
+  var instance = new xrx.instance(element);
 
-  var followingNode = a.getNodeFollowing(new xrx.xpath.KindTest('node'));
-  var followingElement = a.getNodeFollowing(new xrx.xpath.NameTest('*'));
-  var followingText = a.getNodeFollowing(new xrx.xpath.KindTest('text'));
-  var followingAttribute = a.getNodeFollowing(new xrx.xpath.NameTest('@*'));
+  var e0 = new xrx.node.ElementB(instance, 0);
+  var e1 = new xrx.node.ElementB(instance, 1);
 
-  assertEquals(12, followingNode.getLength());
-  assertEquals(5, followingElement.getLength());
-  assertEquals(7, followingText.getLength());
-  assertEquals(0, followingAttribute.getLength()); 
+  assertEquals(0, e0.getNodeAttribute(new xrx.xpath.NameTest('@*')).getLength());
+  assertEquals(2, e1.getNodeAttribute(new xrx.xpath.NameTest('@*')).getLength());
 };
 
 </script>

@@ -21,32 +21,3 @@ goog.require('xrx.xpath.NodeSet');
  * 
  */
 xrx.node.Element = {};
-
-
-
-/**
- * return {!string}
- */
-xrx.node.Element.getNameLocal = function(name) {
-  return goog.string.contains(name, ':') ? 
-      name.substr(name.indexOf(':') + 1) : name;
-};
-
-
-
-/**
- * return {!string}
- */
-xrx.node.Element.getNamePrefix = function(name) {
-  return goog.string.contains(name, ':') ? 
-      'xmlns:' + name.substr(0, name.indexOf(':')) : 'xmlns';
-};
-
-
-
-/**
- * return {!string}
- */
-xrx.node.Element.getNameExpanded = function(namespace, localName) {
-  return namespace + '#' + localName;
-};

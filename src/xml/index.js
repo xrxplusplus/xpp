@@ -66,8 +66,40 @@ xrx.index.prototype.last = function() {
 /**
  * 
  */
-xrx.index.prototype.getRow = function(pos) {
-  return this.rows_[pos];
+xrx.index.prototype.getRow = function(key) {
+  return this.rows_[key];
+};
+
+
+
+/**
+ * 
+ */
+xrx.index.prototype.getRowByToken = function(token, opt_start, opt_reverse) {
+  var row;
+
+  if (opt_reverse) {
+    var pos = opt_start || this.last();
+
+    for(pos; pos >= 0; pos--){
+      row = this.rows_[pos];
+
+      if (row.getType() === token.type() && 
+          this.getLabel(pos).sameAs(token.label())) break;
+    }
+  } else {
+    var pos = opt_start || 0;
+
+    for(pos; pos <= this.last(); pos++) {
+      row = this.rows_[pos];
+
+      if (row.getType() === token.type() && 
+          this.getLabel(pos).sameAs(token.label())) break;
+    }
+
+  }
+
+  return row;
 };
 
 

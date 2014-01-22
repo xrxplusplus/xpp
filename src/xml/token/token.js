@@ -61,8 +61,8 @@ xrx.token = function(type, opt_label, opt_offset, opt_length) {
  */
 /** @const */ xrx.token.ROOT = 0;
 /** @const */ xrx.token.START_TAG = 1;
-/** @const */ xrx.token.END_TAG = 2;
-/** @const */ xrx.token.EMPTY_TAG = 3;
+/** @const */ xrx.token.EMPTY_TAG = 2;
+/** @const */ xrx.token.END_TAG = 3;
 
 
 

@@ -330,20 +330,38 @@ function test11AttrValue() {
   assertEquals(null, location4); 
 };
 
-function test12Attributes() {
-  var xml12 = '<a>1<b attr1="value1" attr2="value2" attr3=""/>2<c/></a>';
+function test12aAttributes() {
+  var xml12 = '<a>1<b attr1="value1" xmlns="http://example.org" attr2="value2" attr3=""/>2<c/></a>';
   var stream = new xrx.stream(xml12);
   var lab = new xrx.label([1, 1]);
   var tok = new xrx.token.EmptyTag(lab);
   tok.offset(4);
-  tok.length(43);
+  tok.length(71);
   var xmlTok = xml12.substr(tok.offset(), tok.length());
 
   // @return ['attr1="value1"', 'attr2="value2"', 'attr3=""']
   var locations = stream.attributes(xmlTok);
+
+  assertEquals(undefined, locations[2])
   assertEquals('attr1="value1"', xmlTok.substr(locations[1].offset, locations[1].length));
-  assertEquals('attr2="value2"', xmlTok.substr(locations[2].offset, locations[2].length));
-  assertEquals('attr3=""', xmlTok.substr(locations[3].offset, locations[3].length));
+  assertEquals('attr2="value2"', xmlTok.substr(locations[3].offset, locations[3].length));
+  assertEquals('attr3=""', xmlTok.substr(locations[4].offset, locations[4].length));
+};
+
+function test12bNamespaces() {
+  var xml12 = '<a>1<b attr1="value1" xmlns="http://example.org" attr2="value2" attr3=""/>2<c/></a>';
+  var stream = new xrx.stream(xml12);
+  var lab = new xrx.label([1, 1]);
+  var tok = new xrx.token.EmptyTag(lab);
+  tok.offset(4);
+  tok.length(71);
+  var xmlTok = xml12.substr(tok.offset(), tok.length());
+
+  // @return ['attr1="value1"', 'attr2="value2"', 'attr3=""']
+  var locations = stream.namespaces(xmlTok);
+
+  assertEquals(undefined, locations[1])
+  assertEquals('xmlns="http://example.org"', xmlTok.substr(locations[2].offset, locations[2].length));
 };
 
 function test13namespaceForward() {

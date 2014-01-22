@@ -17,13 +17,6 @@ goog.inherits(xrx.node.AttributeS, xrx.node.Attribute);
 
 
 
-xrx.nodeS.sharedFunctions(xrx.node.AttributeS);
-
-
-xrx.node.AttributeS.prototype.getNodeAncestor = xrx.nodeS.prototype.getNodeAncestor;
-
-
-
 /**
  * @override
  */

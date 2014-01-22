@@ -21,6 +21,8 @@ var _allTests = [
     "./xpath/kindTest_test.html",
     "./xpath/step_test.html",
     "./xpath/xpath_test.html",
-    "./xpath/node/node_test.html", // node
-    "./xpath/node/element_test.html"
+    "./xpath/node/attribute_test.html", // node
+    "./xpath/node/node_test.html",
+    "./xpath/node/element_test.html",
+    "./xpath/node/document_test.html"
     ];

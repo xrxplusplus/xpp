@@ -14,11 +14,13 @@ goog.require('xrx.token');
 
 
 /**
+ * Creates a binary text node.
+ *
  * @param {!xrx.instance}
  * @constructor
  */
-xrx.node.TextB = function(instance, opt_row) {
-  goog.base(this, xrx.node.TEXT, instance, opt_row);
+xrx.node.TextB = function(instance, opt_key) {
+  goog.base(this, xrx.node.TEXT, instance, opt_key);
 };
 goog.inherits(xrx.node.TextB, xrx.nodeB);
 
@@ -26,9 +28,31 @@ goog.inherits(xrx.node.TextB, xrx.nodeB);
 
 
 xrx.node.TextB.prototype.getLabel = function() {
-  var type = this.getRow().getType();
-  var label = this.instance_.getIndex().getLabel(this.row_);
-  if (type === xrx.token.START_TAG) label.push0();
+  var label = this.getIndex().getLabel(this.key_);;
+  if (this.getRow().getType() === xrx.token.START_TAG) label.push0();
 
   return label;
+};
+
+
+
+xrx.node.TextB.prototype.getOffset = function() {
+  var row = this.getRow();
+
+  return row.getOffset() + row.getLength1();
+};
+
+
+
+xrx.node.TextB.prototype.getLength = function() {
+  var row = this.getRow();
+
+  return row.getLength2() - row.getLength1();
+};
+
+
+
+
+xrx.node.TextB.prototype.getXml = function() {
+  return this.instance_.xml().substr(this.getOffset(), this.getLength());
 };
