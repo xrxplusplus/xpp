@@ -14,6 +14,8 @@
   goog.require('xrx.node.Document');
   goog.require('xrx.node.DocumentS');
   goog.require('xrx.node.DocumentB');
+  goog.require('xrx.token');
+  goog.require('xrx.token.StartTag');
   goog.require('xrx.xpath');
   goog.require('xrx.xpath.NameTest');
   goog.require('xrx.xpath.KindTest');
@@ -33,17 +35,32 @@ function test02identityFunctions() {
   goog.dom.setTextContent(element, xml);
   var instance = new xrx.instance(element);
 
-  var d = new xrx.node.DocumentB(instance);
-  var e = new xrx.node.ElementB(instance, 0);
+  // binary node
+  var dB = new xrx.node.DocumentB(instance);
+  var eB = new xrx.node.ElementB(instance, 0);
 
-  assertEquals(false, d.isSameAs(e));
-  assertEquals(true, d.isSameAs(d));
-  assertEquals(false, d.isAfter(e));
-  assertEquals(true, e.isAfter(d));
-  assertEquals(false, e.isBefore(d));
-  assertEquals(true, d.isBefore(e));
-  assertEquals(true, e.isChildOf(d));
-  assertEquals(true, e.isDescendantOf(d));
+  assertEquals(false, dB.isSameAs(eB));
+  assertEquals(true, dB.isSameAs(dB));
+  assertEquals(false, dB.isAfter(eB));
+  assertEquals(true, eB.isAfter(dB));
+  assertEquals(false, eB.isBefore(dB));
+  assertEquals(true, dB.isBefore(eB));
+  assertEquals(true, eB.isChildOf(dB));
+  assertEquals(true, eB.isDescendantOf(dB));
+
+  // streaming node
+  var dS = new xrx.node.DocumentS(instance);
+  var tag = new xrx.token.StartTag(new xrx.label([1]), 0, 3);
+  var eS = new xrx.node.ElementS(instance, tag);
+
+  assertEquals(false, dS.isSameAs(eS));
+  assertEquals(true, dS.isSameAs(dS));
+  assertEquals(false, dS.isAfter(eS));
+  assertEquals(true, eS.isAfter(dS));
+  assertEquals(false, eS.isBefore(dS));
+  assertEquals(true, dS.isBefore(eS));
+  assertEquals(true, eS.isChildOf(dS));
+  assertEquals(true, eS.isDescendantOf(dS));
 };
 
 function test03contentFunctions() {
@@ -52,10 +69,17 @@ function test03contentFunctions() {
   goog.dom.setTextContent(element, xml);
   var instance = new xrx.instance(element);
 
-  var d = new xrx.node.DocumentB(instance);
+  // binary node
+  var dB = new xrx.node.DocumentB(instance);
 
-  assertEquals('<a>1<b>2</b>3<c/>4<d/></a>', d.getXml());
-  assertEquals('1234', d.getStringValue());
+  assertEquals('<a>1<b>2</b>3<c/>4<d/></a>', dB.getXml());
+  assertEquals('1234', dB.getStringValue());
+
+  // streaming node
+  var dS = new xrx.node.DocumentS(instance);
+
+  assertEquals('<a>1<b>2</b>3<c/>4<d/></a>', dS.getXml());
+  assertEquals('1234', dS.getStringValue());
 };
 
 function axisTest(key, func, expected) {
@@ -64,19 +88,36 @@ function axisTest(key, func, expected) {
   goog.dom.setTextContent(element, xml);
   var instance = new xrx.instance(element);
 
-  var d = new xrx.node.DocumentB(instance);
+  // binary node
+  var dB = new xrx.node.DocumentB(instance);
 
   var test = {
-    node: d[func](new xrx.xpath.KindTest('node')),
-    element: d[func](new xrx.xpath.NameTest('*')),
-    text: d[func](new xrx.xpath.KindTest('text')),
-    attribute: d[func](new xrx.xpath.NameTest('@*'))
+    node: dB[func](new xrx.xpath.KindTest('node')),
+    element: dB[func](new xrx.xpath.NameTest('*')),
+    text: dB[func](new xrx.xpath.KindTest('text')),
+    attribute: dB[func](new xrx.xpath.NameTest('@*'))
   }
 
   assertEquals(expected.node, test.node.getLength());
   assertEquals(expected.element, test.element.getLength());
   assertEquals(expected.text, test.text.getLength());
   assertEquals(expected.attribute, test.attribute.getLength());
+
+  // streaming node
+  var dS = new xrx.node.DocumentS(instance);
+
+  var test = {
+    node: dS[func](new xrx.xpath.KindTest('node')),
+    element: dS[func](new xrx.xpath.NameTest('*')),
+    text: dS[func](new xrx.xpath.KindTest('text')),
+    attribute: dS[func](new xrx.xpath.NameTest('@*'))
+  }
+
+  assertEquals(expected.node, test.node.getLength());
+  assertEquals(expected.element, test.element.getLength());
+  assertEquals(expected.text, test.text.getLength());
+  assertEquals(expected.attribute, test.attribute.getLength());
+
 };
 
 

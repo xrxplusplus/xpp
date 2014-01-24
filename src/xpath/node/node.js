@@ -7,6 +7,7 @@ goog.provide('xrx.node');
 
 
 goog.require('xrx.token');
+goog.require('xrx.xpath.NodeSet');
 
 
 
@@ -56,7 +57,7 @@ xrx.node.prototype.getInstance = function() {
 
 
 /**
- * Returns the type of the node.
+ * Returns type of the node.
  * @return {!integer} The type number.
  */
 xrx.node.prototype.getType = function() {
@@ -190,4 +191,25 @@ xrx.node.prototype.getNodeFollowingSibling = goog.abstractMethod;
 xrx.node.prototype.getNodeParent = goog.abstractMethod;
 xrx.node.prototype.getNodePreceding = goog.abstractMethod;
 xrx.node.prototype.getNodePrecedingSibling = goog.abstractMethod;
+
+
+
+/**
+ * @private
+ */
+xrx.node.prototype.find = function(test, axisTest, reverse, stop) {
+  var self = this;
+  var selfLabel = self.getLabel();
+  var nodeset = new xrx.xpath.NodeSet();
+
+  this.eventNode = function(node) {
+    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
+        test.matches(node)) {
+      reverse ? nodeset.unshift(node) : nodeset.add(node);
+    }
+  };
+  
+  reverse ? this.backward(stop) : this.forward(stop);
+  return nodeset;
+};
 

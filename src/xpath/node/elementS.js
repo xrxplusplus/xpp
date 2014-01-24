@@ -8,6 +8,7 @@ goog.provide('xrx.node.ElementS');
 
 
 goog.require('xrx.node');
+goog.require('xrx.node.DocumentS');
 goog.require('xrx.node.Element');
 goog.require('xrx.node.TextS');
 goog.require('xrx.nodeS');
@@ -32,6 +33,15 @@ xrx.node.ElementS = function(instance, token) {
 
 };
 goog.inherits(xrx.node.ElementS, xrx.nodeS);
+
+
+
+/**
+ * 
+ */
+xrx.node.ElementS.prototype.getToken = function() {
+  return this.token_;
+};
 
 
 
@@ -192,7 +202,7 @@ xrx.node.ElementS.prototype.getStringValue = function() {
     if (stop) traverse.stop();
   };
 
-  traverse.forward(this.getLabel().clone(), this.getOffset());
+  traverse.forward(this.getToken());
 
   return string;
 };
@@ -200,7 +210,9 @@ xrx.node.ElementS.prototype.getStringValue = function() {
 
 
 xrx.node.ElementS.prototype.getXml = function() {
-  if (this.getToken().type() === xrx.token.EMPTY_TAG) return '';
+  if (this.getToken().type() === xrx.token.EMPTY_TAG) {
+    return this.getToken().xml(this.instance_.xml());
+  }
 
   var pilot = new xrx.pilot(this.instance_.xml());
   var target = new xrx.token.EndTag(this.getLabel().clone());
@@ -298,32 +310,38 @@ xrx.node.ElementS.prototype.forward = function(stop) {
   var token;
 
   traverse.rowStartTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    self.eventNode(new xrx.node.ElementS(self.instance_, 
-        new xrx.token.StartTag(label.clone(), offset, length1)));
+    var tag = new xrx.token.StartTag(label.clone(), offset, length1);
+    self.eventNode(new xrx.node.ElementS(self.instance_, tag));
+    if (length1 !== length2) {
+      self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
   };
 
   traverse.rowEmptyTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    self.eventNode(new xrx.node.ElementS(self.instance_, 
-        new xrx.token.EmptyTag(label.clone(), offset, length1)));
+    var tag = new xrx.token.EmptyTag(label.clone(), offset, length1);
+
+    self.eventNode(new xrx.node.ElementS(self.instance_, tag));
+    if (length1 !== length2) {
+      self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
   };
 
   traverse.rowEndTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    //if (self.getLabel().sameAs(stop)) traverse.stop();
+    var tag = new xrx.token.EndTag(label.clone(), offset, length1);
+
+    if (length1 !== length2) {
+      self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
+    if (label.sameAs(stop)) traverse.stop();
   };
 
-  traverse.forward(self.getLabel().clone(), self.getOffset());
+  traverse.forward(self.getToken());
 };
 
 
 
 /**
- *
+ * @param {!xrx.label}
  */
 xrx.node.ElementS.prototype.backward = function(stop) {
   var self = this;
@@ -331,26 +349,33 @@ xrx.node.ElementS.prototype.backward = function(stop) {
   var token;
 
   traverse.rowStartTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    self.eventNode(new xrx.node.ElementS(self.instance_, 
-        new xrx.token.StartTag(label.clone(), offset, length1)));
+    var tag = new xrx.token.StartTag(label.clone(), offset, length1);
+
+    if (length1 !== length2) {
+      //self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
+    self.eventNode(new xrx.node.ElementS(self.instance_, tag));
+    if (label.sameAs(stop)) traverse.stop();
   };
 
   traverse.rowEmptyTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    self.eventNode(new xrx.node.ElementS(self.instance_, 
-        new xrx.token.EmptyTag(label.clone(), offset, length1)));
+    var tag = new xrx.token.EmptyTag(label.clone(), offset, length1);
+
+    if (length1 !== length2) {
+      //self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
+    self.eventNode(new xrx.node.ElementS(self.instance_, tag));
+    if (label.sameAs(stop)) traverse.stop();
   };
 
   traverse.rowEndTag = function(label, offset, length1, length2) {
-    console.log(label.toString());
-    console.log(self.instance_.xml().substr(offset, length1));
-    //if (self.getLabel().sameAs(stop)) traverse.stop();
-  };
+    var tag = new xrx.token.EndTag(label.clone(), offset, length1);
 
-  traverse.backward(self.getLabel().clone(), self.getOffset());
+    if (length1 !== length2) {
+      //self.eventNode(new xrx.node.TextS(self.instance_, tag, length2 - length1));
+    }
+  };
+  traverse.backward(self.getToken());
 };
 
 
@@ -358,5 +383,5 @@ xrx.node.ElementS.prototype.backward = function(stop) {
 /**
  * 
  */
-xrx.node.ElementS.prototype.find = xrx.node.Element.prototype.find;
+xrx.node.ElementS.prototype.find = xrx.node.prototype.find;
 

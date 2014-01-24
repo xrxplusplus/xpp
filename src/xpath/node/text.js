@@ -1,7 +1,8 @@
 /**
- * @fileoverview A class representing the text node of the
- * XDM interface.
+ * @fileoverview A class providing functions that can be
+ * shared by text node implementations.
  */
+
 
 goog.provide('xrx.node.Text');
 
@@ -14,67 +15,258 @@ goog.require('xrx.xpath.NodeSet');
 
 
 /** 
- * @constructor 
+ * A class providing functions that can be
+ * shared by element node implementations.
  */
-xrx.node.Text = function(token, parent, instance) {
-  goog.base(this, xrx.node.TEXT, token, instance);
-  this.parent_ = parent;
-};
-goog.inherits(xrx.node.Text, xrx.node);
+xrx.node.Text = function(token) {};
 
 
 
-xrx.node.Text.prototype.accAttributes = function() {
-  return new xrx.xpath.NodeSet();
-};
-xrx.node.Text.prototype.accBaseUri = function() {};
-xrx.node.Text.prototype.accChildren = function() {};
-xrx.node.Text.prototype.accDocumentUri = function() {};
-xrx.node.Text.prototype.accIsId = function() {};
-xrx.node.Text.prototype.accIsIdrefs = function() {};
-xrx.node.Text.prototype.accNamespaceNodes = function() {};
-xrx.node.Text.prototype.accNilled = function() {};
-xrx.node.Text.prototype.accNodeKind = function() {};
-xrx.node.Text.prototype.accNodeName = function() {};
-xrx.node.Text.prototype.accParent = function() {};
-xrx.node.Text.prototype.accStringValue = function() {};
-xrx.node.Text.prototype.accTypeName = function() {};
-xrx.node.Text.prototype.accTypedValue = function() {};
-xrx.node.Text.prototype.accUnparsedEntityPublicId = function() {};
-xrx.node.Text.prototype.accUnparsedEntitySystemId = function() {};
-
-
-
-/** 
- * Overwrite node functions which always evaluate to an empty node-set
+/**
+ * 
  */
-xrx.node.Text.prototype.getNodeAttribute = function() {
-  return new xrx.xpath.NodeSet();
-};
-xrx.node.Text.prototype.getNodeChild = function() {
-  return new xrx.xpath.NodeSet();
-};
-xrx.node.Text.prototype.getNodeDescendant = function() {
-  return new xrx.xpath.NodeSet();
-};
-xrx.node.Text.prototype.getNodeAttribute = function() {
-  return new xrx.xpath.NodeSet();
+xrx.node.Text.prototype.isSameAs = function(node) {
+  return this.getType() === node.getType() && 
+      this.getLabel().sameAs(node.getLabel());
 };
 
 
 
-/** 
- * @overwrite
+/**
+ * 
  */
-xrx.node.Text.prototype.xml = function() {
-  return this.stringValue();
+xrx.node.Text.prototype.isBefore = function(node) {
+  var selfLabel = this.getLabel();
+  var nodeLabel = node.getLabel();
+
+  return selfLabel.isBefore(nodeLabel) ||
+      ( selfLabel.sameAs(nodeLabel) &&
+          this.getType() < node.getType() );
 };
 
 
 
-/** 
- * @overwrite
+/**
+ * 
  */
-xrx.node.Text.prototype.stringValue = function() {
-  return this.pilot_.xml(this.token_);
+xrx.node.Text.prototype.isAfter = function(node) {
+  var selfLabel = this.getLabel();
+  var nodeLabel = node.getLabel();
+
+  return selfLabel.isAfter(nodeLabel) ||
+      ( selfLabel.sameAs(nodeLabel) &&
+          this.getType() > node.getType() );
 };
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isAncestorOf = function(node) {
+  return false;
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isAttributeOf = function(node) {
+  return false;
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isChildOf = function(node) {
+  return node.getType() === xrx.node.ELEMENT &&
+      this.getLabel().isChildOf(node.getLabel());
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isDescendantOf = function(node) {
+  return ( node.getType() === xrx.node.ELEMENT || 
+      node.getType() === xrx.node.DOCUMENT ) &&
+          this.getLabel().isDescendantOf(node.getLabel());
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isFollowingOf = function(node) {
+  return this.isAfter(node) && !this.isDescendantOf(node);
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isFollowingSiblingOf = function(node) {
+  var selfLabel = this.getLabel();
+  var nodeLabel = node.getLabel();
+
+  return selfLabel.isFollowingSiblingOf(nodeLabel) ||
+      ( selfLabel.sameAs(nodeLabel) && 
+          this.getType() > node.getType() );
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isParentOf = function(node) {
+  return false;
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isPrecedingOf = function(node) {
+  return this.isBefore(node) && !this.getLabel().isAncestorOf(node.getLabel());
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.isPrecedingSiblingOf = function(node) {
+  var selfLabel = this.getLabel();
+  var nodeLabel = node.getLabel();
+
+  return selfLabel.isPrecedingSiblingOf(nodeLabel) ||
+      ( selfLabel.sameAs(nodeLabel) && 
+          this.getType() < node.getType() );
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getName = function() {
+  return '';
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNamespaceUri = function(prefix) {
+  return '';
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getStringValue = function() {
+  return this.instance_.xml().substr(this.getOffset(), this.getLength());
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getXml = function() {
+  return this.getStringValue();
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodeAncestor = function(test) {
+  var nodeset = this.find(test, xrx.node[this.impl_.Text].prototype.isDescendantOf,
+      true, new xrx.label());
+
+  // TODO: not sure if this is correct?
+  if (test.getName() === 'node') 
+      nodeset.unshift(new xrx.node[this.impl_.Document](this.instance_));
+  return nodeset;
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodeAttribute = function(test) {
+  return new xrx.xpath.NodeSet();
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodeChild = function(test) {
+  return new xrx.xpath.NodeSet();
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodeDescendant = function(test) {
+  return new xrx.xpath.NodeSet();
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodeFollowing = function(test) {
+
+  return this.find(test, xrx.node[this.impl_.Text].prototype.isPrecedingOf, false,
+      new xrx.label());
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodePreceding = function(test) {
+  var nodeset = this.find(test, xrx.node[this.impl_.Text].prototype.isFollowingOf, true,
+      new xrx.label());
+
+  // TODO: not sure if this is correct?
+  if (test.getName() === 'node') 
+      nodeset.unshift(new xrx.node[this.impl_.Document](this.instance_));
+
+  return nodeset;
+};
+
+
+
+/**
+ * 
+ */
+xrx.node.Text.prototype.getNodePrecedingSibling = function(test) {
+  var stop = this.getLabel().clone();
+  stop.parent();
+
+  return this.find(test, xrx.node[this.impl_.Text].prototype.isFollowingSiblingOf, true,
+      stop);
+};
+

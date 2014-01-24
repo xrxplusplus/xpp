@@ -111,8 +111,6 @@ xrx.pilot.prototype.stop = function() {
  */
 xrx.pilot.prototype.forward = function(context, target) {
   var tok;
-  var startLabel = context ? context.label() : undefined;
-  var startOffset = context ? context.offset() : undefined;
   var pilot = this;
 
   pilot.traverse_.rowStartTag = function(label, offset, length1, length2) {
@@ -134,8 +132,6 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
-
-    lastTag = xrx.token.START_TAG;
   };
   
   pilot.traverse_.rowEndTag = function(label, offset, length1, length2) {
@@ -151,8 +147,6 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
-
-    lastTag = xrx.token.END_TAG;
   };
   
   pilot.traverse_.rowEmptyTag = function(label, offset, length1, length2) {
@@ -168,11 +162,9 @@ xrx.pilot.prototype.forward = function(context, target) {
       tok.length(length2 - length1);
       pilot.stop();
     } else {}
-
-    lastTag = xrx.token.END_TAG;
   };
   
-  pilot.traverse_.forward(startLabel, startOffset);
+  pilot.traverse_.forward(context);
 
   return tok;
 };

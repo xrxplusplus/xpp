@@ -1,6 +1,6 @@
 /**
  * @fileoverview A class providing functions that can be
- * shared by node implementations.
+ * shared by element node implementations.
  */
 
 goog.provide('xrx.node.Element');
@@ -8,7 +8,8 @@ goog.provide('xrx.node.Element');
 
 
 /** 
- * 
+ * A class providing functions that can be
+ * shared by element node implementations.
  */
 xrx.node.Element = function() {};
 
@@ -164,7 +165,7 @@ xrx.node.Element.prototype.getNodeFollowing = function(test) {
 
 
 xrx.node.Element.prototype.getNodeFollowingSibling = function(test) {
-  var stop = this.getLabel();
+  var stop = this.getLabel().clone();
   stop.parent();
 
   return this.find(test, xrx.node[this.impl_.Element].prototype.isPrecedingSiblingOf,
@@ -174,7 +175,7 @@ xrx.node.Element.prototype.getNodeFollowingSibling = function(test) {
 
 
 xrx.node.Element.prototype.getNodeParent = function(test) {
-  var stop = this.getLabel();
+  var stop = this.getLabel().clone();
   stop.parent();
 
   return this.find(test, xrx.node[this.impl_.Element].prototype.isChildOf, true, stop);
@@ -196,32 +197,10 @@ xrx.node.Element.prototype.getNodePreceding = function(test) {
 
 
 xrx.node.Element.prototype.getNodePrecedingSibling = function(test) {
-  var stop = this.getLabel();
+  var stop = this.getLabel().clone();
   stop.parent();
 
   return this.find(test, xrx.node[this.impl_.Element].prototype.isFollowingSiblingOf, true,
       stop);
 };
-
-
-
-/**
- * @private
- */
-xrx.node.Element.prototype.find = function(test, axisTest, reverse, stop) {
-  var self = this;
-  var selfLabel = self.getLabel();
-  var nodeset = new xrx.xpath.NodeSet();
-
-  this.eventNode = function(node) {
-    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
-        test.matches(node)) {
-      reverse ? nodeset.unshift(node) : nodeset.add(node);
-    }
-  };
-  
-  reverse ? this.backward(stop) : this.forward(stop);
-  return nodeset;
-};
-
 

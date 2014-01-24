@@ -129,7 +129,7 @@ function test03contentFunctions() {
   assertEquals('', e3.getStringValue());
 
   // streaming node
-  var t4 = new xrx.token.StartTag(new xrx.label([1]), 0, xml.length);
+  var t4 = new xrx.token.StartTag(new xrx.label([1]), 0, 3);
   var e4 = new xrx.node.ElementS(instance, t4);
   var t5 = new xrx.token.StartTag(new xrx.label([1, 1]), 4, 3);
   var e5 = new xrx.node.ElementS(instance, t5);
@@ -164,23 +164,22 @@ function axisTest(key, func, expected) {
   var t = pilot.location(null, new xrx.token.StartEmptyTag(eB.getLabel()));
   var eS = new xrx.node.ElementS(instance, t);
   var testS = {
-    //node: eS[func](new xrx.xpath.KindTest('node')),
+    node: eS[func](new xrx.xpath.KindTest('node')),
     element: eS[func](new xrx.xpath.NameTest('*')),
-    //text: eS[func](new xrx.xpath.KindTest('text')),
+    text: eS[func](new xrx.xpath.KindTest('text')),
     attribute: eS[func](new xrx.xpath.NameTest('@*'))
   }
 
-  //assertEquals(expected.node, testS.node.getLength());
+  assertEquals(expected.node, testS.node.getLength());
   assertEquals(expected.element, testS.element.getLength());
-  //assertEquals(expected.text, testS.text.getLength());
+  assertEquals(expected.text, testS.text.getLength());
   assertEquals(expected.attribute, testS.attribute.getLength());
 };
-
 
 function test04nodeFunctions() {
 
   // ancestor
-  //axisTest(5, 'getNodeAncestor', { node: 3, element: 2, text: 0, attribute: 0 });
+  axisTest(5, 'getNodeAncestor', { node: 3, element: 2, text: 0, attribute: 0 });
 
   // child
   axisTest(0, 'getNodeChild', { node: 7, element: 4, text: 3, attribute: 0 });
@@ -195,7 +194,7 @@ function test04nodeFunctions() {
   axisTest(1, 'getNodeFollowingSibling', { node: 5, element: 3, text: 2, attribute: 0 });
 
   // parent
-  //axisTest(6, 'getNodeParent', { node: 1, element: 1, text: 0, attribute: 0 });
+  axisTest(6, 'getNodeParent', { node: 1, element: 1, text: 0, attribute: 0 });
 
   // preceding
   //axisTest(8, 'getNodePreceding', { node: 12, element: 4, text: 7, attribute: 0 });

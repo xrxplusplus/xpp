@@ -6,8 +6,9 @@
 goog.provide('xrx.traverse');
 
 
-goog.require('xrx.stream');
 goog.require('xrx.label');
+goog.require('xrx.stream');
+goog.require('xrx.token');
 
 
 
@@ -167,22 +168,26 @@ xrx.traverse.prototype.secondaryLabel = function(label, primaryLabel) {
  * backward direction.
  * @private
  */
-xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
+xrx.traverse.prototype.traverse = function(opt_token, forward) {
   var traverse = this;
-  var label = opt_label || new xrx.label([1]);
+  var label = opt_token ? opt_token.label().clone() : new xrx.label();
+  var start = opt_token ? opt_token.offset() : undefined;
+  var lastTag = opt_token ? opt_token.type() : xrx.token.ROOT;
   var attrLabel = new xrx.label();
   var nsLabel = new xrx.label();
-  var lastTag;
+  var firstTag = opt_token ? true : false;
 
   this.stream_.rowStartTag = function(offset, length1, length2) {
-    if (lastTag) { 
-      if (forward) {
-        lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+    if (forward) {
+      if (firstTag) {
+        firstTag = false;
       } else {
-        if (lastTag !== xrx.token.END_TAG) label.parent();
+        lastTag === xrx.token.START_TAG || lastTag === xrx.token.ROOT ? 
+            label.child() : label.nextSibling();
       }
+    } else {
+      if (lastTag !== xrx.token.END_TAG) label.parent();
     }
-
     traverse.rowStartTag(label.clone(), offset, length1, length2);
 
     lastTag = xrx.token.START_TAG;
@@ -191,14 +196,18 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
   };
 
   this.stream_.rowEmptyTag = function(offset, length1, length2) {
-    if (lastTag) {
-      if (forward) {
-        lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
+    if (forward) {
+      if (firstTag) {
+        firstTag = false;
       } else {
-        // note: this is valid for the preceding-sibling and the ancestor axis but
-        // not for the preceding axis
-        lastTag === xrx.token.END_TAG ? label.child() : label.precedingSibling();
+        lastTag === xrx.token.START_TAG || lastTag === xrx.token.ROOT ? 
+            label.child() : label.nextSibling();
       }
+    } else {
+      // note: this is valid for the preceding-sibling and the ancestor axis but
+      // not for the preceding axis
+      lastTag === xrx.token.END_TAG || lastTag === xrx.token.ROOT ? 
+          label.child() : label.precedingSibling();
     }
 
     traverse.rowEmptyTag(label.clone(), offset, length1, length2);
@@ -209,12 +218,15 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
   };
 
   this.stream_.rowEndTag = function(offset, length1, length2) {
-    if (lastTag) {
-      if (forward) {
-        if (lastTag !== xrx.token.START_TAG) label.parent();
+    if (forward) {
+      if (firstTag) {
+        firstTag = false;
       } else {
-        lastTag === xrx.token.END_TAG ? label.child() : label.precedingSibling();
+        if (lastTag !== xrx.token.START_TAG) label.parent();
       }
+    } else {
+      lastTag === xrx.token.END_TAG || lastTag === xrx.token.ROOT ? 
+          label.child() : label.precedingSibling();
     }
 
     traverse.rowEndTag(label.clone(), offset, length1, length2);
@@ -258,7 +270,7 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
     traverse.eventNsUri(nsLabel, offset, length);
   };
   
-  forward ? this.stream_.forward(opt_offset) : this.stream_.backward(opt_offset);
+  forward ? this.stream_.forward(start) : this.stream_.backward(start);
 };
 
 
@@ -266,8 +278,8 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
 /**
  * Stream over the labels of a XML instance in forward direction.
  */
-xrx.traverse.prototype.forward = function(opt_label, opt_offset) {
-  this.traverse(opt_label, opt_offset, true);
+xrx.traverse.prototype.forward = function(opt_token) {
+  this.traverse(opt_token, true);
 };
 
 
@@ -275,8 +287,8 @@ xrx.traverse.prototype.forward = function(opt_label, opt_offset) {
 /**
  * Stream over the labels of a XML instance in backward direction.
  */
-xrx.traverse.prototype.backward = function(opt_label, opt_offset) {
-  this.traverse(opt_label, opt_offset, false);
+xrx.traverse.prototype.backward = function(opt_token) {
+  this.traverse(opt_token, false);
 };
 
 

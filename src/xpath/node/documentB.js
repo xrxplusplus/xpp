@@ -11,6 +11,7 @@ goog.require('xrx.index');
 goog.require('xrx.label');
 goog.require('xrx.node');
 goog.require('xrx.nodeB');
+goog.require('xrx.node.Document');
 goog.require('xrx.node.ElementB');
 goog.require('xrx.node.TextB');
 goog.require('xrx.token');
@@ -31,113 +32,75 @@ goog.inherits(xrx.node.DocumentB, xrx.nodeB);
 
 
 
-xrx.node.DocumentB.prototype.getToken = function() {
-  // TODO: implement this.
-  return undefined;
-};
+xrx.node.DocumentB.prototype.getToken = xrx.node.Document.prototype.getToken;
 
 
 
-xrx.node.DocumentB.prototype.getLabel = function() {
-  return new xrx.label();
-};
+xrx.node.DocumentB.prototype.getLabel = xrx.node.Document.prototype.getLabel;
 
 
 
-xrx.node.DocumentB.prototype.getOffset = function() {
-  return 0;
-};
+xrx.node.DocumentB.prototype.getOffset = xrx.node.Document.prototype.getOffset;
 
 
 
-xrx.node.DocumentB.prototype.getLength = function() {
-  // TODO: implement this.
-  return undefined;
-};
+xrx.node.DocumentB.prototype.getLength = xrx.node.Document.prototype.getLength;
 
 
 
-xrx.node.DocumentB.prototype.isSameAs = function(node) {
-  return node.getType() === xrx.node.DOCUMENT;
-};
+xrx.node.DocumentB.prototype.isSameAs = xrx.node.Document.prototype.isSameAs;
 
 
 
-xrx.node.DocumentB.prototype.isBefore = function(node) {
-  return true;
-};
+xrx.node.DocumentB.prototype.isBefore = xrx.node.Document.prototype.isBefore;
 
 
 
-xrx.node.DocumentB.prototype.isAfter = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isAfter = xrx.node.Document.prototype.isAfter;
 
 
 
-xrx.node.DocumentB.prototype.isAncestorOf = function(node) {
-  return true;
-};
+xrx.node.DocumentB.prototype.isAncestorOf = xrx.node.Document.prototype.isAncestorOf;
 
 
 
-xrx.node.DocumentB.prototype.isAttributeOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isAttributeOf = xrx.node.Document.prototype.isAttributeOf;
 
 
 
-xrx.node.DocumentB.prototype.isChildOf = function(node) {
- return false;
-};
+xrx.node.DocumentB.prototype.isChildOf = xrx.node.Document.prototype.isChildOf;
 
 
 
-xrx.node.DocumentB.prototype.isDescendantOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isDescendantOf = xrx.node.Document.prototype.isDescendantOf;
 
 
 
-xrx.node.DocumentB.prototype.isFollowingOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isFollowingOf = xrx.node.Document.prototype.isFollowingOf;
 
 
 
-xrx.node.DocumentB.prototype.isFollowingSiblingOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isFollowingSiblingOf = xrx.node.Document.prototype.isFollowingSiblingOf;
 
 
 
-xrx.node.DocumentB.prototype.isParentOf = function(node) {
-  return node.getKey() === 0;
-};
+xrx.node.DocumentB.prototype.isParentOf = xrx.node.Document.prototype.isParentOf;
 
 
 
-xrx.node.DocumentB.prototype.isPrecedingOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isPrecedingOf = xrx.node.Document.prototype.isPrecedingOf;
 
 
 
-xrx.node.DocumentB.prototype.isPrecedingSiblingOf = function(node) {
-  return false;
-};
+xrx.node.DocumentB.prototype.isPrecedingSiblingOf = xrx.node.Document.prototype.isPrecedingSiblingOf;
 
 
 
-xrx.node.DocumentB.prototype.getName = function() {
-  return '';
-};
+xrx.node.DocumentB.prototype.getName = xrx.node.Document.prototype.getName;
 
 
 
-xrx.node.DocumentB.prototype.getNamespaceUri = function(prefix) {
-  return '';
-};
+xrx.node.DocumentB.prototype.getNamespaceUri = xrx.node.Document.prototype.getNamespaceUri;
 
 
 
@@ -157,21 +120,15 @@ xrx.node.DocumentB.prototype.getStringValue = function() {
 
 
 
-xrx.node.DocumentB.prototype.getXml = function() {
-  return this.instance_.xml();
-};
+xrx.node.DocumentB.prototype.getXml = xrx.node.Document.prototype.getXml;
 
 
 
-xrx.node.DocumentB.prototype.getNodeAncestor = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodeAncestor = xrx.node.Document.prototype.getNodeAncestor;
 
 
 
-xrx.node.DocumentB.prototype.getNodeAttribute = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodeAttribute = xrx.node.Document.prototype.getNodeAttribute;
 
 
 
@@ -216,53 +173,21 @@ xrx.node.DocumentB.prototype.getNodeDescendant = function(test) {
 
 
 
-xrx.node.DocumentB.prototype.getNodeFollowing = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodeFollowing = xrx.node.Document.prototype.getNodeFollowing;
 
 
 
-xrx.node.DocumentB.prototype.getNodeFollowingSibling = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodeFollowingSibling = xrx.node.Document.prototype.getNodeFollowingSibling;
 
 
 
-xrx.node.DocumentB.prototype.getNodeParent = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodeParent = xrx.node.Document.prototype.getNodeParent;
 
 
 
-xrx.node.DocumentB.prototype.getNodePreceding = function(test) {
-  return new xrx.xpath.NodeSet();
-};
+xrx.node.DocumentB.prototype.getNodePreceding = xrx.node.Document.prototype.getNodePreceding;
 
 
 
-xrx.node.DocumentB.prototype.getNodePrecedingSibling = function(test) {
-  return new xrx.xpath.NodeSet();
-};
-
-
-
-/**
- * @private
- */
-xrx.node.DocumentB.prototype.find = function(test, axisTest, reverse, stop) {
-  var self = this;
-  var selfLabel = self.getLabel();
-  var nodeset = new xrx.xpath.NodeSet();
-
-  this.eventNode = function(node) {
-
-    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
-        test.matches(node)) {
-      nodeset.add(node);
-    }
-  };
-  
-  this.forward(stop);
-  return nodeset;
-};
+xrx.node.DocumentB.prototype.getNodePrecedingSibling = xrx.node.Document.prototype.getNodePrecedingSibling;
 

@@ -71,13 +71,13 @@ function test02abstractMethods() {
   // xrx.node.DocumentS
   goog.array.forEach(abstractMethods, function(method, index, arr) {
 
-    //assertEquals(false, xrx.node.DocumentS.prototype[method] == goog.abstractMethod);
+    assertEquals(false, xrx.node.DocumentS.prototype[method] == goog.abstractMethod);
     assertEquals(false, xrx.node.DocumentB.prototype[method] == goog.abstractMethod);
   });
   // xrx.node.ElementS
   goog.array.forEach(abstractMethods, function(method, index, arr) {
 
-    //assertEquals(false, xrx.node.ElementS.prototype[method] == goog.abstractMethod);
+    assertEquals(false, xrx.node.ElementS.prototype[method] == goog.abstractMethod);
     assertEquals(false, xrx.node.ElementB.prototype[method] == goog.abstractMethod);
   });
   // xrx.node.AttributeS
@@ -89,7 +89,7 @@ function test02abstractMethods() {
   // xrx.node.TextS
   goog.array.forEach(abstractMethods, function(method, index, arr) {
 
-    //assertEquals(false, xrx.node.TextS.prototype[method] == goog.abstractMethod);
+    assertEquals(false, xrx.node.TextS.prototype[method] == goog.abstractMethod);
     assertEquals(false, xrx.node.TextB.prototype[method] == goog.abstractMethod);
   });
 };

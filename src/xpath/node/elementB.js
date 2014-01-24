@@ -375,5 +375,5 @@ xrx.node.ElementB.prototype.backward = function(stop) {
 /**
  * 
  */
-xrx.node.ElementB.prototype.find = xrx.node.Element.prototype.find;
+xrx.node.ElementB.prototype.find = xrx.node.prototype.find;
 
