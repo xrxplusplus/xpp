@@ -17,13 +17,24 @@ goog.require('xrx.xpath.NodeSet');
  * @constructor
  */
 xrx.nodeB = function(type, instance, key) {
-  goog.base(this, type, null, instance);
+  goog.base(this, type, instance);
 
   /**
    * @type {integer}
    * @private
    */
   this.key_ = key;
+
+  /**
+   * @type {enum}
+   * @private
+   */
+  this.impl_ = {
+    Document: 'DocumentB',
+    Element: 'ElementB',
+    Attribute: 'AttributeB',
+    Text: 'TextB'
+  };
 };
 goog.inherits(xrx.nodeB, xrx.node);
 

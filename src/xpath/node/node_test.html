@@ -35,78 +35,6 @@
 <body>
 <script type="text/javascript">
 
-function stest01abstractMethodsXDM() {
-  /*
-  5 Accessors
-  5.1 attributes Accessor
-  5.2 base-uri Accessor
-  5.3 children Accessor
-  5.4 document-uri Accessor
-  5.5 is-id Accessor
-  5.6 is-idrefs Accessor
-  5.8 namespace-nodes Accessor
-  5.9 nilled Accessor
-  5.10 node-kind Accessor
-  5.11 node-name Accessor
-  5.12 parent Accessor
-  5.13 string-value Accessor
-  5.14 type-name Accessor
-  5.15 typed-value Accessor
-  5.16 unparsed-entity-public-id Accessor
-  5.17 unparsed-entity-system-id Accessor
-  */
-  var accessors = ['accAttributes', 'accBaseUri', 'accChildren',
-                   'accDocumentUri', 'accIsId', 'accIsIdrefs',
-                   'accNamespaceNodes', 'accNilled', 'accNodeKind',
-                   'accNodeName', 'accParent', 'accStringValue',
-                   'accTypeName', 'accTypedValue', 
-                   'accUnparsedEntityPublicId',
-                   'accUnparsedEntitySystemId'];
-  goog.array.forEach(accessors, function(acc, index, arr) {
-    
-    assertTrue(typeof xrx.xdm.prototype[acc] == 'function');
-  });
-
-  /*
-  6 Nodes
-  6.1 Document Nodes
-  6.2 Element Nodes
-  6.3 Attribute Nodes
-  6.4 Namespace Nodes
-  6.5 Processing Instruction Nodes
-  6.6 Comment Nodes
-  6.7 Text Nodes
-  */
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Attribute.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Comment.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Document.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Element.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Namespace.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.ProcessingInstruction.prototype[acc] == goog.abstractMethod);
-  });
-  goog.array.forEach(accessors, function(acc, index, arr) {
-
-    assertEquals(false, typeof xrx.node.Text.prototype[acc] == goog.abstractMethod);
-  });
-};
-
 function test02abstractMethods() {
   var abstractMethods = [
     'isSameAs',
@@ -162,23 +90,8 @@ function test02abstractMethods() {
   goog.array.forEach(abstractMethods, function(method, index, arr) {
 
     //assertEquals(false, xrx.node.TextS.prototype[method] == goog.abstractMethod);
+    assertEquals(false, xrx.node.TextB.prototype[method] == goog.abstractMethod);
   });
-};
-
-function stest03forward() {
-  var xml   = '<a><b att1="attValue1" att2="attValue2"/>1<c>2</c>3</a>';
-  var element = goog.dom.createElement('div');
-  goog.dom.setTextContent(element, xml);
-  var instance = new xrx.instance(element);
-  var label = new xrx.label([1, 1]);
-  var token = new xrx.token.EmptyTag(label, 3, 38);
-  var elmnt = new xrx.node.ElementS(token, instance);
-  
-  elmnt.nodeElement = function() {};
-  
-  elmnt.nodeText = function() {};
-  
-  elmnt.forward();
 };
 
 </script>

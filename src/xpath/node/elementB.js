@@ -6,7 +6,7 @@
 goog.provide('xrx.node.ElementB');
 
 
-goog.require('xrx.label');
+
 goog.require('xrx.node');
 goog.require('xrx.node.AttributeB');
 goog.require('xrx.node.DocumentB');
@@ -26,131 +26,137 @@ goog.require('xrx.xpath.NodeSet');
  * @param {!integer} 
  * @constructor
  */
-xrx.node.ElementB = function(instance, opt_key) {
-  goog.base(this, xrx.node.ELEMENT, instance, opt_key);
+xrx.node.ElementB = function(instance, key) {
+  goog.base(this, xrx.node.ELEMENT, instance, key);
+
 };
 goog.inherits(xrx.node.ElementB, xrx.nodeB);
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getToken = function() {
   return this.getIndex().getToken(this.key_);
 };
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getLabel = function() {
   return this.getIndex().getLabel(this.key_);
 };
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getOffset = function() {
   return this.getRow().getOffset();
 };
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getLength = function() {
   return this.getRow().getLength1();
 };
 
 
 
-xrx.node.ElementB.prototype.isSameAs = function(node) {
-  return this.getType() === node.getType() && 
-      this.getLabel().sameAs(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isSameAs = xrx.node.Element.prototype.isSameAs;
 
 
 
-xrx.node.ElementB.prototype.isBefore = function(node) {
-  var selfLabel = this.getLabel();
-  var nodeLabel = node.getLabel();
-
-  return selfLabel.isBefore(nodeLabel) ||
-      ( selfLabel.sameAs(nodeLabel) &&
-          this.getType() < node.getType() );
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isBefore = xrx.node.Element.prototype.isBefore;
 
 
 
-xrx.node.ElementB.prototype.isAfter = function(node) {
-  var selfLabel = this.getLabel();
-  var nodeLabel = node.getLabel();
-
-  return selfLabel.isAfter(nodeLabel) ||
-      ( selfLabel.sameAs(nodeLabel) &&
-          this.getType() > node.getType() );
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isAfter = xrx.node.Element.prototype.isAfter;
 
 
 
-xrx.node.ElementB.prototype.isAncestorOf = function(node) {
-  return this.getLabel().isAncestorOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isAncestorOf = xrx.node.Element.prototype.isAncestorOf;
 
 
 
-xrx.node.ElementB.prototype.isAttributeOf = function(node) {
-  return false;
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isAttributeOf = xrx.node.Element.prototype.isAttributeOf;
 
 
 
-xrx.node.ElementB.prototype.isChildOf = function(node) {
-  return this.getLabel().isChildOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isChildOf = xrx.node.Element.prototype.isChildOf;
 
 
 
-xrx.node.ElementB.prototype.isDescendantOf = function(node) {
-  return this.getLabel().isDescendantOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isDescendantOf = xrx.node.Element.prototype.isDescendantOf;
 
 
 
-xrx.node.ElementB.prototype.isFollowingOf = function(node) {
-  return this.isAfter(node) && !this.getLabel().isDescendantOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isFollowingOf = xrx.node.Element.prototype.isFollowingOf;
 
 
 
-xrx.node.ElementB.prototype.isFollowingSiblingOf = function(node) {
-  var selfLabel = this.getLabel();
-  var nodeLabel = node.getLabel();
-
-  return selfLabel.isFollowingSiblingOf(nodeLabel) ||
-      ( selfLabel.sameAs(nodeLabel) && 
-          this.getType() > node.getType() )
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isFollowingSiblingOf = xrx.node.Element.prototype.isFollowingSiblingOf;
 
 
 
-xrx.node.ElementB.prototype.isParentOf = function(node) {
-  return this.getLabel().isParentOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isParentOf = xrx.node.Element.prototype.isParentOf;
 
 
 
-xrx.node.ElementB.prototype.isPrecedingOf = function(node) {
-  return this.isBefore(node) && !this.getLabel().isAncestorOf(node.getLabel());
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isPrecedingOf = xrx.node.Element.prototype.isPrecedingOf;
 
 
 
-xrx.nodeB.prototype.isPrecedingSiblingOf = function(node) {
-  var selfLabel = this.getLabel();
-  var nodeLabel = node.getLabel();
-
-  return selfLabel.isPrecedingSiblingOf(nodeLabel) ||
-      ( selfLabel.sameAs(nodeLabel) && 
-          this.getType() < node.getType() )
-};
+/**
+ *
+ */
+xrx.node.ElementB.prototype.isPrecedingSiblingOf = xrx.node.Element.prototype.isPrecedingSiblingOf;
 
 
 
-
+/**
+ *
+ */
 xrx.node.ElementB.prototype.getName = function() {
   var inst = this.instance_;
   var tag = inst.getIndex().getToken(this.key_);
@@ -162,6 +168,9 @@ xrx.node.ElementB.prototype.getName = function() {
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getNamespaceUri = function(prefix) {
   var inst = this.instance_;
   var ns = inst.getIndex().getNamespace(this.getToken(), prefix);
@@ -171,6 +180,9 @@ xrx.node.ElementB.prototype.getNamespaceUri = function(prefix) {
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getStringValue = function() {
   if (this.getRow().getType() === xrx.token.EMPTY_TAG) return '';
 
@@ -192,6 +204,9 @@ xrx.node.ElementB.prototype.getStringValue = function() {
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getXml = function() {
 
   if (this.getRow().getType() === xrx.token.EMPTY_TAG) {
@@ -208,18 +223,16 @@ xrx.node.ElementB.prototype.getXml = function() {
 
 
 
-xrx.node.ElementB.prototype.getNodeAncestor = function(test) {
-  var nodeset = this.find(test, xrx.node.ElementB.prototype.isDescendantOf,
-      true, new xrx.label());
-
-  // TODO: not sure if this is correct?
-  if (test.getName() === 'node') 
-      nodeset.unshift(new xrx.node.DocumentB(this.instance_));
-  return nodeset;
-};
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeAncestor = xrx.node.Element.prototype.getNodeAncestor;
 
 
 
+/**
+ * 
+ */
 xrx.node.ElementB.prototype.getNodeAttribute = function(test) {
   var nodeset = new xrx.xpath.NodeSet();
   var row = this.getRow();
@@ -238,69 +251,52 @@ xrx.node.ElementB.prototype.getNodeAttribute = function(test) {
 
 
 
-xrx.node.ElementB.prototype.getNodeChild = function(test) {
-
-  return this.find(test, xrx.node.ElementB.prototype.isParentOf, false,
-      this.getIndex().getLabel(this.key_));
-};
-
-
-
-xrx.node.ElementB.prototype.getNodeDescendant = function(test) {
-
-  return this.find(test, xrx.node.ElementB.prototype.isAncestorOf, false,
-      this.getIndex().getLabel(this.key_));
-};
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeChild = xrx.node.Element.prototype.getNodeChild;
 
 
 
-xrx.node.ElementB.prototype.getNodeFollowing = function(test) {
-
-  return this.find(test, xrx.node.ElementB.prototype.isPrecedingOf, false,
-      new xrx.label());
-};
-
-
-
-xrx.node.ElementB.prototype.getNodeFollowingSibling = function(test) {
-  var stop = this.getIndex().getLabel(this.key_);
-  stop.parent();
-
-  return this.find(test, xrx.node.ElementB.prototype.isPrecedingSiblingOf,
-      false, stop);
-};
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeDescendant = xrx.node.Element.prototype.getNodeDescendant;
 
 
 
-xrx.node.ElementB.prototype.getNodeParent = function(test) {
-  var stop = this.getLabel();
-  stop.parent();
-
-  return this.find(test, xrx.node.ElementB.prototype.isChildOf, true, stop);
-};
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeFollowing = xrx.node.Element.prototype.getNodeFollowing;
 
 
 
-xrx.node.ElementB.prototype.getNodePreceding = function(test) {
-  var nodeset = this.find(test, xrx.node.ElementB.prototype.isFollowingOf, true,
-      new xrx.label());
-
-  // TODO: not sure if this is correct?
-  if (test.getName() === 'node') 
-      nodeset.unshift(new xrx.node.DocumentB(this.instance_));
-
-  return nodeset;
-};
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeFollowingSibling = xrx.node.Element.prototype.getNodeFollowingSibling;
 
 
 
-xrx.node.ElementB.prototype.getNodePrecedingSibling = function(test) {
-  var stop = this.getLabel();
-  stop.parent();
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodeParent = xrx.node.Element.prototype.getNodeParent;
 
-  return this.find(test, xrx.node.ElementB.prototype.isFollowingSiblingOf, true,
-      stop);
-};
+
+
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodePreceding = xrx.node.Element.prototype.getNodePreceding;
+
+
+
+/**
+ * 
+ */
+xrx.node.ElementB.prototype.getNodePrecedingSibling = xrx.node.Element.prototype.getNodePrecedingSibling;
 
 
 
@@ -377,22 +373,7 @@ xrx.node.ElementB.prototype.backward = function(stop) {
 
 
 /**
- * @private
+ * 
  */
-xrx.node.ElementB.prototype.find = function(test, axisTest, reverse, stop) {
-  var self = this;
-  var selfLabel = self.getLabel();
-  var nodeset = new xrx.xpath.NodeSet();
-
-  this.eventNode = function(node) {
-
-    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
-        test.matches(node)) {
-      reverse ? nodeset.unshift(node) : nodeset.add(node);
-    }
-  };
-  
-  reverse ? this.backward(stop) : this.forward(stop);
-  return nodeset;
-};
+xrx.node.ElementB.prototype.find = xrx.node.Element.prototype.find;
 

@@ -17,7 +17,7 @@ goog.inherits(xrx.node.DocumentS, xrx.node.Document);
 
 
 
-xrx.nodeS.sharedFunctions(xrx.node.DocumentS);
+//xrx.nodeS.sharedFunctions(xrx.node.DocumentS);
 
 
 xrx.node.DocumentS.prototype.getNodeChild = xrx.nodeS.prototype.getNodeChild;

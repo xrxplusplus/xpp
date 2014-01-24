@@ -22,7 +22,8 @@ var _allTests = [
     "./xpath/step_test.html",
     "./xpath/xpath_test.html",
     "./xpath/node/attribute_test.html", // node
-    "./xpath/node/node_test.html",
+    "./xpath/node/document_test.html",
     "./xpath/node/element_test.html",
-    "./xpath/node/document_test.html"
+    "./xpath/node/node_test.html",
+    "./xpath/node/text_test.html"
     ];

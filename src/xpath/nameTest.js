@@ -38,7 +38,7 @@ xrx.xpath.NameTest = function(name, opt_namespaceUri) {
  * @override
  */
 xrx.xpath.NameTest.prototype.matches = function(node) {
-  var type = node.type();
+  var type = node.getType();
   if (type !== xrx.node.ELEMENT &&
       type !== xrx.node.ATTRIBUTE) {
     return false;

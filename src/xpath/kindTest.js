@@ -73,7 +73,7 @@ xrx.xpath.KindTest.isValidType = function(typeName) {
  * @override
  */
 xrx.xpath.KindTest.prototype.matches = function(node) {
-  return goog.isNull(this.type_) || this.type_ == node.type();
+  return goog.isNull(this.type_) || this.type_ == node.getType();
 };
 
 

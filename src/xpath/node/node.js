@@ -1,6 +1,5 @@
 /**
- * @fileoverview An abstract class which implements and extends the xrx.xdm 
- * interface.
+ * @fileoverview An abstract class representing a XML node.
  */
 
 goog.provide('xrx.node');
@@ -12,24 +11,19 @@ goog.require('xrx.token');
 
 
 /**
- * A class which implements and extends the xrx.xdm interface.
+ * Base class for all XML nodes.
  * 
+ * @param {!integer} type The node type.
+ * @param {!xrx.instance} instance The XML instance.
  * @constructor
- * @implements {xrx.xdm}
  */
-xrx.node = function(type, token, instance) {
+xrx.node = function(type, instance) {
 
   /**
    * @type {xrx.node}
    * @private
    */
   this.type_ = type;
-
-  /**
-   * @type {xrx.token}
-   * @private
-   */
-  this.token_ = token;
 
   /**
    * @type {xrx.instance}
@@ -52,62 +46,11 @@ xrx.node = function(type, token, instance) {
 
 
 /**
- * @return
- * @deprecated
- */
-xrx.node.prototype.token = function() {
-  return this.token_;
-};
-
-
-
-/**
- * @return
- * @deprecated
- */
-xrx.node.prototype.label = function() {
-  return this.token_.label();
-};
-
-
-
-/**
- * @return
- * @deprecated
- */
-xrx.node.prototype.offset = function() {
-  return this.token_.offset();
-};
-
-
-
-/**
- * @return
- * @deprecated
- */
-xrx.node.prototype.instance = function() {
-  return this.instance_;
-};
-
-
-
-/**
  * Returns the the node's instance.
  * @return {!integer} The type number.
  */
 xrx.node.prototype.getInstance = function() {
   return this.instance_;
-};
-
-
-
-
-/**
- * @return
- * @deprecated
- */
-xrx.node.prototype.type = function() {
-  return this.type_;
 };
 
 
@@ -189,7 +132,8 @@ xrx.node.getNameExpanded = function(namespace, localName) {
 
 /**
  * Interface.
- * Each node must implement the functions below.
+ * Each node implementation and each node type must implement 
+ * the functions below.
  */
 
 
@@ -200,6 +144,12 @@ xrx.node.getNameExpanded = function(namespace, localName) {
 xrx.node.prototype.isSameAs = goog.abstractMethod;
 xrx.node.prototype.isBefore = goog.abstractMethod;
 xrx.node.prototype.isAfter = goog.abstractMethod;
+
+
+
+/**
+ * Axis functions
+ */
 xrx.node.prototype.isAncestorOf = goog.abstractMethod;
 xrx.node.prototype.isAttributeOf = goog.abstractMethod;
 xrx.node.prototype.isChildOf = goog.abstractMethod;
@@ -211,15 +161,13 @@ xrx.node.prototype.isPrecedingOf = goog.abstractMethod;
 xrx.node.prototype.isPrecedingSiblingOf = goog.abstractMethod;
 
 
+
 /**
  * Name functions
  */
 xrx.node.prototype.getName = goog.abstractMethod;
-//xrx.node.prototype.getNameLocal = goog.abstractMethod;
 xrx.node.prototype.getNamespaceUri = goog.abstractMethod;
-//xrx.node.prototype.getNamePrefix = goog.abstractMethod;
-//xrx.node.prototype.getNamePrefixed = goog.abstractMethod;
-//xrx.node.prototype.getNameExpanded = goog.abstractMethod;
+
 
 
 /**

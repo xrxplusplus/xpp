@@ -33,6 +33,15 @@ xrx.traverse.prototype.stream = function() {
 
 
 /**
+ * 
+ */
+xrx.traverse.prototype.stop = function() {
+  this.stream_.stop();
+};
+
+
+
+/**
  * Event, thrown whenever a start-tag row is found.
  */
 xrx.traverse.prototype.rowStartTag = goog.abstractMethod;
@@ -186,7 +195,8 @@ xrx.traverse.prototype.traverse = function(opt_label, opt_offset, forward) {
       if (forward) {
         lastTag === xrx.token.START_TAG ? label.child() : label.nextSibling();
       } else {
-        // note: this is valid for the preceding-sibling and the ancestor axis
+        // note: this is valid for the preceding-sibling and the ancestor axis but
+        // not for the preceding axis
         lastTag === xrx.token.END_TAG ? label.child() : label.precedingSibling();
       }
     }

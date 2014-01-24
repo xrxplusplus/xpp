@@ -18,8 +18,25 @@ goog.require('xrx.token');
 /**
  * @constructor
  */
-xrx.nodeS = function(type, token, instance) {
-  goog.base(this, type, token, instance);
+xrx.nodeS = function(type, instance, token) {
+  goog.base(this, type, instance);
+
+  /**
+   * @type {xrx.token}
+   * @private
+   */
+  this.token_ = token;
+
+  /**
+   * @type {enum}
+   * @private
+   */
+  this.impl_ = {
+    Document: 'DocumentS',
+    Element: 'ElementS',
+    Attribute: 'AttributeS',
+    Text: 'TextS'
+  };
 };
 goog.inherits(xrx.nodeS, xrx.node);
 
@@ -28,76 +45,30 @@ goog.inherits(xrx.nodeS, xrx.node);
 /**
  * 
  */
-xrx.nodeS.sharedFunctions = function(nodeImpl) {
-  var functions = ['backward', 'find', 'forward', 'isSameAs',
-                   'isAfter', 'isBefore'];
-
-  for (var i = 0; i < functions.length; i++) {
-    var func = functions[i];
-    nodeImpl.prototype[func] = xrx.nodeS.prototype[func];
-  };
+xrx.nodeS.prototype.getToken = function() {
+  return this.token_;
 };
 
 
 
 /**
- * Indicates whether two nodes are the same.
- *
- * @param {xrx.node} node The node to test against.
- * @return {boolean} Whether the nodes are the same.
- */
-xrx.nodeS.prototype.isSameAs = function(node) {
-  return this.type() === node.type() && this.label().sameAs(
-      node.label()) && this.instance_ === node.instance_;
-};
-
-
-
-/**
- * Indicates whether a node appears after another node
- * in document order.
-
- * @param {!xrx.node} node The node to test against.
- * @return {boolean}
- */
-xrx.nodeS.prototype.isAfter = function(node) {
-  console.log('this');
-  console.log(this.label());
-  console.log('node');
-  console.log(node.label());
-  console.log(this.label().isAfter(node.label()));
-  console.log(this.type_);
-  console.log(node.type());
-  return this.type_ >= node.type() && this.label().isAfter(
-      node.label());
-};
-
-
-
-/**
- * Indicates whether a node appears before another node
- * in document order.
  * 
- * @param {!xrx.node} node The node to test against.
- * @return {boolean}
  */
-xrx.nodeS.prototype.isBefore = function(node) {
-  return this.type_ <= node.type() && this.label().isBefore(
-      node.label());
-};
+xrx.nodeS.prototype.getLabel = goog.abstractMethod;
 
 
 
 /**
- * @override
+ * 
  */
-xrx.nodeS.prototype.expandedName = function() { return ''; };
+xrx.nodeS.prototype.getOffset = goog.abstractMethod;
+
 
 
 /**
- * @override
+ * 
  */
-xrx.nodeS.prototype.namespaceUri = function() { return undefined; };
+xrx.nodeS.prototype.getLength = goog.abstractMethod;
 
 
 
@@ -322,7 +293,6 @@ xrx.nodeS.prototype.backward = function() {
  * @private
  */
 xrx.nodeS.prototype.find = function(test, axisTest, reverse) {
-  console.log(test);
   var nodeset = new xrx.xpath.NodeSet();
   var instance = this.instance_;
   var elmnt;

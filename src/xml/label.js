@@ -63,11 +63,22 @@ xrx.label.prototype.last = function() {
 
 /**
  * Adds a value to the end of the label array.
- * @return {!number}
  */
 xrx.label.prototype.push = function(value) {
   this.label_.push(value);
 };
+
+
+
+/**
+ * Removes the last item of the label array and
+ * return the value of the item.
+ * @return {!number}
+ */
+xrx.label.prototype.pop = function(value) {
+  return this.label_.pop();
+};
+
 
 
 
