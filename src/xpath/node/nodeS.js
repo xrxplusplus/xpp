@@ -7,11 +7,6 @@ goog.provide('xrx.nodeS');
 
 
 goog.require('xrx.node');
-goog.require('xrx.node.AttributeS');
-goog.require('xrx.node.ElementS');
-goog.require('xrx.node.TextS');
-goog.require('xrx.stream');
-goog.require('xrx.token');
 
 
 

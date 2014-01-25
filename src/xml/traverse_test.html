@@ -10,6 +10,7 @@
   goog.require('xrx.label');
   goog.require('xrx.token');
   goog.require('xrx.token.StartTag');
+  goog.require('xrx.token.StartEmptyTag');
   goog.require('xrx.token.EmptyTag');
   goog.require('xrx.token.EndTag');
   goog.require('xrx.traverse');
@@ -161,7 +162,30 @@ function test03offsetStartTag() {
   assertTrue(endLabels[1].sameAs(new xrx.label([1])));
 };
 
-function test04offsetEmptyTag() {
+function test04offsetStartEmptyTag() {
+  var xml = '<test><a></a><b/><c></c></test>';
+  var traverse = new xrx.traverse(xml);
+  var endLabels = [];
+
+  traverse.rowStartTag = function(label) {
+  };
+
+  traverse.rowEndTag = function(label) {
+    endLabels.push(label);
+  };
+
+  traverse.rowEmptyTag = function(label) {
+  };
+
+  traverse.forward(new xrx.token.StartEmptyTag(new xrx.label([1, 1]), 5, 3));
+
+  assertEquals(3, endLabels.length);
+  assertTrue(endLabels[0].sameAs(new xrx.label([1,1])));
+  assertTrue(endLabels[1].sameAs(new xrx.label([1,3])));
+  assertTrue(endLabels[2].sameAs(new xrx.label([1])));
+};
+
+function test05offsetEmptyTag() {
   var xml = '<test><a/></test>';
   var traverse = new xrx.traverse(xml);
   var endLabels = [];
@@ -182,7 +206,7 @@ function test04offsetEmptyTag() {
   assertTrue(endLabels[0].sameAs(new xrx.label([1])));
 };
 
-function test05offsetEndTag() {
+function test06offsetEndTag() {
   var xml = '<test><a></a></test>';
   var traverse = new xrx.traverse(xml);
   var endLabels = [];
@@ -204,7 +228,7 @@ function test05offsetEndTag() {
   assertTrue(endLabels[1].sameAs(new xrx.label([1])));
 };
 
-function test06features() {
+function test07features() {
   var xml = '<test attr1="v1" attr2="v2"' + 
       ' xmlns:a="http://example.org/a"' + 
       ' xmlns:b="http://example.org/b"></test>';

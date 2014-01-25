@@ -77,7 +77,7 @@ goog.inherits(xrx.xpath.PathExpr.RootHelperExpr, xrx.xpath.Expr);
 xrx.xpath.PathExpr.RootHelperExpr.prototype.evaluate = function(ctx) {
   var nodeset = new xrx.xpath.NodeSet();
   var node = ctx.getNode();
-  if (node.type() === xrx.node.DOCUMENT) {
+  if (node.getType() === xrx.node.DOCUMENT) {
     nodeset.add(node);
   } else {
     nodeset.add(/** @type {!Node} */ (node.ownerDocument));

@@ -23,7 +23,7 @@ xrx.func = {
       function(ctx, expr) {
         var nodeset = new xrx.xpath.NodeSet();
         var instance = expr.evaluate(ctx);
-        nodeset.add(xrx.model.getComponent(instance).document());
+        nodeset.add(xrx.model.getComponent(instance).getDocument());
 
         return nodeset;
       }, 1, 1)

@@ -664,7 +664,7 @@ xrx.stream.prototype.secondaries = function(xml) {
  * 
  * @param {!string} xml The tag.
  * @param {!number} pos The attribute position.
- * @return {!string} The attribute name.
+ * @return {!xrx.location} The attribute name location.
  */
 xrx.stream.prototype.attrName = function(xml, pos) {
   return this.attr_(xml, pos, xrx.token.ATTR_NAME);

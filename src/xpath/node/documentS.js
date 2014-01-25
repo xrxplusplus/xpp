@@ -7,8 +7,10 @@ goog.provide('xrx.node.DocumentS');
 
 
 
-goog.require('xrx.node.Document');
+goog.require('xrx.node');
 goog.require('xrx.nodeS');
+goog.require('xrx.node.Document');
+goog.require('xrx.traverse');
 goog.require('xrx.xpath.NodeSet');
 
 

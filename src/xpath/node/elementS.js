@@ -236,15 +236,14 @@ xrx.node.ElementS.prototype.getNodeAncestor = xrx.node.Element.prototype.getNode
  */
 xrx.node.ElementS.prototype.getNodeAttribute = function(test) {
   var nodeset = new xrx.xpath.NodeSet();
-  var row = this.getRow();
-  var xml = this.instance_.xml().substr(row.getOffset(), row.getLength2());
+  var xml = this.instance_.xml().substr(this.getOffset(), this.getLength());
   var locs = this.instance_.getStream().attributes(xml);
   var i = 0;
 
   for(var l in locs) {
     var a = locs[l];
-    if(a.xml(xml).match(/^xmlns(:|=)/) === null) 
-        nodeset.add(new xrx.node.AttributeB(l, this));
+    var attr = new xrx.node.AttributeS(parseInt(l), this);
+    nodeset.add(attr);
   };
 
   return nodeset;

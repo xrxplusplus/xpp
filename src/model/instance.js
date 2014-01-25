@@ -12,7 +12,6 @@ goog.require('goog.net.XhrIo');
 goog.require('xrx.index');
 goog.require('xrx.model');
 goog.require('xrx.node');
-goog.require('xrx.pilot');
 
 
 
@@ -97,11 +96,8 @@ xrx.instance.prototype.getStream = function() {
 /**
  * @return {!xrx.node.Document} The XML instance as node.
  */
-xrx.instance.prototype.document = function(id) {
-  var pilot = new xrx.pilot(this.xml());
-  var node = new xrx.node.Document(pilot, this.getId());
-  
-  return node;
+xrx.instance.prototype.getDocument = function(id) {
+  return new xrx.node.DocumentB(this);
 };
 
 

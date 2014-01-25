@@ -281,7 +281,7 @@ function test09Attribute() {
 function test10AttrName() {
 
   var xml10 = '<a>1<b attr1="value1" attr2="value2"/>2<c/></a>';
-  var off = '    4                21                      ';
+  var off =   '    4                21                      ';
   var stream = new xrx.stream(xml10);
   var tok = new xrx.token.EmptyTag(new xrx.label([1, 1]));
   var attr1 = new xrx.token.AttrName(new xrx.label([1, 1, 1]));

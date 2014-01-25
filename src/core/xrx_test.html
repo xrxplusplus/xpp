@@ -11,7 +11,10 @@
   goog.require('goog.testing.jsunit');
   goog.require('xrx');
   goog.require('xrx.node');
-  goog.require('xrx.node.DocumentS');
+  goog.require('xrx.node.AttributeB');
+  goog.require('xrx.node.DocumentB');
+  goog.require('xrx.node.ElementB');
+  goog.require('xrx.node.TextB');
   goog.require('xrx.pilot');
   goog.require('xrx.xpath');
 </script>
@@ -24,7 +27,10 @@
 <script type="text/javascript">
 
 var xml = '<a>1<b>2</b>3<c/>4<d>t<e type="attrValue">5</e>6</d><d id="test"/></a>';
-var node = new xrx.node.DocumentS();
+var element = goog.dom.createElement('div');
+goog.dom.setTextContent(element, xml);
+var instance = new xrx.instance(element);
+var node = new xrx.node.DocumentB(instance);
 
 function test01FnInstance() {
 
@@ -32,19 +38,19 @@ function test01FnInstance() {
   var result1 = xrx.xpath.evaluate('xrx:instance("i1")', node, null,
       xrx.xpath.XPathResultType.ANY_TYPE);
   var node1 = result1.iterateNext();
-  assertEquals(xrx.node.DOCUMENT, node1.type());
+  assertEquals(xrx.node.DOCUMENT, node1.getType());
 
   // Access Element Node
   var result2 = xrx.xpath.evaluate('xrx:instance("i1")//b', node, null,
       xrx.xpath.XPathResultType.ANY_TYPE);
   var node2 = result2.iterateNext();
-  assertEquals(xrx.node.ELEMENT, node2.type());
+  assertEquals(xrx.node.ELEMENT, node2.getType());
   
   // Access Text Node
   var result3 = xrx.xpath.evaluate('xrx:instance("i1")//b/text()', node, null,
       xrx.xpath.XPathResultType.ANY_TYPE);
   var node3 = result3.iterateNext();
-  assertEquals(xrx.node.TEXT, node3.type());
+  assertEquals(xrx.node.TEXT, node3.getType());
 };
 
 </script>

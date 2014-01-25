@@ -7,8 +7,8 @@ goog.provide('xrx.node.TextS');
 
 
 goog.require('xrx.node');
-goog.require('xrx.nodeS');
 goog.require('xrx.node.Text');
+goog.require('xrx.nodeS');
 goog.require('xrx.token');
 goog.require('xrx.token.NotTag');
 
@@ -248,6 +248,9 @@ xrx.node.TextS.prototype.getNodeFollowingSibling = function(test) {
  */
 xrx.node.TextS.prototype.getNodeParent = function(test) {
   var nodeset = new xrx.xpath.NodeSet();
+  var element = new xrx.node.ElementS(this.getInstance(), this.tag_);
+
+  if (test.matches(element)) nodeset.add(element);
 
   return nodeset;
 };

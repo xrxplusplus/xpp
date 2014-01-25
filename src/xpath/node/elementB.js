@@ -242,8 +242,8 @@ xrx.node.ElementB.prototype.getNodeAttribute = function(test) {
 
   for(var l in locs) {
     var a = locs[l];
-    if(a.xml(xml).match(/^xmlns(:|=)/) === null) 
-        nodeset.add(new xrx.node.AttributeB(l, this));
+    var attr = new xrx.node.AttributeB(parseInt(l), this);
+    nodeset.add(attr);
   };
 
   return nodeset;
