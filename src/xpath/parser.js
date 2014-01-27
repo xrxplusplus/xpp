@@ -4,6 +4,7 @@
 
 goog.provide('xrx.xpath.Parser');
 
+goog.require('xrx.xpath');
 goog.require('xrx.xpath.BinaryExpr');
 goog.require('xrx.xpath.FilterExpr');
 goog.require('xrx.xpath.FunctionCall');
@@ -26,17 +27,12 @@ goog.require('xrx.xpath.UnionExpr');
  * @param {!xrx.xpath.Lexer} lexer The lexer.
  * @param {function(string): ?string} nsResolver Namespace resolver.
  */
-xrx.xpath.Parser = function(lexer, nsResolver) {
+xrx.xpath.Parser = function(lexer) {
 
   /**
    * @private {!xrx.xpath.Lexer}
    */
   this.lexer_ = lexer;
-
-  /**
-   * @private {function(string): ?string}
-   */
-  this.nsResolver_ = nsResolver;
 };
 
 
@@ -243,7 +239,7 @@ xrx.xpath.Parser.prototype.parseNameTest_ = function() {
     return new xrx.xpath.NameTest(name);
   } else {
     var namespacePrefix = name.substring(0, colonIndex);
-    var namespaceUri = this.nsResolver_(namespacePrefix);
+    var namespaceUri = xrx.xpath.XPathNSResolver['xmlns:' + namespacePrefix];
     if (!namespaceUri) {
       throw Error('Namespace prefix not declared: ' + namespacePrefix);
     }

@@ -132,6 +132,27 @@ xrx.node.getNameExpanded = function(namespace, localName) {
 
 
 /**
+ * @private
+ */
+xrx.node.prototype.find = function(test, axisTest, reverse, stop) {
+  var self = this;
+  var selfLabel = self.getLabel();
+  var nodeset = new xrx.xpath.NodeSet();
+
+  this.eventNode = function(node) {
+    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
+        test.matches(node)) {
+      reverse ? nodeset.unshift(node) : nodeset.add(node);
+    }
+  };
+  
+  reverse ? this.backward(stop) : this.forward(stop);
+  return nodeset;
+};
+
+
+
+/**
  * Interface.
  * Each node implementation and each node type must implement 
  * the functions below.
@@ -191,25 +212,4 @@ xrx.node.prototype.getNodeFollowingSibling = goog.abstractMethod;
 xrx.node.prototype.getNodeParent = goog.abstractMethod;
 xrx.node.prototype.getNodePreceding = goog.abstractMethod;
 xrx.node.prototype.getNodePrecedingSibling = goog.abstractMethod;
-
-
-
-/**
- * @private
- */
-xrx.node.prototype.find = function(test, axisTest, reverse, stop) {
-  var self = this;
-  var selfLabel = self.getLabel();
-  var nodeset = new xrx.xpath.NodeSet();
-
-  this.eventNode = function(node) {
-    if (self.instance_ === node.getInstance() && axisTest.call(self, node) &&
-        test.matches(node)) {
-      reverse ? nodeset.unshift(node) : nodeset.add(node);
-    }
-  };
-  
-  reverse ? this.backward(stop) : this.forward(stop);
-  return nodeset;
-};
 

@@ -240,20 +240,20 @@ xrx.xpath.FunctionCall.BuiltInFunc = {
       xrx.xpath.DataType.STRING, false, true, false,
       function(ctx, opt_expr) {
         var node = opt_expr ? opt_expr.evaluate(ctx).getFirst() : ctx.getNode();
-        return node ? node.nodeName.toLowerCase() : '';
+        return node ? xrx.node.getNameLocal(node.getName()) : '';
       }, 0, 1, true),
   NAME: xrx.xpath.FunctionCall.createFunc('name',
       xrx.xpath.DataType.STRING, false, true, false,
       function(ctx, opt_expr) {
-        // TODO(user): Fully implement this.
         var node = opt_expr ? opt_expr.evaluate(ctx).getFirst() : ctx.getNode();
-        return node ? node.nodeName.toLowerCase() : '';
+        return node ? node.getName() : '';
       }, 0, 1, true),
   NAMESPACE_URI: xrx.xpath.FunctionCall.createFunc('namespace-uri',
       xrx.xpath.DataType.STRING, true, false, false,
       function(ctx, opt_expr) {
-        // TODO(user): Fully implement this.
-        return '';
+        var node = opt_expr ? opt_expr.evaluate(ctx).getFirst() : ctx.getNode();
+        var prefix = xrx.node.getNamePrefix(node.getName());
+        return node ? node.getNamespaceUri(prefix) : '';
       }, 0, 1, true),
   NORMALIZE_SPACE: xrx.xpath.FunctionCall.createFunc('normalize-space',
       xrx.xpath.DataType.STRING, false, true, false,

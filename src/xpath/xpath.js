@@ -38,9 +38,7 @@ goog.require('xrx.xpath.Parser');
 
 
 
-xrx.xpath.XPathFunctions = {
-  
-};
+xrx.xpath.XPathFunctions = {};
 
 
 /**
@@ -49,11 +47,11 @@ xrx.xpath.XPathFunctions = {
  * @enum {string}
  */
 xrx.xpath.XPathNSResolver = {
-  xml: 'http://www.w3.org/XML/1998/namespace',
-  xmlns: 'http://www.w3.org/2000/xmlns/',
-  xs: 'http://www.w3.org/2001/XMLSchema',
-  fn: 'http://www.w3.org/2005/xpath-functions',
-  err: 'http://www.w3.org/2005/xqt-errors'
+  'xml': 'http://www.w3.org/XML/1998/namespace',
+  'xmlns': 'http://www.w3.org/2000/xmlns/',
+  'xs': 'http://www.w3.org/2001/XMLSchema',
+  'fn': 'http://www.w3.org/2005/xpath-functions',
+  'err': 'http://www.w3.org/2005/xqt-errors'
 };
 
 
@@ -65,7 +63,6 @@ xrx.xpath.XPathNSResolver = {
  * @param {!string} uri The namespace uri.
  */
 xrx.xpath.declareNamespace = function(prefix, uri) {
-  if (xrx.xpath.XPathNSResolver[prefix]) throw Error('Namespace is already defined.');
   xrx.xpath.XPathNSResolver[prefix] = uri;
 };
 
@@ -122,7 +119,7 @@ xrx.xpath.XPathResultType = {
  *     XPath namespace resolver.
  * @private
  */
-xrx.xpath.XPathExpression = function(expr, nsResolver) {
+xrx.xpath.XPathExpression = function(expr) {
   if (!expr.length) {
     throw Error('Empty XPath expression.');
   }
@@ -131,15 +128,7 @@ xrx.xpath.XPathExpression = function(expr, nsResolver) {
     throw Error('Invalid XPath expression.');
   }
 
-  // nsResolver may either be an XPathNSResolver, which has a lookupNamespaceURI
-  // function, a custom function, or null. Standardize it to a function.
-  if (!nsResolver) {
-    nsResolver = function(string) {return null;};
-  } else if (!goog.isFunction(nsResolver)) {
-    nsResolver = goog.bind(nsResolver.lookupNamespaceURI, nsResolver);
-  }
-
-  var gexpr = new xrx.xpath.Parser(lexer, nsResolver).parseExpr();
+  var gexpr = new xrx.xpath.Parser(lexer).parseExpr();
   if (!lexer.empty()) {
     throw Error('Bad token: ' + lexer.next());
   }

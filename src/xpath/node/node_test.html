@@ -83,7 +83,7 @@ function test02abstractMethods() {
   // xrx.node.AttributeS
   goog.array.forEach(abstractMethods, function(method, index, arr) {
 
-    //assertEquals(false, xrx.node.AttributeS.prototype[method] == goog.abstractMethod);
+    assertEquals(false, xrx.node.AttributeS.prototype[method] == goog.abstractMethod);
     assertEquals(false, xrx.node.AttributeB.prototype[method] == goog.abstractMethod);
   });
   // xrx.node.TextS

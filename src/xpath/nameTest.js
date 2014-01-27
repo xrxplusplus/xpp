@@ -43,10 +43,17 @@ xrx.xpath.NameTest.prototype.matches = function(node) {
       type !== xrx.node.ATTRIBUTE) {
     return false;
   }
-  if (this.name_ !== '*' && this.name_ !== node.getName()) {
-    return false;
+
+  var name = node.getName();
+  var localName = xrx.node.getNameLocal(name);
+  var nsUri = node.getNamespaceUri(xrx.node.getNamePrefix(name));
+
+  if (this.name_ === '*') {
+    return true;
   } else {
-    return this.namespaceUri_ === node.getNamespaceUri();
+    var expandedName = xrx.node.getNameExpanded(nsUri, localName);
+    return xrx.node.getNameExpanded(this.namespaceUri_,
+        this.name_) === expandedName;
   }
 };
 

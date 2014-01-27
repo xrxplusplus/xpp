@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRX++ Benchmark Tests - xrx.xpath</title>
+<script src='../lib/codemirror/lib/codemirror.js'></script>
+<link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css"/>
+<script src='../lib/closure-library/closure/goog/base.js'></script>
+<link rel="stylesheet" type="text/css" 
+    href="../lib/closure-library/closure/goog/testing/performancetable.css" />
+<script type="text/javascript" src="../lib/jssaxparser/LocatorImpls.js"></script>
+<script type="text/javascript" src="../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../lib/jssaxparser/DefaultHandlers.js"></script>
+<script src='../src/deps.js'></script>
+<script type="text/javascript">  
+  goog.require('goog.net.XhrIo');
+  goog.require('goog.testing.AsyncTestCase');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.PerformanceTable');
+  goog.require('goog.userAgent.product');
+  goog.require('xrx');
+  goog.require('xrx.model');
+  goog.require('xrx.node');
+  goog.require('xrx.node.Element');
+  goog.require('xrx.node.ElementB');
+  goog.require('xrx.node.AttributeB');
+  goog.require('xrx.node.TextB');
+  goog.require('xrx.node.DocumentB');
+  goog.require('xrx.xpath.test');
+  goog.require('xrx.instance');
+  goog.require('xrx.xpath');
+</script>
+
+<script>
+  if (goog.userAgent.product.CHROME &&
+      window.location.toString().indexOf('file:') == 0) {
+    document.write(
+        '<div class="warning">' +
+        'WARNING: Due to Chrome\'s security restrictions ' +
+        'this test will not be able to load files off your local disk ' +
+        'unless you start Chrome with:<br>' +
+        '<code>--allow-file-access-from-files</code></div><br>');
+  }
+</script>
+
+</head>
+<body>
+
+<div id="table"></div>
+<div id="i6MB" class="xrx-instance" data-xrx-src="../data/hamlet.xml.txt" style="display:none"/>
+
+<script type="text/javascript">
+
+function test() {
+  console.log(xrx.model.getComponent('i6MB'));
+};
+
+</script>
+
+<script type="text/javascript">
+  xrx.install();
+</script>
+
+</body>
+</html>

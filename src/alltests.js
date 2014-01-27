@@ -19,6 +19,8 @@ var _allTests = [
     "./xml/update_test.html",
     "./xpath/functionCall_test.html", // xpath 
     "./xpath/kindTest_test.html",
+    "./xpath/nameTest_test.html",
+    "./xpath/predicates_test.html",
     "./xpath/step_test.html",
     "./xpath/xpath_test.html",
     "./xpath/node/attribute_test.html", // node
