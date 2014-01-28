@@ -117,6 +117,7 @@ xrx.parse.prototype.normalize = function(xml) {
     for (var nn in namespaces) {
       n += xrx.serialize.namespace(namespaces[nn].prefix, namespaces[nn].uri);
     };
+    namespaces = [];
     for (var aa in atts.attsArray) {
       a += xrx.serialize.attribute(arr[aa].qName, arr[aa].value);
     };

@@ -149,6 +149,7 @@ xrx.node.DocumentB.prototype.getNodeDescendant = function(test) {
   var row = iter.getRow();
   var element;
   var text;
+  var needTextNode = test.needsTextNode();
 
   do {
 
@@ -159,7 +160,7 @@ xrx.node.DocumentB.prototype.getNodeDescendant = function(test) {
       }
     }
 
-    if (row.getLength1() !== row.getLength2()) {
+    if (needTextNode && row.getLength1() !== row.getLength2()) {
       text = new xrx.node.TextB(this.instance_, iter.getPos());
       if (test.matches(text)) {
         nodeset.add(text);

@@ -4,6 +4,10 @@
 <title>XRX++ Unit Tests - xrx.node.Attribute, xrx.node.AttributeS, xrx.node.AttributeB</title>
 <script src='../../../lib/closure-library/closure/goog/base.js'></script>
 <script src='../../deps.js'></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/LocatorImpls.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/DefaultHandlers.js"></script>
 <script type="text/javascript">
   goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
@@ -14,6 +18,7 @@
   goog.require('xrx.node.Element');
   goog.require('xrx.node.ElementS');
   goog.require('xrx.node.ElementB');
+  goog.require('xrx.pilot');
   goog.require('xrx.token');
   goog.require('xrx.token.StartTag');
   goog.require('xrx.token.StartEmptyTag');
@@ -71,8 +76,9 @@ function test01nameFunctions() {
   assertEquals('http://example.org/x', aB2.getNamespaceUri('xmlns:x'));
 
   // streaming node
-  var t1 = new xrx.token.EmptyTag(new xrx.label([1,1]), 36, 44);
-  var t2 = new xrx.token.EmptyTag(new xrx.label([1,2]), 80, 11);
+  var pilot = new xrx.pilot(instance.xml());
+  var t1 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,1])));
+  var t2 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,2])));
   var eS1 = new xrx.node.ElementS(instance, t1);
   var eS2 = new xrx.node.ElementS(instance, t2);
   var aS1 = new xrx.node.AttributeS(2, eS1);

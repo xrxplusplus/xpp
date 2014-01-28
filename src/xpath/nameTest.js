@@ -30,6 +30,13 @@ xrx.xpath.NameTest = function(name, opt_namespaceUri) {
    * @private
    */
   this.namespaceUri_ = opt_namespaceUri || '';
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.nameExpanded_ = xrx.node.getNameExpanded(this.namespaceUri_,
+      this.name_);
 };
 
 
@@ -44,16 +51,16 @@ xrx.xpath.NameTest.prototype.matches = function(node) {
     return false;
   }
 
-  var name = node.getName();
-  var localName = xrx.node.getNameLocal(name);
-  var nsUri = node.getNamespaceUri(xrx.node.getNamePrefix(name));
-
   if (this.name_ === '*') {
     return true;
+  } else if (this.namespaceUri_ === '') {
+    return this.name_ === node.getName();
   } else {
+    var name = node.getName();
+    var localName = xrx.node.getNameLocal(name);
+    var nsUri = node.getNamespaceUri(xrx.node.getNamePrefix(name));
     var expandedName = xrx.node.getNameExpanded(nsUri, localName);
-    return xrx.node.getNameExpanded(this.namespaceUri_,
-        this.name_) === expandedName;
+    return this.nameExpanded_ === expandedName;
   }
 };
 
@@ -63,6 +70,14 @@ xrx.xpath.NameTest.prototype.matches = function(node) {
  */
 xrx.xpath.NameTest.prototype.getName = function() {
   return this.name_;
+};
+
+
+/**
+ * @override
+ */
+xrx.xpath.NameTest.prototype.getNameExpanded = function() {
+  return this.nameExpanded_;
 };
 
 
@@ -82,4 +97,13 @@ xrx.xpath.NameTest.prototype.getNamespaceUri = function() {
 xrx.xpath.NameTest.prototype.toString = function() {
   var prefix = this.namespaceUri_ + ':';
   return 'Name Test: ' + prefix + this.name_;
+};
+
+
+/**
+ * Returns whether the test needs text nodes to match.
+ * @return {boolean}
+ */
+xrx.xpath.NameTest.prototype.needsTextNode = function() {
+  return false;
 };

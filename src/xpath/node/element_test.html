@@ -3,6 +3,10 @@
 <head>
 <title>XRX++ Unit Tests - xrx.node.Element, xrx.node.ElementS, xrx.node.ElementB</title>
 <script src='../../../lib/closure-library/closure/goog/base.js'></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/LocatorImpls.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/DefaultHandlers.js"></script>
 <script src='../../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.dom');
@@ -59,7 +63,6 @@ function test02nameFunctions() {
   var element = goog.dom.createElement('div');
   goog.dom.setTextContent(element, xml);
   var instance = new xrx.instance(element);
-  var pilot = new xrx.pilot(xml);
 
   // binary node
   var elementB1 = new xrx.node.ElementB(instance, 1);
@@ -92,6 +95,7 @@ function test02nameFunctions() {
   assertEquals(expandedNameB2, 'http://example.org/x#z');
 
   // streaming node
+  var pilot = new xrx.pilot(instance.xml());
   var t1 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1, 1])));
   var t2 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1, 2])));
   var elementS1 = new xrx.node.ElementS(instance, t1);
@@ -160,7 +164,7 @@ function axisTest(key, func, expected) {
   assertEquals(expected.attribute, testB.attribute.getLength());
 
   // streaming node
-  var pilot = new xrx.pilot(xml);
+  var pilot = new xrx.pilot(instance.xml());
   var t = pilot.location(null, new xrx.token.StartEmptyTag(eB.getLabel()));
   var eS = new xrx.node.ElementS(instance, t);
   var testS = {

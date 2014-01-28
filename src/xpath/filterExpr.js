@@ -49,7 +49,6 @@ goog.inherits(xrx.xpath.FilterExpr, xrx.xpath.Expr);
  */
 xrx.xpath.FilterExpr.prototype.evaluate = function(ctx) {
   var result = this.primary_.evaluate(ctx);
-  console.log(result);
   return this.predicates_.evaluatePredicates(
       /** @type {!xrx.xpath.NodeSet} */ (result));
 };

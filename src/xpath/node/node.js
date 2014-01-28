@@ -146,7 +146,8 @@ xrx.node.prototype.find = function(test, axisTest, reverse, stop) {
     }
   };
   
-  reverse ? this.backward(stop) : this.forward(stop);
+  reverse ? this.backward(stop, test.needsTextNode()) : 
+      this.forward(stop, test.needsTextNode());
   return nodeset;
 };
 

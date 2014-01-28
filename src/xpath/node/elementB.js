@@ -136,7 +136,13 @@ xrx.node.ElementB.prototype.isFollowingSiblingOf = xrx.node.Element.prototype.is
 /**
  *
  */
-xrx.node.ElementB.prototype.isParentOf = xrx.node.Element.prototype.isParentOf;
+xrx.node.ElementB.prototype.isParentOf = function(node) {
+  if (node.getType() === xrx.node.ELEMENT) {
+    return this.getKey() === node.getRow().getParent() && node.getKey() !== 0;
+  } else {
+    return this.getLabel().isParentOf(node.getLabel());
+  }
+};
 
 
 
@@ -303,7 +309,7 @@ xrx.node.ElementB.prototype.getNodePrecedingSibling = xrx.node.Element.prototype
 /**
  * @param {!xrx.label}
  */
-xrx.node.ElementB.prototype.forward = function(stop) {
+xrx.node.ElementB.prototype.forward = function(stop, needTextNode) {
   var self = this;
   var index = this.instance_.getIndex();
   var iter = new xrx.index.Iter(index, this.key_);
@@ -324,7 +330,7 @@ xrx.node.ElementB.prototype.forward = function(stop) {
       break;
     };
 
-    if (row.getLength1() !== row.getLength2()) {
+    if (needTextNode && row.getLength1() !== row.getLength2()) {
       self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
     }
 
@@ -339,7 +345,7 @@ xrx.node.ElementB.prototype.forward = function(stop) {
 /**
  * @param {!xrx.label}
  */
-xrx.node.ElementB.prototype.backward = function(stop) {
+xrx.node.ElementB.prototype.backward = function(stop, needTextNode) {
   var self = this;
   var index = this.getIndex();
   var iter = new xrx.index.Iter(index, this.key_);
@@ -349,7 +355,7 @@ xrx.node.ElementB.prototype.backward = function(stop) {
   do {
     type = row.getType();
 
-    if (row.getLength1() !== row.getLength2()) {
+    if (needTextNode && row.getLength1() !== row.getLength2()) {
       self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
     }
 

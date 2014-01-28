@@ -187,7 +187,7 @@ xrx.node.TextB.prototype.getNodePrecedingSibling = xrx.node.Text.prototype.getNo
 /**
  * @param {!xrx.label}
  */
-xrx.node.TextB.prototype.forward = function(stop) {
+xrx.node.TextB.prototype.forward = function(stop, needTextNode) {
   var self = this;
   var index = this.instance_.getIndex();
   var iter = new xrx.index.Iter(index, this.key_);
@@ -208,7 +208,7 @@ xrx.node.TextB.prototype.forward = function(stop) {
       break;
     };
 
-    if (row.getLength1() !== row.getLength2()) {
+    if (needTextNode && row.getLength1() !== row.getLength2()) {
       self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
     }
 
@@ -223,7 +223,7 @@ xrx.node.TextB.prototype.forward = function(stop) {
 /**
  * @param {!xrx.label}
  */
-xrx.node.TextB.prototype.backward = function(stop) {
+xrx.node.TextB.prototype.backward = function(stop, needTextNode) {
   var self = this;
   var index = this.getIndex();
   var iter = new xrx.index.Iter(index, this.key_);
@@ -233,7 +233,7 @@ xrx.node.TextB.prototype.backward = function(stop) {
   do {
     type = row.getType();
 
-    if (row.getLength1() !== row.getLength2()) {
+    if (needTextNode && row.getLength1() !== row.getLength2()) {
       self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
     }
 

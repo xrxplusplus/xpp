@@ -105,3 +105,12 @@ xrx.xpath.KindTest.prototype.toString = function() {
   }
   return text;
 };
+
+
+/**
+ * Returns whether the test needs text nodes to match.
+ * @return {boolean}
+ */
+xrx.xpath.KindTest.prototype.needsTextNode = function() {
+  return this.type_ === null || this.type_ === xrx.node.TEXT;
+};
