@@ -7,7 +7,7 @@ goog.addDependency('../../../../src/core/xrx.js', ['xrx'], ['goog.dom', 'xrx.bin
 goog.addDependency('../../../../src/model/bind.js', ['xrx.bind'], ['xrx.model', 'xrx.xpath']);
 goog.addDependency('../../../../src/model/component.js', ['xrx.component'], ['goog.events.EventHandler', 'goog.ui.IdGenerator']);
 goog.addDependency('../../../../src/model/controller.js', ['xrx.controller'], ['xrx.update']);
-goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.index', 'xrx.model', 'xrx.node']);
+goog.addDependency('../../../../src/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.index', 'xrx.model', 'xrx.node', 'xrx.parse', 'xrx.pilot', 'xrx.stream']);
 goog.addDependency('../../../../src/model/model.js', ['xrx.model'], ['xrx.component']);
 goog.addDependency('../../../../src/view/codemirror.js', ['xrx.codemirror'], ['xrx.model', 'xrx.view']);
 goog.addDependency('../../../../src/view/console.js', ['xrx.console'], ['goog.dom', 'xrx.serialize', 'xrx.view']);
@@ -44,7 +44,7 @@ goog.addDependency('../../../../src/xml/token/tag.js', ['xrx.token.Tag'], ['xrx.
 goog.addDependency('../../../../src/xml/token/tagName.js', ['xrx.token.TagName'], ['xrx.token']);
 goog.addDependency('../../../../src/xml/token/token.js', ['xrx.token'], ['xrx.label']);
 goog.addDependency('../../../../src/xml/traverse.js', ['xrx.traverse'], ['xrx.label', 'xrx.stream', 'xrx.token']);
-goog.addDependency('../../../../src/xml/update.js', ['xrx.update'], ['xrx.stream', 'xrx.token']);
+goog.addDependency('../../../../src/xml/update.js', ['xrx.update'], ['xrx.serialize', 'xrx.stream', 'xrx.token']);
 goog.addDependency('../../../../src/xpath/binaryExpr.js', ['xrx.xpath.BinaryExpr'], ['xrx.node', 'xrx.xpath.DataType', 'xrx.xpath.Expr']);
 goog.addDependency('../../../../src/xpath/context.js', ['xrx.xpath.Context'], []);
 goog.addDependency('../../../../src/xpath/dataType.js', ['xrx.xpath.DataType'], []);
@@ -78,7 +78,7 @@ goog.addDependency('../../../../src/xpath/node/xdm.js', ['xrx.xdm'], []);
 goog.addDependency('../../../../src/xpath/nodeTest.js', ['xrx.xpath.NodeTest'], []);
 goog.addDependency('../../../../src/xpath/nodeset.js', ['xrx.xpath.NodeSet'], ['goog.dom', 'xrx.node']);
 goog.addDependency('../../../../src/xpath/number.js', ['xrx.xpath.Number'], ['xrx.xpath.Expr']);
-goog.addDependency('../../../../src/xpath/parser.js', ['xrx.xpath.Parser'], ['xrx.xpath.BinaryExpr', 'xrx.xpath.FilterExpr', 'xrx.xpath.FunctionCall', 'xrx.xpath.KindTest', 'xrx.xpath.Literal', 'xrx.xpath.NameTest', 'xrx.xpath.Number', 'xrx.xpath.PathExpr', 'xrx.xpath.Predicates', 'xrx.xpath.Step', 'xrx.xpath.UnaryExpr', 'xrx.xpath.UnionExpr']);
+goog.addDependency('../../../../src/xpath/parser.js', ['xrx.xpath.Parser'], ['xrx.xpath', 'xrx.xpath.BinaryExpr', 'xrx.xpath.FilterExpr', 'xrx.xpath.FunctionCall', 'xrx.xpath.KindTest', 'xrx.xpath.Literal', 'xrx.xpath.NameTest', 'xrx.xpath.Number', 'xrx.xpath.PathExpr', 'xrx.xpath.Predicates', 'xrx.xpath.Step', 'xrx.xpath.UnaryExpr', 'xrx.xpath.UnionExpr']);
 goog.addDependency('../../../../src/xpath/pathExpr.js', ['xrx.xpath.PathExpr'], ['goog.array', 'xrx.node', 'xrx.xpath.DataType', 'xrx.xpath.Expr', 'xrx.xpath.NodeSet']);
 goog.addDependency('../../../../src/xpath/predicates.js', ['xrx.xpath.Predicates'], ['goog.array', 'xrx.xpath.Context', 'xrx.xpath.Expr']);
 goog.addDependency('../../../../src/xpath/step.js', ['xrx.xpath.Step'], ['goog.array', 'xrx.node', 'xrx.xpath.DataType', 'xrx.xpath.Expr', 'xrx.xpath.KindTest', 'xrx.xpath.Predicates']);

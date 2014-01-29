@@ -20,7 +20,10 @@ xrx.serialize.attribute = function(qName, value) {
 
 
 
-xrx.serialize.startTag = function(qName, namespaces, attributes) {
+xrx.serialize.startTag = function(qName, opt_namespaces, opt_attributes) {
+  var namespaces = opt_namespaces || '';
+  var attributes = opt_attributes || '';
+
   return '<' + qName + namespaces + attributes + '>';
 };
 
@@ -32,8 +35,20 @@ xrx.serialize.endTag = function(qName) {
 
 
 
-xrx.serialize.startEndTag = function(qName, namespaces, attributes) {
+xrx.serialize.startEndTag = function(qName, opt_namespaces, opt_attributes) {
+  var namespaces = opt_namespaces || '';
+  var attributes = opt_attributes || '';
+
   return '<' + qName + namespaces + attributes;
+};
+
+
+
+xrx.serialize.emptyTag = function(qName, opt_namespaces, opt_attributes) {
+  var namespaces = opt_namespaces || '';
+  var attributes = opt_attributes || '';
+
+  return '<' + qName + namespaces + attributes + '/>';
 };
 
 

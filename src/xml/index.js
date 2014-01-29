@@ -5,6 +5,8 @@
 
 
 goog.provide('xrx.index');
+goog.provide('xrx.index.Iter');
+goog.provide('xrx.index.Namespace');
 
 
 
@@ -182,6 +184,50 @@ xrx.index.Namespace = function(opt_label, opt_prefix, opt_uri) {
 
 
 /**
+ * return {xrx.index.Namespace|undefined}
+ * @deprecated
+ */
+xrx.index.prototype.getNamespace = function(token, prefix) {
+
+  return goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
+    return ns.prefix === prefix && (token.label().sameAs(ns.parentLabel) ||
+        token.label().isDescendantOf(ns.parentLabel));
+  });
+};
+
+
+
+/**
+ * return {string|undefined}
+ */
+xrx.index.prototype.getNamespaceUri = function(token, prefix) {
+
+  var namespace = goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
+    return ns.prefix === prefix && (token.label().sameAs(ns.parentLabel) ||
+        token.label().isDescendantOf(ns.parentLabel));
+  });
+  
+  namespace ? namespace.uri : undefined;
+};
+
+
+
+/**
+ * return {string}
+ */
+xrx.index.prototype.getNamespacePrefix = function(token, uri) {
+
+  var namespace = goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
+    return ns.uri === uri && (token.label().sameAs(ns.parentLabel) ||
+        token.label().isDescendantOf(ns.parentLabel));
+  });
+
+  namespace ? namespace.prefix : undefined;
+};
+
+
+
+/**
  * 
  */
 xrx.index.prototype.reindex = function(xml) {
@@ -236,7 +282,6 @@ xrx.index.prototype.reindex = function(xml) {
 
   traverse.forward();
 };
-
 
 
 xrx.index.prototype.head = function() {
@@ -436,19 +481,6 @@ xrx.index.prototype.getToken = function(row) {
       r.getOffset(this.format_), r.getLength1(this.format_));
   
   return xrx.token.native(tag);
-};
-
-
-
-/**
- * return {!xrx.index.row}
- */
-xrx.index.prototype.getNamespace = function(token, prefix) {
-
-  return goog.array.findRight(this.tNamespace_, function(ns, ind, arr) {
-    return ns.prefix === prefix && (token.label().sameAs(ns.parentLabel) ||
-        token.label().isDescendantOf(ns.parentLabel));
-  });
 };
 
 

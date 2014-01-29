@@ -6,9 +6,13 @@
 <script src='../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.array');
+  goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
   goog.require('xrx.index');
   goog.require('xrx.label');
+  goog.require('xrx.pilot');
+  goog.require('xrx.token');
+  goog.require('xrx.token.EmptyTag');
 </script>
 </head>
 <body>
@@ -67,6 +71,17 @@ function test02traverse() {
       '</a>', '</d>', '</e>', '</b>'])); // backward
   assertTrue(goog.array.equals(notTags, ['1', '2', '3', '4', '', '5', '6', '', '', // forward
       '', '', '6', '5', '', '4', '3', '2', '1'])); // backward
+};
+
+function test03namespaceFunctions() {
+  var xml = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/></b:b></a></x>';
+  var index = new xrx.index(xml);
+  var pilot = new xrx.pilot(xml);
+
+  // <c/>
+  var t1 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,2])));
+  var uriDefault = instance.getNamespaceUri(t1, 'xmlns');
+  assertEquals('http://www.example.org/a', uriDefault);
 };
 
 

@@ -14,6 +14,8 @@ goog.require('xrx.index');
 goog.require('xrx.model');
 goog.require('xrx.node');
 goog.require('xrx.parse');
+goog.require('xrx.stream');
+goog.require('xrx.pilot');
 
 
 
@@ -33,9 +35,31 @@ xrx.instance = function(element, callback) {
 
 
 
+  this.pilot_;
+
+
+
   this.recalculate(callback);
 };
 goog.inherits(xrx.instance, xrx.model);
+
+
+
+/**
+ * 
+ */
+xrx.instance.prototype.update = function(offset, length, xml) {
+
+  var tmp = this.xml_.substr(0, offset) + xml + this.xml_.substr(
+      offset + length);
+
+  this.xml_ = undefined;
+  this.xml_ = tmp;
+  this.stream_ = undefined;
+  this.stream_ = new xrx.stream(this.xml_);
+  this.pilot_ = undefined;
+  this.pilot_ = new xrx.pilot(this.xml_);
+};
 
 
 
@@ -47,6 +71,7 @@ xrx.instance.prototype.getDataInline = function() {
 
   this.xml_ = parse.normalize(goog.dom.getRawTextContent(this.getElement()));
   this.stream_ = new xrx.stream(this.xml_);
+  this.pilot_ = new xrx.pilot(this.xml_);
 };
 
 
@@ -64,6 +89,7 @@ xrx.instance.prototype.getDataRemote = function(callback) {
         throw Error('Expected content type is "text/plain."');
     self.xml_ = parse.normalize(request.getResponseText());
     self.stream_ = new xrx.stream(self.xml_);
+    self.pilot_ = new xrx.pilot(this.xml_);
 
     if (callback) callback(self);
   });
@@ -94,10 +120,19 @@ xrx.instance.prototype.xml = function(xml) {
 
 
 /**
- * @return {!xrx.stream} The XML stream.
+ * @return {xrx.stream} The stream.
  */
 xrx.instance.prototype.getStream = function() {
   return this.stream_;
+};
+
+
+
+/**
+ * @return {xrx.pilot} The pilot.
+ */
+xrx.instance.prototype.getPilot = function() {
+  return this.pilot_;
 };
 
 
