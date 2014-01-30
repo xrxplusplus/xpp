@@ -27,6 +27,10 @@ var xml;
 var element;
 var instance;
 
+var xmlNs;
+var elementNs;
+var instanceNs;
+
 function resetForNextTest() {
   xml = undefined;
   xml = '<a>test<b>2</b>3<c attr1="test" attr2="">4<d/>55<e/></c><f/></a>';
@@ -35,6 +39,14 @@ function resetForNextTest() {
   goog.dom.setTextContent(element, xml);
   instance = undefined;
   instance = new xrx.instance(element);
+
+  xmlNs = undefined;
+  xmlNs = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/></b:b></a></x>';
+  elementNs = undefined;
+  elementNs = goog.dom.createElement('div');
+  goog.dom.setTextContent(elementNs, xmlNs);
+  instanceNs = undefined;
+  instanceNs = new xrx.instance(elementNs);
 };
 
 function test01wrap() {
@@ -132,12 +144,68 @@ function test05insertEmptyTag() {
   assertEquals(expected3, instance.xml());
 };
 
-function test05_NsDefault_insertEmptyTag() {
-  
+function test05_Ns_insertEmptyTag() {
+  resetForNextTest();
+
+  // default namespace
+  var expected1 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/><y/></b:b></a></x>';
+  var t1 = instanceNs.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,2,1,1])));
+  xrx.update.insertEmptyTag(instanceNs, t1, 0, 'y', 'http://www.example.org/a');
+  assertEquals(expected1, instanceNs.xml());
+
+  // namespace with prefix
+  var expected2 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/><b:y/><y/></b:b></a></x>';
+  xrx.update.insertEmptyTag(instanceNs, t1, 0, 'y', 'http://www.example.org/b');
+  assertEquals(expected2, instanceNs.xml());
+
+  // undefined namespace
+  var expected3 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b">' + 
+      '<c/><y xmlns="http://www.example.org/c"/><b:y/><y/></b:b></a></x>';
+  xrx.update.insertEmptyTag(instanceNs, t1, 0, 'y', 'http://www.example.org/c');
+  assertEquals(expected3, instanceNs.xml());
 };
 
-function test05_NsPrefix_insertEmptyTag() {
+function test06insertStartEndTag() {
+  resetForNextTest();
+
+  // start-tag, offset 0
+  var expected1 = '<a><x></x>test<b>2</b>3<c attr1="test" attr2="">4<d/>55<e/></c><f/></a>';
+  var t1 = instance.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,0])));
+  xrx.update.insertStartEndTag(instance, t1, 0, 'x');
+  assertEquals(expected1, instance.xml());
   
+  // end-tag, at end of not-tag
+  var expected2 = '<a><x></x>test<b>2</b>3<x></x><c attr1="test" attr2="">4<d/>55<e/></c><f/></a>';
+  var t2 = instance.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,2])));
+  xrx.update.insertStartEndTag(instance, t2, 1, 'x');
+  assertEquals(expected2, instance.xml());
+  
+  // empty tag, with offset
+  var expected3 = '<a><x></x>test<b>2</b>3<x></x><c attr1="test" attr2="">4<d/>5<x></x>5<e/></c><f/></a>';
+  var t3 = instance.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,4,1])));
+  xrx.update.insertStartEndTag(instance, t3, 1, 'x');
+  assertEquals(expected3, instance.xml());
+};
+
+function test06_Ns_insertStartEndTag() {
+  resetForNextTest();
+
+  // default namespace
+  var expected1 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/><y></y></b:b></a></x>';
+  var t1 = instanceNs.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,2,1,1])));
+  xrx.update.insertStartEndTag(instanceNs, t1, 0, 'y', 'http://www.example.org/a');
+  assertEquals(expected1, instanceNs.xml());
+
+  // namespace with prefix
+  var expected2 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b"><c/><b:y></b:y><y></y></b:b></a></x>';
+  xrx.update.insertStartEndTag(instanceNs, t1, 0, 'y', 'http://www.example.org/b');
+  assertEquals(expected2, instanceNs.xml());
+
+  // undefined namespace
+  var expected3 = '<x><y/><a xmlns="http://www.example.org/a"><b:b xmlns:b="http://www.example.org/b">' + 
+      '<c/><y xmlns="http://www.example.org/c"></y><b:y></b:y><y></y></b:b></a></x>';
+  xrx.update.insertStartEndTag(instanceNs, t1, 0, 'y', 'http://www.example.org/c');
+  assertEquals(expected3, instanceNs.xml());
 };
 
 </script>

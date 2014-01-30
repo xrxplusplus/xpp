@@ -115,14 +115,16 @@ xrx.parse.prototype.normalize = function(xml) {
 
     idx = self.saxParser.saxScanner.reader.reader.nextIdx;
     for (var nn in namespaces) {
-      n += xrx.serialize.namespace(namespaces[nn].prefix, namespaces[nn].uri);
+      var prefix = namespaces[nn].prefix;
+      prefix === '' ? prefix += 'xmlns' : prefix = 'xmlns:' + prefix;
+      n += xrx.serialize.namespace(prefix, namespaces[nn].uri);
     };
     namespaces = [];
     for (var aa in atts.attsArray) {
       a += xrx.serialize.attribute(arr[aa].qName, arr[aa].value);
     };
 
-    normalized += xrx.serialize.startEndTag(qName, n, a);
+    normalized += xrx.serialize.startEmptyTag(qName, n, a);
     lastToken = xrx.token.START_TAG;
   };
 

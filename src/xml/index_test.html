@@ -78,10 +78,31 @@ function test03namespaceFunctions() {
   var index = new xrx.index(xml);
   var pilot = new xrx.pilot(xml);
 
-  // <c/>
-  var t1 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,2])));
-  var uriDefault = instance.getNamespaceUri(t1, 'xmlns');
+  // default namespace uri
+  var t1 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,2,1,1])));
+  var uriDefault = index.getNamespaceUri(t1, 'xmlns');
   assertEquals('http://www.example.org/a', uriDefault);
+
+  // namespace uri with prefix
+  var uriPrefix = index.getNamespaceUri(t1, 'xmlns:b');
+  assertEquals('http://www.example.org/b', uriPrefix);
+
+  // namespace uri with undefined prefix
+  var uriPrefixUndefined = index.getNamespaceUri(t1, 'xmlns:a');
+  assertEquals(undefined, uriPrefixUndefined);
+
+  // default namespace prefix
+  var t2 = pilot.location(null, new xrx.token.EmptyTag(new xrx.label([1,2,1,1])));
+  var prefixDefault = index.getNamespacePrefix(t2, 'http://www.example.org/a');
+  assertEquals('xmlns', prefixDefault);
+
+  // namespace prefix
+  var prefix = index.getNamespacePrefix(t2, 'http://www.example.org/b');
+  assertEquals('xmlns:b', prefix);
+
+  // undefined prefix
+  var prefixUndefined = index.getNamespacePrefix(t1, 'http://www.example.org/c');
+  assertEquals(undefined, prefixUndefined);
 };
 
 

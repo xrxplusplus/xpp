@@ -1,8 +1,9 @@
 /**
- * @fileoverview A class for XML serialization.
+ * @fileoverview A class for XML token serialization.
  */
 
 goog.provide('xrx.serialize');
+
 
 
 goog.require('xrx.stream');
@@ -10,16 +11,54 @@ goog.require('xrx.token');
 
 
 
+/**
+ *
+ */
 xrx.serialize = {};
 
 
 
+/**
+ *
+ */
 xrx.serialize.attribute = function(qName, value) {
   return ' ' + qName + '="' + value.replace(/\"/g, "'") + '"';
-}; 
+};
 
 
 
+/**
+ *
+ */
+xrx.serialize.attributeNs = function(qName, value) {
+};
+
+
+
+/**
+ * @private
+ */
+xrx.serialize.tagNs_ = function(func, nsPrefix, localName, namespaceUri) {
+
+  if (nsPrefix === undefined) {
+
+    return func(localName, xrx.serialize.namespace('xmlns',
+        namespaceUri));
+  } else if (nsPrefix === 'xmlns') {
+
+    return func(localName);
+  } else {
+    var colonIndex = nsPrefix.indexOf(':');
+
+    return func(nsPrefix.substr(colonIndex + 1) + ':' + localName);
+  }
+};
+
+
+
+/**
+ *
+ */
 xrx.serialize.startTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
   var attributes = opt_attributes || '';
@@ -29,13 +68,40 @@ xrx.serialize.startTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 
+/**
+ *
+ */
+xrx.serialize.startTagNs = function(nsPrefix, localName, namespaceUri) {
+  return xrx.serialize.tagNs_(xrx.serialize.startTag, nsPrefix, localName,
+      namespaceUri);
+};
+
+
+
+/**
+ *
+ */
 xrx.serialize.endTag = function(qName) {
   return '</' + qName + '>';
 };
 
 
 
-xrx.serialize.startEndTag = function(qName, opt_namespaces, opt_attributes) {
+/**
+ *
+ */
+xrx.serialize.endTagNs = function(nsPrefix, localName, namespaceUri) {
+  var prefix = !nsPrefix ? 'xmlns' : nsPrefix;
+  return xrx.serialize.tagNs_(xrx.serialize.endTag, prefix, localName,
+      namespaceUri);
+};
+
+
+
+/**
+ *
+ */
+xrx.serialize.startEmptyTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
   var attributes = opt_attributes || '';
 
@@ -44,6 +110,9 @@ xrx.serialize.startEndTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 
+/**
+ * 
+ */
 xrx.serialize.emptyTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
   var attributes = opt_attributes || '';
@@ -53,13 +122,28 @@ xrx.serialize.emptyTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 
-xrx.serialize.namespace = function(prefix, uri) {
-  var pr = prefix ? 'xmlns:' : 'xmlns';
-  return ' ' + pr + prefix + '="' + uri + '"';
+/**
+ *
+ */
+xrx.serialize.emptyTagNs = function(nsPrefix, localName, namespaceUri) {
+  return xrx.serialize.tagNs_(xrx.serialize.emptyTag, nsPrefix, localName,
+      namespaceUri);
 };
 
 
 
+/**
+ *
+ */
+xrx.serialize.namespace = function(prefix, uri) {
+  return ' ' + prefix + '="' + uri + '"';
+};
+
+
+
+/**
+ *
+ */
 xrx.serialize.indent = function(xml, indent) {
   var stream = new xrx.stream(xml);
   var level = 0;

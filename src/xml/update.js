@@ -7,6 +7,7 @@ goog.provide('xrx.update');
 
 
 
+goog.require('goog.string');
 goog.require('xrx.serialize');
 goog.require('xrx.stream');
 goog.require('xrx.token');
@@ -111,12 +112,12 @@ xrx.update.insertEmptyTag = function(instance, target, offset, localName,
     diff = xrx.update.insert_(instance, target.offset() + offset,
         xrx.serialize.emptyTag(localName));
   } else {
-    var nsPrefix = instance.getIndex().getNamespacePrefix(opt_namespaceUri);
+    var nsPrefix = instance.getIndex().getNamespacePrefix(target, opt_namespaceUri);
 
-    if (nsPrefix === 'xmlns') {
-      diff = xrx.update.insert_(instance, target.offset() + offset,
-          xrx.serialize.emptyTag(localName));
-    }
+    diff = xrx.update.insert_(instance, target.offset() + offset,
+        xrx.serialize.emptyTagNs(nsPrefix, localName, opt_namespaceUri));
+
+    //TODO: add namespace declaration to index
   }
 };
 
@@ -132,6 +133,20 @@ xrx.update.insertEmptyTag = function(instance, target, offset, localName,
  */
 xrx.update.insertStartEndTag = function(instance, target, offset, localName,
     opt_namespaceUri) {
+  var diff;
+
+  if (!opt_namespaceUri) {
+    diff = xrx.update.insert_(instance, target.offset() + offset,
+        xrx.serialize.startTag(localName) + xrx.serialize.endTag(localName));
+  } else {
+    var nsPrefix = instance.getIndex().getNamespacePrefix(target, opt_namespaceUri);
+
+    diff = xrx.update.insert_(instance, target.offset() + offset,
+        xrx.serialize.startTagNs(nsPrefix, localName, opt_namespaceUri) +
+            xrx.serialize.endTagNs(nsPrefix, localName, opt_namespaceUri));
+
+    //TODO: add namespace declaration to index
+  }
 };
 
 
@@ -195,6 +210,7 @@ xrx.update.removeStartEndTag = function(instance, token) {
  * @param {!xrx.token.Fragment} target The empty tag to be removed.
  */
 xrx.update.removeFragment = function(instance, token) {
+  //TODO: implement this
 };
 
 
@@ -206,6 +222,7 @@ xrx.update.removeFragment = function(instance, token) {
  * @param {!xrx.token.Mixed} target The empty tag to be removed.
  */
 xrx.update.removeMixed = function(instance, token) {
+  //TODO: implement this
 };
 
 

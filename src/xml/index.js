@@ -207,7 +207,7 @@ xrx.index.prototype.getNamespaceUri = function(token, prefix) {
         token.label().isDescendantOf(ns.parentLabel));
   });
   
-  namespace ? namespace.uri : undefined;
+  return namespace ? namespace.uri : undefined;
 };
 
 
@@ -222,7 +222,7 @@ xrx.index.prototype.getNamespacePrefix = function(token, uri) {
         token.label().isDescendantOf(ns.parentLabel));
   });
 
-  namespace ? namespace.prefix : undefined;
+  return namespace ? namespace.prefix : undefined;
 };
 
 
