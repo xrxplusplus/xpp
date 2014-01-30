@@ -144,7 +144,7 @@ function test05insertEmptyTag() {
   assertEquals(expected3, instance.xml());
 };
 
-function test05_Ns_insertEmptyTag() {
+function test05insertEmptyTagNs() {
   resetForNextTest();
 
   // default namespace
@@ -187,7 +187,7 @@ function test06insertStartEndTag() {
   assertEquals(expected3, instance.xml());
 };
 
-function test06_Ns_insertStartEndTag() {
+function test06insertStartEndTagNs() {
   resetForNextTest();
 
   // default namespace
@@ -206,6 +206,65 @@ function test06_Ns_insertStartEndTag() {
       '<c/><y xmlns="http://www.example.org/c"></y><b:y></b:y><y></y></b:b></a></x>';
   xrx.update.insertStartEndTag(instanceNs, t1, 0, 'y', 'http://www.example.org/c');
   assertEquals(expected3, instanceNs.xml());
+};
+
+function test07insertAttribute() {
+  resetForNextTest();
+
+  // start-tag, attribute exists
+  var expected1 = '<a>test<b>2</b>3<c attr0="" attr1="test" attr2="">4<d/>55<e/></c><f/></a>';
+  var t1 = instance.getPilot().location(null, new xrx.token.StartTag(new xrx.label([1,2])));
+  xrx.update.insertAttribute(instance, t1, 'attr0');
+  assertEquals(expected1, instance.xml());
+  
+  // empty tag, no attribute exists
+  var expected2 = '<a>test<b>2</b>3<c attr0="" attr1="test" attr2="">4<d attr0=""/>55<e/></c><f/></a>';
+  var t2 = instance.getPilot().location(null, new xrx.token.EmptyTag(new xrx.label([1,2,1])));
+  xrx.update.insertAttribute(instance, t2, 'attr0');
+  assertEquals(expected2, instance.xml());
+};
+
+function test07insertAttributeNs() {
+  resetForNextTest();
+
+  // prefix is defined
+  var expected1 = '<x><y/><a xmlns="http://www.example.org/a"><b:b b:b="" xmlns:b="http://www.example.org/b"><c/></b:b></a></x>';
+  var t1 = instanceNs.getPilot().location(null, new xrx.token.StartTag(new xrx.label([1,2,1])));
+  xrx.update.insertAttribute(instanceNs, t1, 'b:b', 'http://www.example.org/b');
+  assertEquals(expected1, instanceNs.xml());
+
+  // prefix is not defined
+  var expected2 = '<x><y/><a xmlns:a="http://www.example.org/a" a:a="" xmlns="http://www.example.org/a"><b:b b:b="" xmlns:b="http://www.example.org/b"><c/></b:b></a></x>';
+  var t2 = instanceNs.getPilot().location(null, new xrx.token.StartTag(new xrx.label([1,2])));
+  xrx.update.insertAttribute(instanceNs, t2, 'a:a', 'http://www.example.org/a');
+  assertEquals(expected2, instanceNs.xml());
+  
+  // prefix of namespace and prefix of qName do not match
+  var t3 = instanceNs.getPilot().location(null, new xrx.token.StartTag(new xrx.label([1,2,1])));
+  assertThrows('Prefix c is not bound to namespace http://www.example.org/b.',
+      goog.partial(xrx.update.insertAttribute, instanceNs, t3, 'c:a', 'http://www.example.org/b'));
+};
+
+function test08removeEmptyTag() {
+  resetForNextTest();
+
+  var expected = '<a>test<b>2</b>3<c attr1="test" attr2="">455<e/></c><f/></a>';
+  var t = instance.getPilot().location(null, new xrx.token.EmptyTag(new xrx.label([1,2,1])));
+  xrx.update.removeEmptyTag(instance, t);
+  assertEquals(expected, instance.xml());
+};
+
+function test09removeStartEndTag() {
+  
+};
+
+function test10removeAttribute() {
+  resetForNextTest();
+
+  var expected = '<a>test<b>2</b>3<c attr1="test">4<d/>55<e/></c><f/></a>';
+  var t = instance.getPilot().location(null, new xrx.token.Attribute(new xrx.label([1,2,2])));
+  xrx.update.removeAttribute(instance, t);
+  assertEquals(expected, instance.xml());
 };
 
 </script>

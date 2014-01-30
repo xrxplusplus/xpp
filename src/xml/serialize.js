@@ -30,7 +30,16 @@ xrx.serialize.attribute = function(qName, value) {
 /**
  *
  */
-xrx.serialize.attributeNs = function(qName, value) {
+xrx.serialize.attributeNs = function(nsPrefix, qName, namespaceUri) {
+
+  if (nsPrefix === undefined || nsPrefix === "xmlns") {
+
+    return xrx.serialize.namespace('xmlns:' + qName.split(':')[0], namespaceUri) +
+        xrx.serialize.attribute(qName, '');
+  } else {
+
+    return xrx.serialize.attribute(qName, '');
+  }
 };
 
 

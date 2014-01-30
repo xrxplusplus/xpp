@@ -7,7 +7,6 @@ goog.provide('xrx.update');
 
 
 
-goog.require('goog.string');
 goog.require('xrx.serialize');
 goog.require('xrx.stream');
 goog.require('xrx.token');
@@ -48,6 +47,19 @@ xrx.update.insert_ = function(instance, offset, xml) {
 
 
 /**
+ * Shared function for all remove operations.
+ * @private
+ */
+xrx.update.remove_ = function(instance, offset, length) {
+
+  instance.update(offset, length, '');
+
+  return -length;
+};
+
+
+
+/**
  * Wrap a piece of XML with a start-tag and a end-tag.
  * 
  * @param {!xrx.instance} instance The instance to be updated.
@@ -57,7 +69,8 @@ xrx.update.insert_ = function(instance, offset, xml) {
  * new end-tag shall be inserted.
  * @param {!integer} offset1 The offset relative to the left not-tag token.
  * @param {!integer} offset2 The offset relative to the right not-tag token.
- * @param The expanded name of the new token.
+ * @param {!string} localName The local name of the new token.
+ * @param {!string} opt_namespaceUri The namespace URI of the new token.
  */
 xrx.update.wrap = function(instance, target1, target2, offset1, offset2,
     localName, opt_namespaceUri) {
@@ -102,7 +115,8 @@ xrx.update.replaceAttrValue = function(instance, target, value) {
  * @param {!xrx.instance} instance The instance to be updated.
  * @param {!xrx.token.NotTag} target The not-tag token where the empty tag is inserted.
  * @param {!integer} offset The offset relative to the not-tag token.
- * @param {!string} expandedName The expanded name of the new token.
+ * @param {!string} localName The local name of the new token.
+ * @param {!string} opt_namespaceUri The namespace URI of the new token.
  */
 xrx.update.insertEmptyTag = function(instance, target, offset, localName,
     opt_namespaceUri) {
@@ -129,7 +143,8 @@ xrx.update.insertEmptyTag = function(instance, target, offset, localName,
  * @param {!xrx.instance} instance The instance to be updated.
  * @param {!xrx.token.NotTag} target The not-tag token where the start-end-tag is inserted.
  * @param {!integer} offset The offset relative to the not-tag token.
- * @param {!string} expandedName The expanded name of the new token.
+ * @param {!string} localName The local name of the new token.
+ * @param {!string} opt_namespaceUri The namespace URI of the new token.
  */
 xrx.update.insertStartEndTag = function(instance, target, offset, localName,
     opt_namespaceUri) {
@@ -171,10 +186,29 @@ xrx.update.insertMixed = function(instance, target, offset, localName,
  * @param {!xrx.instance} instance The instance to be updated.
  * @param {!(xrx.token.StartTag|xrx.token.EmptyTag)} target The tag where the attribute 
  * shall be inserted.
- * @param {!string} expandedName The expanded name of the new attribute.
+ * @param {!string} qName The qualified name of the new attribute.
+ * @param {!string} opt_namespaceUri The namespace URI of the new attribute.
  */
-xrx.update.insertAttribute = function(instance, target, localName,
+xrx.update.insertAttribute = function(instance, parent, qName,
     opt_namespaceUri) {
+  var diff;
+  var loc = instance.getStream().tagName(parent.xml(instance.xml()));
+
+  if (!opt_namespaceUri) {
+    diff = xrx.update.insert_(instance, parent.offset() + loc.offset +
+        loc.length, xrx.serialize.attribute(qName, ''));
+  } else {
+    var nsPrefix1 = instance.getIndex().getNamespacePrefix(parent, opt_namespaceUri);
+    var nsPrefix2 = qName.split(':')[0];
+    if (nsPrefix1 !== 'xmlns:' + nsPrefix2 && nsPrefix1 !== undefined &&
+        nsPrefix1 !== 'xmlns') throw Error('Prefix ' + nsPrefix2 +
+        ' is not bound to namespace ' + opt_namespaceUri + '.');
+
+    diff = xrx.update.insert_(instance, parent.offset() + loc.offset +
+        loc.length, xrx.serialize.attributeNs(nsPrefix1, qName, opt_namespaceUri));
+
+    //TODO: add namespace declaration to index
+  }
 };
 
 
@@ -183,9 +217,10 @@ xrx.update.insertAttribute = function(instance, target, localName,
  * Removes a empty tag.
  * 
  * @param {!xrx.instance} instance The instance to be updated.
- * @param {!xrx.token.EmptyTag} target The empty tag to be removed.
+ * @param {!xrx.token.EmptyTag} target The tag to be removed.
  */
 xrx.update.removeEmptyTag = function(instance, token) {
+  var diff = xrx.update.remove_(instance, token.offset(), token.length());
 };
 
 
@@ -195,9 +230,9 @@ xrx.update.removeEmptyTag = function(instance, token) {
  * between the two tags. 
  * 
  * @param {!xrx.instance} instance The instance to be updated.
- * @param {!xrx.token.EmptyTag} target The empty tag to be removed.
+ * @param {!xrx.token.EmptyTag} target The tag to be removed.
  */
-xrx.update.removeStartEndTag = function(instance, token) {
+xrx.update.removeStartEndTag = function(instance, token1, token2) {
 };
 
 
@@ -207,7 +242,7 @@ xrx.update.removeStartEndTag = function(instance, token) {
  * tags. 
  * 
  * @param {!xrx.instance} instance The instance to be updated.
- * @param {!xrx.token.Fragment} target The empty tag to be removed.
+ * @param {!xrx.token.Fragment} target The tag to be removed.
  */
 xrx.update.removeFragment = function(instance, token) {
   //TODO: implement this
@@ -219,7 +254,7 @@ xrx.update.removeFragment = function(instance, token) {
  * Removes a mixed set of nodes. 
  * 
  * @param {!xrx.instance} instance The instance to be updated.
- * @param {!xrx.token.Mixed} target The empty tag to be removed.
+ * @param {!xrx.token.Mixed} target The token to be removed.
  */
 xrx.update.removeMixed = function(instance, token) {
   //TODO: implement this
@@ -231,7 +266,8 @@ xrx.update.removeMixed = function(instance, token) {
  * Removes a attribute token.
  * 
  * @param {!xrx.instance} instance The instance to be updated.
- * @param {!xrx.token.Attribute} target The empty tag to be removed.
+ * @param {!xrx.token.Attribute} target The token to be removed.
  */
 xrx.update.removeAttribute = function(instance, token) {
+  var diff = xrx.update.remove_(instance, token.offset() - 1, token.length() + 1);
 };
