@@ -24,6 +24,7 @@ function test01basic() {
   var index = new xrx.index(xml);
   
   assertEquals(14, index.getLength());
+  assertEquals(13, index.getLastKey());
   assertTrue(index.getLabel(0).sameAs(new xrx.label([1])));
   assertTrue(index.getLabel(1).sameAs(new xrx.label([1,1])));
   assertTrue(index.getLabel(2).sameAs(new xrx.label([1,2])));
@@ -40,28 +41,53 @@ function test01basic() {
   assertTrue(index.getLabel(13).sameAs(new xrx.label([1])));
 };
 
-function test02traverse() {
+function test02iter() {
   var xml           =         '<a>1<b>2</b>3<c/>4<d><e>5</e>6</d></a>';
   var startTags = [], endTags = [], emptyTags = [], notTags = [];
   var index = new xrx.index(xml);
+  var row = index.iterGetRow();
+  var key;
+  var offset;
+  var length1;
+  var length2;
 
-  index.rowStartTag = function(pos, label, offset, length1, length2) {
-    startTags.push(xml.substr(offset, length1));
+  do {
+    key = index.iterGetKey();
+    offset = row.getOffset();
+    length1 = row.getLength1();
+    length2 = row.getLength2();
+    
+    if (row.getType() === xrx.token.START_TAG) {
+      startTags.push(xml.substr(offset, length1));
+    } else if (row.getType() === xrx.token.EMPTY_TAG) {
+      emptyTags.push(xml.substr(offset, length1));
+    } else {
+      endTags.push(xml.substr(offset, length1));
+    }
+    
     notTags.push(xml.substr(offset + length1, length2 - length1));
-  };
+  } while (row = index.iterNext());
 
-  index.rowEmptyTag = function(pos, label, offset, length1, length2) {
-    emptyTags.push(xml.substr(offset, length1));
+
+  index.iterSetKey(index.getLastKey());
+  row = index.iterGetRow();
+  
+  do {
+    key = index.iterGetKey();
+    offset = row.getOffset();
+    length1 = row.getLength1();
+    length2 = row.getLength2();
+    
+    if (row.getType() === xrx.token.START_TAG) {
+      startTags.push(xml.substr(offset, length1));
+    } else if (row.getType() === xrx.token.EMPTY_TAG) {
+      emptyTags.push(xml.substr(offset, length1));
+    } else {
+      endTags.push(xml.substr(offset, length1));
+    }
+    
     notTags.push(xml.substr(offset + length1, length2 - length1));
-  };
-
-  index.rowEndTag = function(pos, label, offset, length1, length2) {
-    endTags.push(xml.substr(offset, length1));
-    notTags.push(xml.substr(offset + length1, length2 -length1));
-  };
-
-  index.forward();
-  index.backward();
+  } while (row = index.iterPrevious());
 
   assertTrue(goog.array.equals(startTags, ['<a>', '<b>', '<d>', '<e>', // forward
       '<e>', '<d>', '<b>', '<a>'])); // backward

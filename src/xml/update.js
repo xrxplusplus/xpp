@@ -118,6 +118,8 @@ xrx.update.insertEmptyTag = function(instance, target, offset, localName,
 
     //TODO: add namespace declaration to index
   }
+
+  return diff;
 };
 
 
@@ -204,6 +206,8 @@ xrx.update.insertAttribute = function(instance, parent, qName,
 
     //TODO: add namespace declaration to index
   }
+
+  return diff;
 };
 
 
@@ -218,6 +222,8 @@ xrx.update.removeEmptyTag = function(instance, token) {
   var diff = xrx.update.remove_(instance, token.offset(), token.length());
 
   //TODO: remove namespace declaration from index
+
+  return diff;
 };
 
 
@@ -272,4 +278,6 @@ xrx.update.removeMixed = function(instance, token) {
  */
 xrx.update.removeAttribute = function(instance, token) {
   var diff = xrx.update.remove_(instance, token.offset() - 1, token.length() + 1);
+
+  return diff;
 };

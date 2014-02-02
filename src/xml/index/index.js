@@ -10,7 +10,6 @@ goog.provide('xrx.index.Namespace');
 
 
 goog.require('goog.array');
-goog.require('goog.math.Long');
 goog.require('xrx.index.row');
 goog.require('xrx.label');
 goog.require('xrx.token');
@@ -19,8 +18,8 @@ goog.require('xrx.traverse');
 
 
 /**
- * A class to create long-lived binary encodings for
- * XML instances.
+ * A class to create long-lived binary encodings for XML instances.
+ * 
  * @param {string} The XML string to be indexed.
  * @constructor
  */
@@ -36,7 +35,7 @@ xrx.index = function(xml) {
    * Current position of row iteration.
    * @type {integer}
    */
-  this.iterKey = 0;
+  this.iterKey_ = 0;
 
   /**
    * Indexed namespace table.
@@ -65,24 +64,77 @@ xrx.index.prototype.getLength = function() {
  * Returns the last key of the index.
  * @return {integer}
  */
-xrx.index.prototype.last = function() {
+xrx.index.prototype.getLastKey = function() {
   return this.getLength() - 1;
 };
 
 
 
 /**
+ * Searches a index key by overloading a tag token.
  * 
+ * @param {xrx.token} token The tag token.
+ * @param {integer} opt_start The index key where to start.
+ * @param {boolean} opt_reverse False to search in forward or true to search in 
+ * backward direction.
+ * @return {integer} The key.
  */
-xrx.index.prototype.getKeyByToken = function(token) {
-  var key;
+xrx.index.prototype.getKeyByTag = function(token, opt_start) {
   var row;
+  var key;
 
-  for(key = 0; key <= this.last(); key++) {
-    row = this.rows_[key];
+  opt_start ? this.iterSetKey(opt_start) : this.iterAtFirst();
+
+  do {
+    row = this.iterGetRow();
+    key = this.iterGetKey();
 
     if (token.typeOf(row.getType()) && 
         this.getLabel(key).sameAs(token.label())) break;
+
+  } while (row = this.iterNext());
+
+  return key;
+};
+
+
+
+/**
+ * Searches a index key by overloading a not-tag token.
+ * @param {xrx.token} token The not-tag token.
+ * @return {integer} The key.
+ */
+xrx.index.prototype.getKeyByNotTag = function(token, opt_start) {
+  var row;
+  var key;
+  var isStartTagRow = token.label().last() === 0 ? true : false;
+
+  opt_start ? this.iterSetKey(opt_start) : this.iterAtFirst();
+
+  if (isStartTagRow) {
+    var searchLabel = token.label().clone();
+    searchLabel.parent();
+
+    do {
+      row = this.iterGetRow();
+      key = this.iterGetKey();
+  
+      if (row.getType() === xrx.token.START_TAG && 
+          this.getLabel(key).sameAs(searchLabel)) break;
+  
+    } while (row = this.iterNext());
+    
+  } else {
+    var searchLabel = token.label().clone();
+
+    do {
+      row = this.iterGetRow();
+      key = this.iterGetKey();
+  
+      if ((row.getType() === xrx.token.EMPTY_TAG || row.getType() === xrx.token.END_TAG) && 
+          this.getLabel(key).sameAs(searchLabel)) break;
+  
+    } while (row = this.iterNext());
   }
 
   return key;
@@ -91,42 +143,74 @@ xrx.index.prototype.getKeyByToken = function(token) {
 
 
 /**
- * 
+ * Returns a index row by overloading a key.
+ * @param {!integer} key The key.
+ * @return {xrx.index.row} The row.
  */
-xrx.index.prototype.getRow = function(key) {
+xrx.index.prototype.getRowByKey = function(key) {
   return this.rows_[key];
 };
 
 
 
 /**
- * 
+ * Searches a index row by overloading a tag token.
+ * @param {xrx.token} token The token.
+ * @return {xrx.index.row} The row.
  */
-xrx.index.prototype.getRowByToken = function(token, opt_start, opt_reverse) {
-  var row;
+xrx.index.prototype.getRowByTag = function(token, opt_start) {
 
-  if (opt_reverse) {
-    var pos = opt_start || this.last();
+  return this.getRowByKey(this.getKeyByTag(token, opt_start));
+};
 
-    for(pos; pos >= 0; pos--){
-      row = this.rows_[pos];
 
-      if (row.getType() === token.type() && 
-          this.getLabel(pos).sameAs(token.label())) break;
-    }
-  } else {
-    var pos = opt_start || 0;
 
-    for(pos; pos <= this.last(); pos++) {
-      row = this.rows_[pos];
+/**
+ * Searches a index row by overloading a not-tag token.
+ * @param {xrx.token} token The token.
+ * @return {xrx.index.row} The row.
+ */
+xrx.index.prototype.getRowByTag = function(token, opt_start) {
 
-      if (row.getType() === token.type() && 
-          this.getLabel(pos).sameAs(token.label())) break;
-    }
+  return this.getRowByKey(this.getKeyByNotTag(token, opt_start));
+};
 
+
+
+/**
+ * Returns a row label by overloading a index key.
+ * @return {xrx.label} The label.
+ */
+xrx.index.prototype.getLabel = function(key) {
+  var row = this.rows_[key];
+  var next;
+  var label = [];
+
+  label.unshift(row.getPosition());
+  if (key === 0 || key === this.getLastKey()) return new xrx.label(label);
+
+  for(;;) {
+    next = row.getParent();
+    row = this.rows_[next];
+    label.unshift(row.getPosition());
+    if (next === 0) break;
   }
 
-  return row;
+  return new xrx.label(label);
+};
+
+
+
+/**
+ * Returns a tag token by overloading a row.
+ * @return {xrx.token.StartTag|xrx.token.EmptyTag|xrx.token.EndTag} The tag. 
+ */
+xrx.index.prototype.getTag = function(row) {
+  var r = this.rows_[row];
+  var tag = new xrx.token(r.getType(), this.getLabel(row),
+      r.getOffset(), r.getLength1());
+  
+  return xrx.token.native(tag);
 };
 
 
@@ -137,9 +221,27 @@ xrx.index.prototype.getRowByToken = function(token, opt_start, opt_reverse) {
  */
 xrx.index.prototype.iterSetKey = function(key) {
 
-
-
   this.iterKey_ = key || 0;
+};
+
+
+
+/**
+ * Sets the iterator key at the first position.
+ */
+xrx.index.prototype.iterAtFirst = function() {
+
+  this.iterKey_ = 0;
+};
+
+
+
+/**
+ * Sets the iterator key at the last position.
+ */
+xrx.index.prototype.iterAtLast = function() {
+
+  this.iterKey_ = this.getLastKey();
 };
 
 
@@ -160,7 +262,7 @@ xrx.index.prototype.iterGetKey = function() {
  * @return {xrx.index.row} The row.
  */
 xrx.index.prototype.iterGetRow = function() {
-  return this.getRow(this.iterKey_);
+  return this.getRowByKey(this.iterKey_);
 };
 
 
@@ -171,7 +273,7 @@ xrx.index.prototype.iterGetRow = function() {
  */
 xrx.index.prototype.iterNext = function() {
 
-  return this.getRow(++this.iterKey_);
+  return this.getRowByKey(++this.iterKey_);
 };
 
 
@@ -182,7 +284,7 @@ xrx.index.prototype.iterNext = function() {
  */
 xrx.index.prototype.iterPrevious = function() {
 
-  return this.getRow(--this.iterKey_);
+  return this.getRowByKey(--this.iterKey_);
 };
 
 
@@ -259,25 +361,21 @@ xrx.index.prototype.getNamespacePrefix = function(token, uri) {
 
 
 
-xrx.index.replaceNotTag = function(token, diff) {
-  var parentLabel = token.label().clone();
-  parentLabel.parent();
-  var parent = new xrx.token.StartEmptyTag(parentLabel);
-  var key = this.getKeyByToken(parent);
-  var row = this.getRow(key);
+/**
+ * Adds a new row to the end of the index and returns the new row.
+ * @return {xrx.index.row} The new row.
+ */
+xrx.index.prototype.head = function() {
+  this.rows_.push(new xrx.index.row());
 
-  this.iterSetKey(key);
-  row.setLength2(row.getLength2() + diff);
-  this.rows_[key] = goog.object.clone(row);
-
-  xrx.rebuild.offset(index, key, diff);
+  return this.rows_[this.rows_.length - 1];
 };
 
 
 
 /**
- * Builds the index.
- * @param {!string} The XML instance as string.
+ * Builds an index from scratch.
+ * @param {!string} The XML string.
  */
 xrx.index.prototype.build = function(xml) {
   var traverse = new xrx.traverse(xml);
@@ -304,7 +402,7 @@ xrx.index.prototype.build = function(xml) {
   traverse.rowStartTag = function(label, offset, length1, length2) {
 
     update(index.head(), xrx.token.START_TAG, label, offset, length1, length2);
-    labelBuffer[label.toString()] = index.last();
+    labelBuffer[label.toString()] = index.getLastKey();
   };
 
   traverse.rowEmptyTag = function(label, offset, length1, length2) {
@@ -334,105 +432,23 @@ xrx.index.prototype.build = function(xml) {
 };
 
 
-xrx.index.prototype.head = function() {
-  this.rows_.push(new xrx.index.row());
 
-  return this.rows_[this.rows_.length - 1];
+/**
+ * Inserts a row after a key position.
+ * @param {!integer} key The key.
+ * @param {!row} row The row.
+ */
+xrx.index.prototype.insertRowAfter = function(key, row) {
+  this.rows_.splice(++key, 0, row);
 };
 
 
 
-xrx.index.prototype.getLabel = function(pos) {
-  var row = this.rows_[pos];
-  var next;
-  var label = [];
-
-  label.unshift(row.getPosition());
-  if (pos === 0 || pos === this.last()) return new xrx.label(label);
-
-  for(;;) {
-    next = row.getParent();
-    row = this.rows_[next];
-    label.unshift(row.getPosition());
-    if (next === 0) break;
-  }
-
-  return new xrx.label(label);
+/**
+ * Removes a row indicated by a key.
+ * @param {!integer} key The key.
+ * @param {!row} row The row.
+ */
+xrx.index.prototype.removeRow = function(key) {
+  this.rows_.splice(key, 1);
 };
-
-
-
-xrx.index.prototype.getToken = function(row) {
-  var r = this.rows_[row];
-  var tag = new xrx.token(r.getType(), this.getLabel(row),
-      r.getOffset(), r.getLength1());
-  
-  return xrx.token.native(tag);
-};
-
-
-
-xrx.index.prototype.rowStartTag = goog.abstractMethod;
-xrx.index.prototype.rowEmptyTag = goog.abstractMethod;
-xrx.index.prototype.rowEndTag = goog.abstractMethod;
-
-
-
-xrx.index.prototype.forward = function() {
-  var index = this;
-  var pos = 0;
-  var row;
-
-  while(pos <= index.last()) {
-    row = index.rows_[pos];
-
-    switch(row.getType()) {
-    case xrx.token.START_TAG:
-      index.rowStartTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    case xrx.token.EMPTY_TAG:
-      index.rowEmptyTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    case xrx.token.END_TAG:
-      index.rowEndTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    default:
-      break;
-    }
-    pos ++;
-  }
-};
-
-
-
-xrx.index.prototype.backward = function() {
-  var index = this;
-  var pos = index.last();
-  var row;
-
-  while(pos >= 0) {
-    row = index.rows_[pos];
-
-    switch(row.getType()) {
-    case xrx.token.START_TAG:
-      index.rowStartTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    case xrx.token.EMPTY_TAG:
-      index.rowEmptyTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    case xrx.token.END_TAG:
-      index.rowEndTag(pos, index.getLabel(pos), row.getOffset(), 
-          row.getLength1(), row.getLength2());
-      break;
-    default:
-      break;
-    }
-    pos--;
-  }
-};
-

@@ -38,7 +38,7 @@ goog.inherits(xrx.node.ElementB, xrx.nodeB);
  * 
  */
 xrx.node.ElementB.prototype.getToken = function() {
-  return this.getIndex().getToken(this.key_);
+  return this.getIndex().getTag(this.key_);
 };
 
 
@@ -165,7 +165,7 @@ xrx.node.ElementB.prototype.isPrecedingSiblingOf = xrx.node.Element.prototype.is
  */
 xrx.node.ElementB.prototype.getName = function() {
   var inst = this.instance_;
-  var tag = inst.getIndex().getToken(this.key_);
+  var tag = inst.getIndex().getTag(this.key_);
   var loc = inst.getStream().tagName(tag.xml(inst.xml()));
   loc.offset += tag.offset();
 
@@ -197,8 +197,8 @@ xrx.node.ElementB.prototype.getStringValue = function() {
   var row;
   var selfLabel = this.getLabel();
 
-  for(var key = this.getKey(); key <= this.getIndex().last(); key++) {
-    row = this.getIndex().getRow(key);
+  for(var key = this.getKey(); key <= this.getIndex().getLastKey(); key++) {
+    row = this.getIndex().getRowByKey(key);
     if (row.getType() === xrx.token.END_TAG && 
         this.getIndex().getLabel(key).sameAs(selfLabel)) break;
     string += xml.substr(row.getOffset() + row.getLength1(),
@@ -219,8 +219,8 @@ xrx.node.ElementB.prototype.getXml = function() {
 
     return this.instance_.xml().substr(this.getOffset(), this.getLength());
   } else {
-    var row = this.getIndex().getRowByToken(new xrx.token.EndTag(
-        this.getLabel()), this.getKey(), false);
+    var row = this.getIndex().getRowByTag(new xrx.token.EndTag(
+        this.getLabel()), this.getKey());
 
     return this.instance_.xml().substring(this.getOffset(), row.getOffset() +
         row.getLength1());

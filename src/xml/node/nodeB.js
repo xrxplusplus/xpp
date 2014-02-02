@@ -89,6 +89,6 @@ xrx.nodeB.prototype.getIndex = function() {
  * @return {!xrx.index.row}
  */
 xrx.nodeB.prototype.getRow = function() {
-  return this.getIndex().getRow(this.key_);
+  return this.getIndex().getRowByKey(this.key_);
 };
 

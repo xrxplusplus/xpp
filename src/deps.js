@@ -21,7 +21,7 @@ goog.addDependency('../../../../src/view/richxmlTagname.js', ['xrx.richxml.tagna
 goog.addDependency('../../../../src/view/textarea.js', ['xrx.textarea'], []);
 goog.addDependency('../../../../src/view/view.js', ['xrx.view'], ['goog.string', 'xrx.control']);
 goog.addDependency('../../../../src/xml/index/index.js', ['xrx.index', 'xrx.index.Namespace'], ['goog.array', 'goog.math.Long', 'xrx.index.row', 'xrx.label', 'xrx.token', 'xrx.traverse']);
-goog.addDependency('../../../../src/xml/index/rebuild.js', ['xrx.rebuild'], ['xrx.token', 'xrx.token.StartEmptyTag']);
+goog.addDependency('../../../../src/xml/index/rebuild.js', ['xrx.rebuild'], ['goog.object', 'xrx.token', 'xrx.token.StartEmptyTag']);
 goog.addDependency('../../../../src/xml/index/row.js', ['xrx.index.row', 'xrx.index.row.format', 'xrx.index.row.mask'], ['xrx.index']);
 goog.addDependency('../../../../src/xml/label.js', ['xrx.label'], []);
 goog.addDependency('../../../../src/xml/location.js', ['xrx.location'], []);

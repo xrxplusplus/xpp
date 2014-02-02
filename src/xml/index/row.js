@@ -9,6 +9,7 @@ goog.provide('xrx.index.row.mask');
 
 
 
+goog.require('goog.math.Long');
 goog.require('xrx.index');
 
 
@@ -94,6 +95,19 @@ xrx.index.row.prototype.set = function(integer, format) {
 
 
 /**
+ * Shared function for all update functions.
+ * @private
+ */
+xrx.index.row.prototype.update = function(diff, format) {
+  var long = goog.math.Long.fromInt(diff);
+
+  long = long.shiftLeft(format.shift);
+  this[format.bits] = this[format.bits].add(long);
+};
+
+
+
+/**
  * Decodes the type descriptor of the row from binary to
  * integer and returns the type as integer.
  * @return {!integer} The token type.
@@ -114,6 +128,15 @@ xrx.index.row.prototype.setType = function(type) {
 
 
 /**
+ * 
+ */
+xrx.index.row.prototype.updateType = function(type) {
+  this.update(type, xrx.index.row.format[xrx.index.row.format_].TYPE);
+};
+
+
+
+/**
  * Decodes the position descriptor of the row from binary to
  * integer and returns the position as integer.
  * @return {!integer} The label position.
@@ -124,8 +147,20 @@ xrx.index.row.prototype.getPosition = function() {
 
 
 
+/**
+ * 
+ */
 xrx.index.row.prototype.setPosition = function(position) {
   this.set(position, xrx.index.row.format[xrx.index.row.format_].POSITION); 
+};
+
+
+
+/**
+ * 
+ */
+xrx.index.row.prototype.updatePosition = function(position) {
+  this.update(position, xrx.index.row.format[xrx.index.row.format_].POSITION); 
 };
 
 
@@ -141,8 +176,20 @@ xrx.index.row.prototype.getParent = function() {
 
 
 
+/**
+ * 
+ */
 xrx.index.row.prototype.setParent = function(parent) {
   this.set(parent, xrx.index.row.format[xrx.index.row.format_].PARENT); 
+};
+
+
+
+/**
+ * 
+ */
+xrx.index.row.prototype.updateParent = function(parent) {
+  this.update(parent, xrx.index.row.format[xrx.index.row.format_].PARENT); 
 };
 
 
@@ -158,8 +205,20 @@ xrx.index.row.prototype.getOffset = function() {
 
 
 
+/**
+ * 
+ */
 xrx.index.row.prototype.setOffset = function(offset) {
   this.set(offset, xrx.index.row.format[xrx.index.row.format_].OFFSET); 
+};
+
+
+
+/**
+ * 
+ */
+xrx.index.row.prototype.updateOffset = function(offset) {
+  this.update(offset, xrx.index.row.format[xrx.index.row.format_].OFFSET); 
 };
 
 
@@ -175,8 +234,20 @@ xrx.index.row.prototype.getLength1 = function() {
 
 
 
+/**
+ * 
+ */
 xrx.index.row.prototype.setLength1 = function(length) {
   this.set(length, xrx.index.row.format[xrx.index.row.format_].LENGTH1);
+};
+
+
+
+/**
+ * 
+ */
+xrx.index.row.prototype.updateLength1 = function(length) {
+  this.update(length, xrx.index.row.format[xrx.index.row.format_].LENGTH1);
 };
 
 
@@ -192,12 +263,27 @@ xrx.index.row.prototype.getLength2 = function() {
 
 
 
+/**
+ * 
+ */
 xrx.index.row.prototype.setLength2 = function(length) {
   this.set(length, xrx.index.row.format[xrx.index.row.format_].LENGTH2);
 };
 
 
 
+/**
+ * 
+ */
+xrx.index.row.prototype.updateLength2 = function(length) {
+  this.update(length, xrx.index.row.format[xrx.index.row.format_].LENGTH2);
+};
+
+
+
+/**
+ * 
+ */
 xrx.index.row.prototype.toString = function() {
 
   var formatNumber = function(number) {

@@ -109,8 +109,8 @@ xrx.node.DocumentB.prototype.getStringValue = function() {
   var xml = this.instance_.xml();
   var row;
 
-  for(var key = 0; key <= this.getIndex().last(); key++) {
-    row = this.getIndex().getRow(key);
+  for(var key = 0; key <= this.getIndex().getLastKey(); key++) {
+    row = this.getIndex().getRowByKey(key);
     string += xml.substr(row.getOffset() + row.getLength1(),
         row.getLength2() - row.getLength1());
   };

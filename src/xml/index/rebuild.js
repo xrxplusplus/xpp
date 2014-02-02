@@ -1,5 +1,5 @@
 /**
- * @fileoverview A class extending class xrx.index with update
+ * @fileoverview A class extending class xrx.index with rebuild
  * operations on binary encodings. 
  */
 
@@ -17,12 +17,56 @@ xrx.rebuild = function() {};
 
 
 
-xrx.rebuild.offset = function(index, key, diff) {
-  var row;
+/**
+ * Shared function to recalculate index offsets after a update
+ * operation that requires no relabeling.
+ * @param {!xrx.index} index The index.
+ * @param {!integer} diff The offset difference.
+ */
+xrx.rebuild.offset = function(index, diff) {
+  var row = index.iterGetRow();
 
-  while (row = index.iterNext()) {
-    row.setOffset(row.getOffset() + diff);
-  };
+  do {
+    row.updateOffset(diff);
+  } while (row = index.iterNext());
+};
+
+
+
+/**
+ * Shared function to recalculate index offsets and labels after a update
+ * operation that requires relabeling.
+ * @param {!xrx.index} index The index.
+ * @param {!integer} diff The offset difference.
+ * @param {!integer} parentKey The index key of the parent token which was
+ * updated.
+ * @param {!intger} numRows Number of subsequent rows that were removed or
+ * inserted. Positive integer, if rows were inserted and negative integer if
+ * rows were removed.
+ */
+xrx.rebuild.relabel = function(index, diff, parentKey, numRows) {
+  var row = index.iterGetRow();
+  var key;
+  var sibling = -3;
+  var last = index.getLastKey();
+
+  do {
+    key = index.iterGetKey();
+
+    if (row.getParent() === parentKey && row.getType() !== xrx.token.END_TAG) {
+      row.updatePosition(numRows);
+      sibling = key;
+    }
+    if (row.getParent() === parentKey && row.getType() === xrx.token.END_TAG) {
+      if (key !== last) row.updatePosition(numRows);
+      sibling = -3;
+    }
+    if (row.getParent() === sibling - numRows) {
+      row.updateParent(numRows);
+    }
+
+    row.updateOffset(diff);
+  } while (row = index.iterNext());
 };
 
 
@@ -30,18 +74,193 @@ xrx.rebuild.offset = function(index, key, diff) {
 /**
  * Rebuilds an index after a XML instance has been updated by
  * a replaceNotTag update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!xrx.token.NotTag} token The not-tag token which was updated.
+ * @param {!integer} diff The length difference of the updated token.
  */
-xrx.rebuild.replaceNotTag = function(instance, token, diff) {
-  var index = instance.getIndex();
-  var parentLabel = token.label().clone();
-  parentLabel.parent();
-  var parent = new xrx.token.StartEmptyTag(parentLabel);
-  var key = index.getKeyByToken(parent);
-  var row = index.getRow(key);
+xrx.rebuild.replaceNotTag = function(index, token, diff) {
+  var key = index.getKeyByNotTag(token);
+  var row = index.getRowByKey(key);
+
+  row.updateLength2(diff);
 
   index.iterSetKey(key);
-  row.setLength2(row.getLength2() + diff);
-  index.rows_[key] = goog.object.clone(row);
+  index.iterNext();
 
-  xrx.rebuild.offset(index, key, diff);
+  xrx.rebuild.offset(index, diff);
 };
+
+
+
+/**
+ * 
+ */
+xrx.rebuild.replaceTagName = function(instance, token, localName, opt_namespaceUri) {
+  //TODO: implement this
+};
+
+
+
+
+/**
+ * Rebuilds an index after a XML instance has been updated by
+ * a replaceAttrValue update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!xrx.token.AttrValue} token The attribute value token which was updated.
+ * @param {!integer} diff The length difference of the updated token.
+ */
+xrx.rebuild.replaceAttrValue = function(index, token, diff) {
+  var label = token.label().clone();
+  label.parent();
+  var tag = new xrx.token.StartEmptyTag(label);
+  var key = index.getKeyByTag(tag);
+  var row = index.getRowByKey(key);
+
+  row.updateLength1(diff);
+  row.updateLength2(diff);
+
+  index.iterSetKey(key);
+  index.iterNext();
+
+  xrx.rebuild.offset(index, diff);
+};
+
+
+
+
+/**
+ * Rebuilds an index after a XML instance has been updated by
+ * a insertEmptyTag update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!xrx.token.NotTag} token The not-tag token into which the empty tag
+ * was inserted.
+ * @param {!integer} token The offset relative to the not-tag token where the
+ * empty tag was inserted.
+ * @param {!integer} diff The length difference of the updated token.
+ */
+xrx.rebuild.insertEmptyTag = function(index, token, offset, diff) {
+  var key = index.getKeyByNotTag(token);
+  var row = index.getRowByKey(key);
+  var length1 = row.getLength1();
+  var length2 = row.getLength2();
+  var rest = length2 - length1 - offset;
+  
+  // rebuild updated row
+  row.updateLength2(length1 + offset - length2);
+
+  // insert new row
+  var newRow = new xrx.index.row();
+  var newLabel = token.label().clone();
+  newLabel.nextSibling();
+  var newParentLabel = newLabel.clone();
+  newParentLabel.parent();
+  var newParentToken = new xrx.token.StartEmptyTag(newParentLabel);
+  var newParentKey = index.getKeyByTag(newParentToken);
+
+  newRow.setType(xrx.token.EMPTY_TAG);
+  newRow.setPosition(newLabel.last());
+  newRow.setParent(newParentKey);
+  newRow.setOffset(row.getOffset() + row.getLength2());
+  newRow.setLength1(diff);
+  newRow.setLength2(diff + rest);
+  index.insertRowAfter(key, newRow);
+
+  // rebuild all following rows
+  index.iterSetKey(key);
+  index.iterNext();
+  index.iterNext();
+
+  xrx.rebuild.relabel(index, diff, newParentKey, 1);
+};
+
+
+
+/**
+ * 
+ */
+xrx.rebuild.insertStartEndTag = function(index, token1, token2, offset1, offset2,
+    diff1, diff2) {
+};
+
+
+
+/**
+ * 
+ */
+xrx.rebuild.insertFragment = function(index, token, offset, diff) {
+  //TODO: implement this
+};
+
+
+
+/**
+ * 
+ */
+xrx.rebuild.insertMixed = function(index, token, offset, diff) {
+  //TODO: implement this
+};
+
+
+
+/**
+ * Rebuilds an index after a XML instance has been updated by
+ * a insertAttribute update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!(xrx.token.StartTag|xrx.token.EmptyTag)} parent The tag token into which the
+ * attribute was inserted.
+ * @param {!integer} diff The length difference of the updated parent token.
+ */
+xrx.rebuild.insertAttribute = function(index, parent, diff) {
+  var key = index.getKeyByTag(parent);
+  var row = index.getRowByKey(key);
+
+  row.updateLength1(diff);
+  row.updateLength2(diff);
+
+  index.iterSetKey(key);
+  index.iterNext();
+
+  xrx.rebuild.offset(index, diff);  
+};
+
+
+
+/**
+ * Rebuilds an index after a XML instance has been updated by
+ * a removeEmptyTag update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!xrx.token.EmptyTag} token The empty tag which was removed.
+ * @param {!integer} diff The length difference of the updated empty tag token.
+ */
+xrx.rebuild.removeEmptyTag = function(index, token, diff) {
+  var key = index.getKeyByNotTag(token);
+  var row = index.getRowByKey(key);
+  var length1 = row.getLength1();
+  var length2 = row.getLength2();
+  var notTagLength = length2 - length1;
+
+  // rebuild row before
+  index.iterSetKey(key);
+  index.iterPrevious();
+  var rowBefore = index.iterGetRow();
+  rowBefore.updateLength2(notTagLength);
+  
+  // remove updated row
+  index.removeRow(key);
+
+  // rebuild all following rows
+  var parentLabel = token.label().clone();
+  parentLabel.parent();
+  var parentToken = new xrx.token.StartEmptyTag(parentLabel);
+  var parentKey = index.getKeyByTag(parentToken);
+
+  index.iterSetKey(key);
+
+  xrx.rebuild.relabel(index, diff, parentKey, -1);
+};
+
