@@ -312,8 +312,8 @@ xrx.node.ElementB.prototype.getNodePrecedingSibling = xrx.node.Element.prototype
 xrx.node.ElementB.prototype.forward = function(stop, needTextNode) {
   var self = this;
   var index = this.instance_.getIndex();
-  var iter = new xrx.index.Iter(index, this.key_);
-  var row = iter.getRow();
+  index.iterSetKey(this.key_);
+  var row = index.iterGetRow();
   var type;
 
   do {
@@ -321,23 +321,23 @@ xrx.node.ElementB.prototype.forward = function(stop, needTextNode) {
 
     switch(type) {
     case xrx.token.START_TAG:
-      self.eventNode(new xrx.node.ElementB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.ElementB(self.instance_, index.iterGetKey()));
       break;
     case xrx.token.EMPTY_TAG:
-      self.eventNode(new xrx.node.ElementB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.ElementB(self.instance_, index.iterGetKey()));
       break;
     default:
       break;
     };
 
     if (needTextNode && row.getLength1() !== row.getLength2()) {
-      self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.TextB(self.instance_, index.iterGetKey()));
     }
 
     if (type === xrx.token.END_TAG &&
-        self.getIndex().getLabel(iter.getPos()).sameAs(stop)) break;
+        self.getIndex().getLabel(index.iterGetKey()).sameAs(stop)) break;
 
-  } while (row = iter.next());
+  } while (row = index.iterNext());
 };
 
 
@@ -348,32 +348,32 @@ xrx.node.ElementB.prototype.forward = function(stop, needTextNode) {
 xrx.node.ElementB.prototype.backward = function(stop, needTextNode) {
   var self = this;
   var index = this.getIndex();
-  var iter = new xrx.index.Iter(index, this.key_);
-  var row = iter.getRow();
+  index.iterSetKey(this.key_);
+  var row = index.iterGetRow();
   var type;
 
   do {
     type = row.getType();
 
     if (needTextNode && row.getLength1() !== row.getLength2()) {
-      self.eventNode(new xrx.node.TextB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.TextB(self.instance_, index.iterGetKey()));
     }
 
     switch(type) {
     case xrx.token.START_TAG:
-      self.eventNode(new xrx.node.ElementB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.ElementB(self.instance_, index.iterGetKey()));
       break;
     case xrx.token.EMPTY_TAG:
-      self.eventNode(new xrx.node.ElementB(self.instance_, iter.getPos()));
+      self.eventNode(new xrx.node.ElementB(self.instance_, index.iterGetKey()));
       break;
     default:
       break;
     };
 
     if (type === xrx.token.END_TAG &&
-        self.getIndex().getLabel(iter.getPos()).sameAs(stop)) break;
+        self.getIndex().getLabel(index.iterGetKey()).sameAs(stop)) break;
 
-  } while (row = iter.previous());
+  } while (row = index.iterPrevious());
 };
 
 

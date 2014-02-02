@@ -145,8 +145,9 @@ xrx.node.DocumentB.prototype.getNodeChild = function(test) {
 
 xrx.node.DocumentB.prototype.getNodeDescendant = function(test) {
   var nodeset = new xrx.xpath.NodeSet();
-  var iter = new xrx.index.Iter(this.getIndex());
-  var row = iter.getRow();
+  var index = this.instance_.getIndex();
+  index.iterSetKey(0);
+  var row = index.iterGetRow();
   var element;
   var text;
   var needTextNode = test.needsTextNode();
@@ -154,20 +155,20 @@ xrx.node.DocumentB.prototype.getNodeDescendant = function(test) {
   do {
 
     if (row.getType() !== xrx.token.END_TAG) {
-      element = new xrx.node.ElementB(this.instance_, iter.getPos());
+      element = new xrx.node.ElementB(this.instance_, index.iterGetKey());
       if (test.matches(element)) {
         nodeset.add(element);
       }
     }
 
     if (needTextNode && row.getLength1() !== row.getLength2()) {
-      text = new xrx.node.TextB(this.instance_, iter.getPos());
+      text = new xrx.node.TextB(this.instance_, index.iterGetKey());
       if (test.matches(text)) {
         nodeset.add(text);
       }
     }
  
-  } while(row = iter.next());
+  } while(row = index.iterNext());
 
   return nodeset;
 };

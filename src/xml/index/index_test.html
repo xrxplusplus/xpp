@@ -2,8 +2,8 @@
 <html>
 <head>
 <title>XRX++ Unit Tests - xrx.index</title>
-<script src='../../lib/closure-library/closure/goog/base.js'></script>
-<script src='../deps.js'></script>
+<script src='../../../lib/closure-library/closure/goog/base.js'></script>
+<script src='../../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.array');
   goog.require('goog.dom');
@@ -23,7 +23,7 @@ function test01basic() {
   //         [1]    [1,1]   [1,2]   [1,3]  [1,3,1][1,3,1][1,3][1,4]  [1,4,1] [1,4] [1,5]  [1,5] [1,6]   [1]
   var index = new xrx.index(xml);
   
-  assertEquals(14, index.length());
+  assertEquals(14, index.getLength());
   assertTrue(index.getLabel(0).sameAs(new xrx.label([1])));
   assertTrue(index.getLabel(1).sameAs(new xrx.label([1,1])));
   assertTrue(index.getLabel(2).sameAs(new xrx.label([1,2])));
@@ -46,7 +46,6 @@ function test02traverse() {
   var index = new xrx.index(xml);
 
   index.rowStartTag = function(pos, label, offset, length1, length2) {
-
     startTags.push(xml.substr(offset, length1));
     notTags.push(xml.substr(offset + length1, length2 - length1));
   };

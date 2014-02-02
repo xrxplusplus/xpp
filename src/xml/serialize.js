@@ -1,5 +1,6 @@
 /**
- * @fileoverview A class for XML token serialization.
+ * @fileoverview A function module for XML token and XML
+ * document serialization.
  */
 
 goog.provide('xrx.serialize');
@@ -12,14 +13,15 @@ goog.require('xrx.token');
 
 
 /**
- *
+ * Function module for XML serializazion.
  */
 xrx.serialize = {};
 
 
 
 /**
- *
+ * Serialize a attribute token.
+ * @return {string} The attribute token string.
  */
 xrx.serialize.attribute = function(qName, value) {
   return ' ' + qName + '="' + value.replace(/\"/g, "'") + '"';
@@ -28,7 +30,8 @@ xrx.serialize.attribute = function(qName, value) {
 
 
 /**
- *
+ * Serialize a attribute token with namespace.
+ * @return {string} The attribute token string.
  */
 xrx.serialize.attributeNs = function(nsPrefix, qName, namespaceUri) {
 
@@ -45,7 +48,9 @@ xrx.serialize.attributeNs = function(nsPrefix, qName, namespaceUri) {
 
 
 /**
+ * Shared function for tag serialization.
  * @private
+ * @return {string} The tag string.
  */
 xrx.serialize.tagNs_ = function(func, nsPrefix, localName, namespaceUri) {
 
@@ -66,7 +71,8 @@ xrx.serialize.tagNs_ = function(func, nsPrefix, localName, namespaceUri) {
 
 
 /**
- *
+ * Serialize a start-tag token.
+ * @return {string} The start-tag token string.
  */
 xrx.serialize.startTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
@@ -78,7 +84,8 @@ xrx.serialize.startTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 /**
- *
+ * Serialize a start-tag token with namespace.
+ * @return {string} The start-tag token string.
  */
 xrx.serialize.startTagNs = function(nsPrefix, localName, namespaceUri) {
   return xrx.serialize.tagNs_(xrx.serialize.startTag, nsPrefix, localName,
@@ -88,7 +95,8 @@ xrx.serialize.startTagNs = function(nsPrefix, localName, namespaceUri) {
 
 
 /**
- *
+ * Serialize a end-tag token.
+ * @return {string} The end-tag token string.
  */
 xrx.serialize.endTag = function(qName) {
   return '</' + qName + '>';
@@ -97,12 +105,19 @@ xrx.serialize.endTag = function(qName) {
 
 
 /**
- *
+ * Serialize a end-tag token with namespace.
+ * @return {string} The end-tag token string.
  */
 xrx.serialize.endTagNs = function(nsPrefix, localName, namespaceUri) {
-  var prefix = !nsPrefix ? 'xmlns' : nsPrefix;
-  return xrx.serialize.tagNs_(xrx.serialize.endTag, prefix, localName,
-      namespaceUri);
+
+  if (nsPrefix === undefined || nsPrefix === 'xmlns') {
+
+    return xrx.serialize.endTag(localName);
+  } else {
+    var colonIndex = nsPrefix.indexOf(':');
+
+    return xrx.serialize.endTag(nsPrefix.substr(colonIndex + 1) + ':' + localName);
+  }
 };
 
 
@@ -120,7 +135,8 @@ xrx.serialize.startEmptyTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 /**
- * 
+ * Serialize a empty-tag token.
+ * @return {string} The empty-tag token string.
  */
 xrx.serialize.emptyTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
@@ -132,7 +148,8 @@ xrx.serialize.emptyTag = function(qName, opt_namespaces, opt_attributes) {
 
 
 /**
- *
+ * Serialize a empty-tag token with namespace.
+ * @return {string} The empty-tag token string.
  */
 xrx.serialize.emptyTagNs = function(nsPrefix, localName, namespaceUri) {
   return xrx.serialize.tagNs_(xrx.serialize.emptyTag, nsPrefix, localName,
@@ -142,7 +159,8 @@ xrx.serialize.emptyTagNs = function(nsPrefix, localName, namespaceUri) {
 
 
 /**
- *
+ * Serialize a namespace token.
+ * @return {string} The namespace token string.
  */
 xrx.serialize.namespace = function(prefix, uri) {
   return ' ' + prefix + '="' + uri + '"';
@@ -151,7 +169,8 @@ xrx.serialize.namespace = function(prefix, uri) {
 
 
 /**
- *
+ * Serialize a XML document with indentation.
+ * @return {string} The indented XML document.
  */
 xrx.serialize.indent = function(xml, indent) {
   var stream = new xrx.stream(xml);
@@ -200,3 +219,4 @@ xrx.serialize.indent = function(xml, indent) {
   
   return output;
 };
+
