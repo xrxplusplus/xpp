@@ -139,7 +139,7 @@ xrx.update.insertEmptyTag = function(instance, target, offset, localName,
  */
 xrx.update.insertStartEndTag = function(instance, target1, target2, offset1, offset2,
     localName, opt_namespaceUri) {
-  var diff1;
+  var diffs;
   var diff2;
 
   if (!opt_namespaceUri) {
@@ -159,6 +159,8 @@ xrx.update.insertStartEndTag = function(instance, target1, target2, offset1, off
 
     //TODO: add namespace declaration to index
   }
+
+  return [diff1, diff2];
 };
 
 
@@ -237,10 +239,12 @@ xrx.update.removeEmptyTag = function(instance, token) {
  * @param {!xrx.token.EndTag} token2 The end-tag to be removed.
  */
 xrx.update.removeStartEndTag = function(instance, token1, token2) {
-  var diff1 = xrx.update.remove_(instance, token2.offset(), token2.length());
-  var diff2 = xrx.update.remove_(instance, token1.offset(), token1.length());
+  var diff2 = xrx.update.remove_(instance, token2.offset(), token2.length());
+  var diff1 = xrx.update.remove_(instance, token1.offset(), token1.length());
 
   //TODO: remove namespace declaration from index
+
+  return [diff1, diff2];
 };
 
 

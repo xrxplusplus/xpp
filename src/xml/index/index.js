@@ -184,6 +184,7 @@ xrx.index.prototype.getRowByTag = function(token, opt_start) {
 xrx.index.prototype.getLabel = function(key) {
   var row = this.rows_[key];
   var next;
+  var last;
   var label = [];
 
   label.unshift(row.getPosition());
@@ -193,7 +194,8 @@ xrx.index.prototype.getLabel = function(key) {
     next = row.getParent();
     row = this.rows_[next];
     label.unshift(row.getPosition());
-    if (next === 0) break;
+    if (next === 0 || next === last) break;
+    last = next; // to avoid endless loop
   }
 
   return new xrx.label(label);
@@ -447,8 +449,12 @@ xrx.index.prototype.insertRowAfter = function(key, row) {
 /**
  * Removes a row indicated by a key.
  * @param {!integer} key The key.
+ * @param {!integer} opt_num The number of rows to be removed.
  * @param {!row} row The row.
  */
-xrx.index.prototype.removeRow = function(key) {
-  this.rows_.splice(key, 1);
+xrx.index.prototype.removeRow = function(key, opt_num) {
+  var num = opt_num || 1;
+
+  this.rows_.splice(key, num);
 };
+
