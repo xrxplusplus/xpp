@@ -7,12 +7,14 @@ goog.provide('xrx.node.TextB');
 
 
 
+goog.require('xrx.label');
 goog.require('xrx.node');
 goog.require('xrx.nodeB');
 goog.require('xrx.node.DocumentB');
 goog.require('xrx.node.ElementB');
 goog.require('xrx.node.Text');
 goog.require('xrx.token');
+goog.require('xrx.token.NotTag');
 goog.require('xrx.xpath.NodeSet');
 
 
@@ -33,8 +35,9 @@ goog.inherits(xrx.node.TextB, xrx.nodeB);
 
 
 xrx.node.TextB.prototype.getToken = function() {
-  // TODO: implement this.
-  return undefined;
+
+  return new xrx.token.NotTag(this.getLabel(), this.getOffset(),
+      this.getLength());
 };
 
 

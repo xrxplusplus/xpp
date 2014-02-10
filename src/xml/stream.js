@@ -7,6 +7,7 @@ goog.provide('xrx.stream');
 
 
 
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('xrx.location');
 goog.require('xrx.reader');
@@ -183,30 +184,6 @@ xrx.stream.prototype.hasFeature = function(feature) {
 
 
 /**
- * Enumeration of internal states used by the streamer.
- * @enum
- * @private
- */
-xrx.stream.State_ = {
-  XML_START: 1,
-  XML_END: 2,
-  START_TAG: 3,
-  END_TAG: 4,
-  EMPTY_TAG: 5,
-  NOT_TAG: 6,
-  LT_SEEN: 7,
-  GT_SEEN: 8,
-  WS_SEEN: 9,
-  TAG_START: 10,
-  TAG_NAME: 11,
-  TOK_END: 12,
-  ATTR_NAME: 13,
-  ATTR_VAL: 14
-};
-
-
-
-/**
  * Returns or sets the content of the current stream reader.
  * 
  * @param opt_xml Well-formed, normalized UTF-8 XML string.
@@ -285,8 +262,8 @@ xrx.stream.prototype.features = function(token, offset, length) {
 
       if ((token === xrx.token.START_TAG || token === xrx.token.EMPTY_TAG)) {
         var atts = stream.secondaries(tag);
-        for (var pos in atts) {
-          var att = atts[pos];
+        goog.object.forEach(atts, function(att, pos, atts) {
+
           if (goog.string.startsWith(att.xml(tag), 'xmlns:') ||
               goog.string.startsWith(att.xml(tag), 'xmlns=')) {
 
@@ -324,10 +301,34 @@ xrx.stream.prototype.features = function(token, offset, length) {
               stream.eventAttrValue(attrValue.offset + offset, attrValue.length);
             }
           }
-        }
+        });
       }
     }
   }
+};
+
+
+
+/**
+ * Enumeration of internal states used by the streamer.
+ * @enum
+ * @private
+ */
+xrx.stream.State_ = {
+  XML_START: 'XML_START',
+  XML_END: 'XML_END',
+  START_TAG: 'START_TAG',
+  END_TAG: 'END_TAG',
+  EMPTY_TAG: 'EMPTY_TAG',
+  NOT_TAG: 'NOT_TAG',
+  LT_SEEN: 'LT_SEEN',
+  GT_SEEN: 'GT_SEEN',
+  WS_SEEN: 'WS_SEEN',
+  TAG_START: 'TAG_START',
+  TAG_NAME: 'TAG_NAME',
+  TOK_END: 'TOK_END',
+  ATTR_NAME: 'ATTR_NAME',
+  ATTR_VAL: 'ATTR_VAL'
 };
 
 
@@ -350,39 +351,29 @@ xrx.stream.prototype.forward = function(opt_offset) {
   !opt_offset ? reader.first() : reader.set(opt_offset);
   this.stopped_ = false;
 
-  for (;;) {
-
-    switch (state) {
-    // start parsing
-    case xrx.stream.State_.XML_START:
+  var process = {
+    'XML_START': function() {
       reader.get() === '<' ? state = xrx.stream.State_.LT_SEEN :
-          state = xrx.stream.State_.NOT_TAG;
-      break;
-    // end parsing
-    case xrx.stream.State_.XML_END:
-      break;
-    // parse start tag or empty tag
-    case xrx.stream.State_.START_TAG:
+        state = xrx.stream.State_.NOT_TAG;
+    },
+    'XML_END': function() {},
+    'START_TAG': function() {
       offset = reader.pos();
       reader.forwardInclusive('>');
       state = xrx.stream.State_.NOT_TAG;
       reader.peek(-2) === '/' ? token = xrx.token.EMPTY_TAG : 
           token = xrx.token.START_TAG;
       length = reader.pos() - offset;
-      break;
-    // parse end tag
-    case xrx.stream.State_.END_TAG:
+    },
+    'END_TAG': function() {
       offset = reader.pos();
       reader.forwardInclusive('>');
       state = xrx.stream.State_.NOT_TAG;
       token = xrx.token.END_TAG;
       length = reader.pos() - offset;
-      break;
-    // empty tag (never used)
-    case xrx.stream.State_.EMPTY_TAG:
-      break;
-    // parse token that is not a tag
-    case xrx.stream.State_.NOT_TAG:
+    },
+    'EMPTY_TAG': function() {},
+    'NOT_TAG': function(stream) {
       if (!reader.get()) {
         state = xrx.stream.State_.XML_END;
       } else if (reader.peek() === '<') {
@@ -392,32 +383,31 @@ xrx.stream.prototype.forward = function(opt_offset) {
         state = xrx.stream.State_.LT_SEEN;
       }
       // if we have parsed the not-tag, the row is complete.
-      switch(token) {
-      case xrx.token.START_TAG:
-        this.rowStartTag(offset, length, reader.pos() - offset);
-        break;
-      case xrx.token.END_TAG:
-        this.rowEndTag(offset, length, reader.pos() - offset);
-        break;
-      case xrx.token.EMPTY_TAG:
-        this.rowEmptyTag(offset, length, reader.pos() - offset);
-        break;
-      default:
-        break;
-      };
-      this.features(token, offset, length);
-      break;
-    // '<' seen: start tag or empty tag or end tag?
-    case xrx.stream.State_.LT_SEEN:
+      if (token === xrx.token.START_TAG) {
+        stream.rowStartTag(offset, length, reader.pos() - offset);
+      } else if (token === xrx.token.END_TAG) {
+        stream.rowEndTag(offset, length, reader.pos() - offset);
+      } else if (token === xrx.token.EMPTY_TAG) {
+        stream.rowEmptyTag(offset, length, reader.pos() - offset);
+      } else {}
+
+      stream.features(token, offset, length);
+    },
+    'LT_SEEN': function() {
       if (reader.peek(1) === '/') {
         state = xrx.stream.State_.END_TAG;
       } else {
         state = xrx.stream.State_.START_TAG;
       }
-      break;
-    default:
+    }
+  };
+
+  for (;;) {
+
+    if (process[state]) { 
+      process[state](this);
+    } else {
       throw Error('Invalid parser state.');
-      break;
     }
 
     if (state === xrx.stream.State_.XML_END || this.stopped_) {
@@ -448,74 +438,68 @@ xrx.stream.prototype.backward = function(opt_offset) {
   !opt_offset ? reader.last() : reader.set(opt_offset);
   this.stopped_ = false;
 
-  for (;;) {
-
-    switch (state) {
-    // start parsing
-    case xrx.stream.State_.XML_START:
+  var process = {
+    'XML_START': function() {
       if (reader.get() === '<') reader.previous();
       reader.get() === '>' ? state = xrx.stream.State_.GT_SEEN : 
           state = xrx.stream.State_.NOT_TAG;
-      break;
-    // end parsing
-    case xrx.stream.State_.XML_END:
-      break;
-    // start tag (never used)
-    case xrx.stream.State_.START_TAG:
-      break;
-    // parse end tag or start tag
-    case xrx.stream.State_.END_TAG:
+    },
+    'XML_END': function() {},
+    'START_TAG': function() {},
+    'END_TAG': function(stream) {
       offset = reader.pos();
       reader.backwardInclusive('<');
       state = xrx.stream.State_.NOT_TAG;
       if (reader.peek(1) !== '/') {
         var off = reader.pos();
         var len1 = offset - reader.pos() + 1;
-        this.rowStartTag(off, len1);
-        this.features(xrx.token.START_TAG, off, len1);
+        stream.rowStartTag(off, len1);
+        stream.features(xrx.token.START_TAG, off, len1);
       } else {
-        this.rowEndTag(reader.pos(), offset - reader.pos() + 1);
-        this.features(xrx.token.END_TAG, reader.pos(), offset - reader.pos() + 1);
+        stream.rowEndTag(reader.pos(), offset - reader.pos() + 1);
+        stream.features(xrx.token.END_TAG, reader.pos(), offset - reader.pos() + 1);
       }
       reader.previous();
       if (reader.finished()) state = xrx.stream.State_.XML_END;
-      break;
-    // parse empty tag
-    case xrx.stream.State_.EMPTY_TAG:
+    },
+    'EMPTY_TAG': function(stream) {
       offset = reader.pos();
       reader.backwardInclusive('<');
       state = xrx.stream.State_.NOT_TAG;
       var off = reader.pos();
       var len1 = offset - reader.pos() + 1;
-      this.rowEmptyTag(off, len1);
-      this.features(xrx.token.EMPTY_TAG, off, len1);
+      stream.rowEmptyTag(off, len1);
+      stream.features(xrx.token.EMPTY_TAG, off, len1);
       reader.previous();
       if (reader.finished()) state = xrx.stream.State_.XML_END;
-      break;
-    // parse token that is not a tag
-    case xrx.stream.State_.NOT_TAG:
+    },
+    'NOT_TAG': function(stream) {
       if (reader.get() === '>') {
         state = xrx.stream.State_.GT_SEEN;
       } else {
         offset = reader.pos();
         reader.backwardExclusive('>');
-        //this.tokenNotTag.call(this, reader.pos(), offset - reader.pos() + 1);
+        //stream.tokenNotTag.call(this, reader.pos(), offset - reader.pos() + 1);
         reader.previous();
         state = xrx.stream.State_.GT_SEEN;
       }
       if (reader.finished()) state = xrx.stream.State_.XML_END;
-      break;
-    // '>' seen: end tag or start tag or empty tag?
-    case xrx.stream.State_.GT_SEEN:
+    },
+    'GT_SEEN': function() {
       if (reader.peek(-1) === '/') {
         state = xrx.stream.State_.EMPTY_TAG;
       } else {
         state = xrx.stream.State_.END_TAG;
       }
-      break;
-    default:
+    }
+  };
+
+  for (;;) {
+
+    if (process[state]) { 
+      process[state](this);
+    } else {
       throw Error('Invalid parser state.');
-      break;
     }
 
     if (state === xrx.stream.State_.XML_END || this.stopped_) {
@@ -542,31 +526,35 @@ xrx.stream.prototype.tagName = function(xml, opt_reader) {
   var reader = opt_reader || new xrx.reader(xml);
 
   this.stopped_ = false;
-  
-  for (;;) {
-    
-    switch(state) {
-    case xrx.stream.State_.TAG_START:
-      if (reader.next() !== '<') {
-        throw Error('< is expected.');
-      } else {
+
+  var process = {
+    'TAG_START': function() {
+      if (reader.next() === '<') {
         state = xrx.stream.State_.TAG_NAME;
         reader.get() === '/' ? reader.next() : null;
         offset = reader.pos();
+      } else {
+        throw Error('< is expected.');
       }
-      break;
-    case xrx.stream.State_.TAG_NAME:
-      if (reader.next().match(/( |\/|>)/g)) {
+    },
+    'TAG_NAME': function() {
+      var next = reader.next();
+      if (next === ' ' || next === '/' || next === '>') {
         state = xrx.stream.State_.TOK_END;
         reader.backward();
         length = reader.pos() - offset - 1;
       }
-      break;
-    default:
-      throw Error('Invalid parser state.');
-      break;
     }
-    
+  };
+  
+  for (;;) {
+
+    if (process[state]) { 
+      process[state](this);
+    } else {
+      throw Error('Invalid parser state.');
+    }
+
     if (state === xrx.stream.State_.TOK_END) break; 
   }
 
@@ -705,11 +693,8 @@ xrx.stream.prototype.attr_ = function(xml, pos, tokenType, opt_offset, opt_reade
   var found = 0;
   var quote;
 
-  
-  for (;;) {
-
-    switch(state) {
-    case xrx.stream.State_.ATTR_NAME:
+  var process = {
+    'ATTR_NAME': function() {
       found += 1;
       tokenType === xrx.token.ATTRIBUTE || tokenType === xrx.token.ATTR_NAME ? 
           offset = reader.pos() : null;
@@ -723,8 +708,8 @@ xrx.stream.prototype.attr_ = function(xml, pos, tokenType, opt_offset, opt_reade
         tokenType === xrx.token.ATTR_VALUE ? offset = reader.pos() : null;
         state = xrx.stream.State_.ATTR_VAL;
       }
-      break;
-    case xrx.stream.State_.ATTR_VAL:
+    },
+    'ATTR_VAL': function() {
       reader.forwardInclusive(quote);
       if(found === pos) {
         location.offset = offset;
@@ -736,17 +721,23 @@ xrx.stream.prototype.attr_ = function(xml, pos, tokenType, opt_offset, opt_reade
         state = xrx.stream.State_.TOK_END;
       } else {
         reader.next();
-        if(!reader.peek(-1).match(/(\/|>)/g)) {
-          state = xrx.stream.State_.ATTR_NAME;
-        } else {
+        var lst = reader.peek(-1);
+        if(lst === '/' || lst === '>') {
           state = xrx.stream.State_.TOK_END;
           location = null;
+        } else {
+          state = xrx.stream.State_.ATTR_NAME;
         }
       }
-      break;
-    default:
+    }
+  };
+
+  for (;;) {
+
+    if (process[state]) { 
+      process[state](this);
+    } else {
       throw Error('Invalid parser state.');
-      break;
     }
     
     if (state === xrx.stream.State_.TOK_END) break;

@@ -131,7 +131,7 @@ xrx.richxml.prototype.options = {
 
 
 xrx.richxml.prototype.refresh = function() {
-  var visualXml = this.transformXml_(this.getNode().xml());
+  var visualXml = this.transformXml_(this.getNode().getXml());
   this.codemirror_.setValue(visualXml);
 };
 

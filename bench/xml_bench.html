@@ -39,8 +39,10 @@
 
 <h2>xrx.reader</h2>
 <div id="readerTable"></div>
-<h2>xrx.traverse</h2>
+<h2>xrx.traverse (features off)</h2>
 <div id="traverseTable"></div>
+<h2>xrx.traverse (featrues on)</h2>
+<div id="traverseFeaturesTable"></div>
 <h2>xrx.index</h2>
 <div id="indexTable"></div>
 <h2>jssaxparser</h2>
@@ -56,6 +58,9 @@ var readerTable = new goog.testing.PerformanceTable(
 
 var traverseTable = new goog.testing.PerformanceTable(
     goog.dom.getElement('traverseTable'));
+
+var traverseFeaturesTable = new goog.testing.PerformanceTable(
+    goog.dom.getElement('traverseFeaturesTable'));
 
 var indexTable = new goog.testing.PerformanceTable(
     goog.dom.getElement('indexTable'));
@@ -75,7 +80,6 @@ var doRequest = function(name, file, func, table) {
 
   goog.events.listen(request, 'complete', function() {
     xml = request.getResponseText();
-    console.log(xml.length);
     parse = new xrx.parse();
     xml = parse.normalize(xml);
 
@@ -150,26 +154,79 @@ function test02traverse() {
     traverse.backward();
   };
   
-  doRequest('xrx.traverse.forward :: hamlet.xml (384kb)',
+  doRequest('xrx.traverse.forward (with secondary tokens off) :: hamlet.xml (384kb)',
       '../data/hamlet.xml.txt', traverseForward, traverseTable);
   
-  doRequest('xrx.traverse.backward :: hamlet.xml  (384kb)',
+  doRequest('xrx.traverse.backward (with secondary tokens off) :: hamlet.xml  (384kb)',
       '../data/hamlet.xml.txt', traverseBackward, traverseTable);
   
-  doRequest('xrx.traverse.forward :: CSGIII.xml (3MB)',
+  doRequest('xrx.traverse.forward (with secondary tokens off) :: CSGIII.xml (3MB)',
       '../data/CSGIII.xml.txt', traverseForward, traverseTable);
   
-  doRequest('xrx.traverse.backward :: CSGIII.xml (3MB)',
+  doRequest('xrx.traverse.backward (with secondary tokens off) :: CSGIII.xml (3MB)',
       '../data/CSGIII.xml.txt', traverseBackward, traverseTable);
   
-  doRequest('xrx.traverse.forward :: 6MB.xml (5.7 MB)',
+  doRequest('xrx.traverse.forward (with secondary tokens off) :: 6MB.xml (5.7 MB)',
       '../data/6MB.xml.txt', traverseForward, traverseTable);
   
-  doRequest('xrx.traverse.backward :: 6MB.xml (5.7 MB)',
+  doRequest('xrx.traverse.backward (with secondary tokens off) :: 6MB.xml (5.7 MB)',
       '../data/6MB.xml.txt', traverseBackward, traverseTable);
 };
 
-function test03index() {
+function test03traverseFeatures() {
+
+  function traverseForward(xml) {
+    var traverse = new xrx.traverse(xml);
+    traverse.setFeatures(true);
+    traverse.rowStartTag = function() {};
+    traverse.rowEmptyTag = function() {};
+    traverse.rowEndTag = function() {};
+    traverse.eventTagName = function() {};
+    traverse.eventAttribute = function() {};
+    traverse.eventAttrName = function() {};
+    traverse.eventAttrValue = function() {};
+    traverse.eventNamespace = function() {};
+    traverse.eventNsPrefix = function() {};
+    traverse.eventNsUri = function() {};
+    traverse.forward();
+  };
+
+  function traverseBackward(xml) {
+    var traverse = new xrx.traverse(xml);
+    traverse.setFeatures(true);
+    traverse.rowStartTag = function() {};
+    traverse.rowEmptyTag = function() {};
+    traverse.rowEndTag = function() {};
+    traverse.eventTagName = function() {};
+    traverse.eventAttribute = function() {};
+    traverse.eventAttrName = function() {};
+    traverse.eventAttrValue = function() {};
+    traverse.eventNamespace = function() {};
+    traverse.eventNsPrefix = function() {};
+    traverse.eventNsUri = function() {};
+    traverse.backward();
+  };
+  
+  doRequest('xrx.traverse.forward (with secondary tokens on) :: hamlet.xml (384kb)',
+      '../data/hamlet.xml.txt', traverseForward, traverseFeaturesTable);
+  
+  doRequest('xrx.traverse.backward (with secondary tokens on) :: hamlet.xml  (384kb)',
+      '../data/hamlet.xml.txt', traverseBackward, traverseFeaturesTable);
+  
+  doRequest('xrx.traverse.forward (with secondary tokens on) :: CSGIII.xml (3MB)',
+      '../data/CSGIII.xml.txt', traverseForward, traverseFeaturesTable);
+  
+  doRequest('xrx.traverse.backward (with secondary tokens on) :: CSGIII.xml (3MB)',
+      '../data/CSGIII.xml.txt', traverseBackward, traverseFeaturesTable);
+  
+  doRequest('xrx.traverse.forward (with secondary tokens on) :: 6MB.xml (5.7 MB)',
+      '../data/6MB.xml.txt', traverseForward, traverseFeaturesTable);
+  
+  doRequest('xrx.traverse.backward (with secondary tokens on) :: 6MB.xml (5.7 MB)',
+      '../data/6MB.xml.txt', traverseBackward, traverseFeaturesTable);
+};
+
+function test04index() {
 
   var index = function(xml) {
     return new xrx.index(xml);
@@ -185,7 +242,7 @@ function test03index() {
       '../data/6MB.xml.txt', index, indexTable);
 };
 
-function test04Sax() {
+function test05Sax() {
 
   var parse = function(xml) {
     var contentHandler = new DefaultHandler2();
