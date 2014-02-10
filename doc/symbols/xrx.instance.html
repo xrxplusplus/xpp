@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -325,7 +333,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_model_instance.js.html">instance.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_mvc_model_instance.js.html">instance.js</a>.
 				
 			</p>
 
@@ -344,7 +352,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/xrx.instance.html#constructor">xrx.instance</a></b>(element)
+								<b><a href="../symbols/xrx.instance.html#constructor">xrx.instance</a></b>(element, callback)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -373,15 +381,6 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#document">document</a></b>(id)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getDataInline">getDataInline</a></b>()
 								</div>
 								<div class="description"></div>
@@ -391,7 +390,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getDataRemote">getDataRemote</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getDataRemote">getDataRemote</a></b>(callback)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -400,7 +399,52 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#recalculate">recalculate</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getDocument">getDocument</a></b>(id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getIndex">getIndex</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getPilot">getPilot</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#getStream">getStream</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#recalculate">recalculate</a></b>(callback)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.instance.html#update">update</a></b>(offset, length, xml)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -432,7 +476,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>xrx.instance</b>(element)
+						<b>xrx.instance</b>(element, callback)
 				</div>
 				
 				<div class="description">
@@ -449,6 +493,12 @@ ul.inheritsList
 						
 							<dt>
 								 <b>element</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								 <b>callback</b>
 								
 							</dt>
 								<dd></dd>
@@ -474,11 +524,72 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="document"> </a>
+					<a name="getDataInline"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getDataInline</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getDataRemote"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getDataRemote</b>(callback)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getDocument"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{!<a href="../symbols/xrx.node.Document.html">xrx.node.Document</a>}</span>
-					<b>document</b>(id)
+					<b>getDocument</b>(id)
 					
 					</div>
 					<div class="description">
@@ -517,11 +628,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getDataInline"> </a>
+					<a name="getIndex"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>getDataInline</b>()
+					<span class="light">{!<a href="../symbols/xrx.index.html">xrx.index</a>}</span>
+					<b>getIndex</b>()
 					
 					</div>
 					<div class="description">
@@ -536,17 +647,24 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.index.html">xrx.index</a>}</span> </dd>
+							
+							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name="getDataRemote"> </a>
+					<a name="getPilot"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>getDataRemote</b>()
+					<span class="light">{<a href="../symbols/xrx.pilot.html">xrx.pilot</a>}</span>
+					<b>getPilot</b>()
 					
 					</div>
 					<div class="description">
@@ -561,6 +679,45 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/xrx.pilot.html">xrx.pilot</a>}</span> The pilot.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getStream"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/xrx.stream.html">xrx.stream</a>}</span>
+					<b>getStream</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/xrx.stream.html">xrx.stream</a>}</span> The stream.</dd>
+							
+							</dl>
 						
 						
 						
@@ -571,7 +728,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>recalculate</b>()
+					<b>recalculate</b>(callback)
 					
 					</div>
 					<div class="description">
@@ -582,6 +739,65 @@ ul.inheritsList
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="update"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>update</b>(offset, length, xml)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>offset</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>length</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>xml</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -647,7 +863,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:08 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

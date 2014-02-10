@@ -63,12 +63,12 @@ function test03sequentialModelUpdate() {
   // third update
   var expected3 = '<data>testtttttttt<a/><b>Updated!</b><c/></data>';
   in2.setValue('testtttttttt');
-  //assertEquals(expected3, xrx.model.getComponent('i1').xml());
+  assertEquals(expected3, xrx.model.getComponent('i1').xml());
 
   // fourth update
   var expected4 = '<data>testtttttttt<a/><b>OK!</b><c/></data>';
   in1.setValue('OK!');
-  //assertEquals(expected4, xrx.model.getComponent('i1').xml());
+  assertEquals(expected4, xrx.model.getComponent('i1').xml());
 };
 
 function test04synchronizeSameNodeInputs() {

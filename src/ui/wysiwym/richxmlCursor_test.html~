@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRX++ Unit Tests - xrx.ui.wysiwym.cursor</title>
+<script src='../../../lib/codemirror/lib/codemirror.js'></script>
+<link rel="stylesheet" href="../../../lib/codemirror/lib/codemirror.css"/>
+<script src='../../../lib/closure-library/closure/goog/base.js'></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/AttributesImpl.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/LocatorImpls.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/DefaultHandlers.js"></script>
+<script src='../../deps.js'></script>
+<script type="text/javascript">
+  goog.require('goog.dom');
+  goog.require('goog.testing.jsunit');
+  goog.require('xrx');
+  goog.require('xrx.view');
+  goog.require('xrx.ui.wysiwym.cursor');
+</script>
+<link rel="stylesheet" href="default.css"/>
+<style>
+textarea, .CodeMirror {
+  display: nnone;
+}
+</style>
+</head>
+<body>
+
+<textarea id="x1" class="xrx-richxml" data-xrx-bind="b1"></textarea>
+<textarea id="x2" class="xrx-richxml" data-xrx-bind="b1"></textarea>
+<textarea id="x3" class="xrx-richxml" data-xrx-bind="b1"></textarea>
+<textarea id="x4" class="xrx-richxml" data-xrx-bind="b1"></textarea>
+<div id="i1" class="xrx-instance">&lt;data&gt;1&lt;a/&gt;2&lt;b&gt;3&lt;/b&gt;4&lt;c/&gt;5&lt;/data&gt;</div>
+<div id="b1" class="xrx-bind" data-xrx-ref="xrx:instance('i1')/data"></div>
+
+<script type="text/javascript">
+
+function test01CursorCaret() {
+  var richxml = xrx.view.getComponent('x1');
+  richxml.setFocus();
+  richxml.codemirror_.setCursor({line: 0, ch: 6});
+  var cursor = xrx.ui.wysiwym.cursor;
+
+  assertEquals(6, cursor.leftIndex(richxml));
+  assertEquals(null, cursor.rightIndex(richxml));
+  assertEquals(0, cursor.leftPosition(richxml).line);
+  assertEquals(6, cursor.leftPosition(richxml).ch);
+  assertEquals(null, cursor.rightPosition(richxml));
+  assertEquals(unescape('%AB'), cursor.leftTokenInside(richxml).string);
+  assertEquals('3', cursor.leftTokenOutside(richxml).string);
+  assertEquals(false, cursor.leftAtStartPosition(richxml));
+  assertEquals(false, cursor.leftAtEndPosition(richxml));
+};
+
+function test02CaretFirstLast() {
+  var richxml = xrx.view.getComponent('x2');
+  richxml.setFocus();
+  var cursor = xrx.wysiwym.cursor;
+
+  // cursor caret at start position
+  richxml.codemirror_.setCursor({line: -1, ch: -1});
+  assertEquals(true, cursor.leftAtStartPosition(richxml));
+
+  // cursor caret at end position
+  richxml.codemirror_.setCursor({line: 9999, ch: 9999});
+  assertEquals(true, cursor.leftAtEndPosition(richxml));
+};
+
+function test03CursorSelection() {
+  var richxml = xrx.view.getComponent('x3');
+  richxml.setFocus();
+  richxml.codemirror_.setSelection({line: 0, ch: 3}, {line: 0, ch: 8});
+  var cursor = xrx.wysiwym.cursor;
+
+  assertEquals(3, cursor.leftIndex(richxml));
+  assertEquals(8, cursor.rightIndex(richxml));
+  assertEquals(0, cursor.rightPosition(richxml).line);
+  assertEquals(8, cursor.rightPosition(richxml).ch);
+  assertEquals('4', cursor.rightTokenInside(richxml).string);
+  assertEquals(unescape('%D7'), cursor.rightTokenOutside(richxml).string);
+  assertEquals(false, cursor.rightAtStartPosition(richxml));
+  assertEquals(false, cursor.rightAtEndPosition(richxml));
+};
+
+function test04SelectionFirstLast() {
+  var richxml = xrx.view.getComponent('x4');
+  richxml.setFocus();
+  var cursor = xrx.wysiwym.cursor;
+
+  // right at start position
+  richxml.codemirror_.setSelection({line: 0, ch: 0}, {line: 0, ch: 0});
+  assertEquals(null, cursor.rightAtStartPosition(richxml));
+
+  richxml.codemirror_.setSelection({line: 0, ch: 0}, {line: 0, ch: 1});
+  assertEquals(false, cursor.rightAtStartPosition(richxml));
+
+  // cursor caret at end position
+  richxml.codemirror_.setSelection({line: -1, ch: -1}, {line: 9999, ch: 9999});
+  assertEquals(true, cursor.rightAtEndPosition(richxml));
+};
+
+</script>
+<script type="text/javascript">
+  xrx.install();
+</script>
+</body>
+</html>

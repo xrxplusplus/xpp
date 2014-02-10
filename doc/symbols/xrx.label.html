@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -400,9 +408,39 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#isAfter">isAfter</a></b>(label)
+								</div>
+								<div class="description">Tests whether the label appears after another label
+in document order.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#isBefore">isBefore</a></b>(label)
 								</div>
-								<div class="description"></div>
+								<div class="description">Tests whether the label appears before another label
+in document order.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#isChildOf">isChildOf</a></b>(label)
+								</div>
+								<div class="description">Tests whether the label is the child label of another
+label.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#isRoot">isRoot</a></b>()
+								</div>
+								<div class="description">Tests whether a label is the root label.</div>
 							</td>
 						</tr>
 					
@@ -454,9 +492,28 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#pop">pop</a></b>(value)
+								</div>
+								<div class="description">Removes the last item of the label array and
+return the value of the item.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#precedingSibling">precedingSibling</a></b>()
 								</div>
 								<div class="description">Mutates the label into its preceding sibling label.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.label.html#push">push</a></b>(value)
+								</div>
+								<div class="description">Adds a value to the end of the label array.</div>
 							</td>
 						</tr>
 					
@@ -635,15 +692,16 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="isBefore"> </a>
+					<a name="isAfter"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>isBefore</b>(label)
+					<span class="light">{!boolean}</span>
+					<b>isAfter</b>(label)
 					
 					</div>
 					<div class="description">
-						
+						Tests whether the label appears after another label
+in document order.
 						
 						
 					</div>
@@ -665,6 +723,133 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!boolean}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="isBefore"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{!boolean}</span>
+					<b>isBefore</b>(label)
+					
+					</div>
+					<div class="description">
+						Tests whether the label appears before another label
+in document order.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>label</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!boolean}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="isChildOf"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{!boolean}</span>
+					<b>isChildOf</b>(label)
+					
+					</div>
+					<div class="description">
+						Tests whether the label is the child label of another
+label.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>label</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!boolean}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="isRoot"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{!boolean}</span>
+					<b>isRoot</b>()
+					
+					</div>
+					<div class="description">
+						Tests whether a label is the root label.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!boolean}</span> </dd>
+							
+							</dl>
 						
 						
 						
@@ -829,6 +1014,50 @@ to the nesting depth of a node or token in the XML tree.
 
 					<hr />
 				
+					<a name="pop"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{!number}</span>
+					<b>pop</b>(value)
+					
+					</div>
+					<div class="description">
+						Removes the last item of the label array and
+return the value of the item.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>value</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{!number}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="precedingSibling"> </a>
 					<div class="fixedFont">
 					
@@ -844,6 +1073,42 @@ to the nesting depth of a node or token in the XML tree.
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="push"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>push</b>(value)
+					
+					</div>
+					<div class="description">
+						Adds a value to the end of the label array.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>value</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -977,7 +1242,7 @@ to the nesting depth of a node or token in the XML tree.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:09 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

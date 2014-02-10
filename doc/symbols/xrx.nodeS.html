@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -325,7 +333,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_xpath_node_nodeS.js.html">nodeS.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_xml_node_nodeS.js.html">nodeS.js</a>.
 				
 			</p>
 
@@ -344,7 +352,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/xrx.nodeS.html#constructor">xrx.nodeS</a></b>(type, token, instance)
+								<b><a href="../symbols/xrx.nodeS.html#constructor">xrx.nodeS</a></b>(type, instance, token)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -355,17 +363,14 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
-
-<!-- ============================== methods summary ======================== -->
-			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class xrx.nodeS.">
-					<caption>Method Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class xrx.nodeS.">
+					<caption>Field Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -373,7 +378,8 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#expandedName">expandedName</a></b>()
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.nodeS.html#getLabel">getLabel</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -382,7 +388,8 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeAncestor">getNodeAncestor</a></b>(test)
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.nodeS.html#getLength">getLength</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -391,7 +398,8 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeAttribute">getNodeAttribute</a></b>(test)
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.nodeS.html#getOffset">getOffset</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -400,108 +408,8 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeChild">getNodeChild</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeDescendant">getNodeDescendant</a></b>(test)
-								</div>
-								<div class="description">Returns the descendants of a node.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeFollowing">getNodeFollowing</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeFollowingSibling">getNodeFollowingSibling</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodeParent">getNodeParent</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodePreceding">getNodePreceding</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#getNodePrecedingSibling">getNodePrecedingSibling</a></b>(test)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#isAfter">isAfter</a></b>(node)
-								</div>
-								<div class="description">Indicates whether a node appears after another node
-in document order.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#isBefore">isBefore</a></b>(node)
-								</div>
-								<div class="description">Indicates whether a node appears before another node
-in document order.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#isSameAs">isSameAs</a></b>(node)
-								</div>
-								<div class="description">Indicates whether two nodes are the same.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.nodeS.html#namespaceUri">namespaceUri</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">xrx.nodeS.<b><a href="../symbols/xrx.nodeS.html#.sharedFunctions">sharedFunctions</a></b>(nodeImpl)
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.nodeS.html#getToken">getToken</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -512,6 +420,9 @@ in document order.</div>
 				
 				
 				
+			
+
+<!-- ============================== methods summary ======================== -->
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -524,7 +435,7 @@ in document order.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>xrx.nodeS</b>(type, token, instance)
+						<b>xrx.nodeS</b>(type, instance, token)
 				</div>
 				
 				<div class="description">
@@ -546,13 +457,13 @@ in document order.</div>
 								<dd></dd>
 						
 							<dt>
-								 <b>token</b>
+								 <b>instance</b>
 								
 							</dt>
 								<dd></dd>
 						
 							<dt>
-								 <b>instance</b>
+								 <b>token</b>
 								
 							</dt>
 								<dd></dd>
@@ -571,18 +482,15 @@ in document order.</div>
 
 <!-- ============================== field details ========================== -->		
 			
-
-<!-- ============================== method details ========================= -->		
-			
 				<div class="sectionTitle">
-					Method Detail
+					Field Detail
 				</div>
 				
-					<a name="expandedName"> </a>
+					<a name="getLabel"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>expandedName</b>()
+					<b>getLabel</b>
 					
 					</div>
 					<div class="description">
@@ -592,10 +500,7 @@ in document order.</div>
 					</div>
 					
 					
-					
-						
-						
-						
+
 						
 						
 						
@@ -603,11 +508,11 @@ in document order.</div>
 
 					<hr />
 				
-					<a name="getNodeAncestor"> </a>
+					<a name="getLength"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getNodeAncestor</b>(test)
+					<b>getLength</b>
 					
 					</div>
 					<div class="description">
@@ -617,21 +522,7 @@ in document order.</div>
 					</div>
 					
 					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
+
 						
 						
 						
@@ -639,11 +530,11 @@ in document order.</div>
 
 					<hr />
 				
-					<a name="getNodeAttribute"> </a>
+					<a name="getOffset"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getNodeAttribute</b>(test)
+					<b>getOffset</b>
 					
 					</div>
 					<div class="description">
@@ -653,21 +544,7 @@ in document order.</div>
 					</div>
 					
 					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
+
 						
 						
 						
@@ -675,11 +552,11 @@ in document order.</div>
 
 					<hr />
 				
-					<a name="getNodeChild"> </a>
+					<a name="getToken"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getNodeChild</b>(test)
+					<b>getToken</b>
 					
 					</div>
 					<div class="description">
@@ -689,436 +566,7 @@ in document order.</div>
 					</div>
 					
 					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
 
-					<hr />
-				
-					<a name="getNodeDescendant"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{!<a href="../symbols/xrx.xpath.NodeSet.html">xrx.xpath.NodeSet</a>}</span>
-					<b>getNodeDescendant</b>(test)
-					
-					</div>
-					<div class="description">
-						Returns the descendants of a node.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.xpath.NodeSet.html">xrx.xpath.NodeSet</a>}</span> The node-set with descendants.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodeFollowing"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodeFollowing</b>(test)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodeFollowingSibling"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodeFollowingSibling</b>(test)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodeParent"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodeParent</b>(test)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodePreceding"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodePreceding</b>(test)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodePrecedingSibling"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodePrecedingSibling</b>(test)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>test</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="isAfter"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{boolean}</span>
-					<b>isAfter</b>(node)
-					
-					</div>
-					<div class="description">
-						Indicates whether a node appears after another node
-in document order.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{!<a href="../symbols/xrx.node.html">xrx.node</a>}</span> <b>node</b>
-									
-								</dt>
-								<dd>The node to test against.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{boolean}</span> </dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="isBefore"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{boolean}</span>
-					<b>isBefore</b>(node)
-					
-					</div>
-					<div class="description">
-						Indicates whether a node appears before another node
-in document order.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{!<a href="../symbols/xrx.node.html">xrx.node</a>}</span> <b>node</b>
-									
-								</dt>
-								<dd>The node to test against.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{boolean}</span> </dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="isSameAs"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{boolean}</span>
-					<b>isSameAs</b>(node)
-					
-					</div>
-					<div class="description">
-						Indicates whether two nodes are the same.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/xrx.node.html">xrx.node</a>}</span> <b>node</b>
-									
-								</dt>
-								<dd>The node to test against.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{boolean}</span> Whether the nodes are the same.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="namespaceUri"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>namespaceUri</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".sharedFunctions"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">xrx.nodeS.</span><b>sharedFunctions</b>(nodeImpl)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>nodeImpl</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
 						
 						
 						
@@ -1126,6 +574,9 @@ in document order.
 
 					
 				
+			
+
+<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -1138,7 +589,7 @@ in document order.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:10 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

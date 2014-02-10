@@ -6,6 +6,8 @@
 goog.provide('xrx.controller');
 
 
+goog.require('xrx.nodeB');
+goog.require('xrx.rebuild');
 goog.require('xrx.update');
 
 
@@ -19,9 +21,12 @@ xrx.controller = function() {};
  */
 xrx.controller.update = function(control, update) {
   var node = control.getNode();
-  console.log(node);
-  var diff = xrx.update.replaceNotTag(node.getInstance(), node.getToken(), update);
-  //xrx.controller.valueUpdate(control, diff, update);
+  var token = node.getToken();
+
+  var diff = xrx.update.replaceNotTag(node.getInstance(), token, update);
+
+  if (node instanceof xrx.nodeB) xrx.rebuild.replaceNotTag(node.getInstance().getIndex(),
+      token, diff);
 };
 
 

@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -504,8 +512,7 @@ of the n'th attribute, or null if the attribute does not exist.</div>
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#attributes">attributes</a></b>(xml)
 								</div>
 								<div class="description">Streams over a start-tag or a empty tag and returns an array of 
-locations of all attributes found in the tag or null if no 
-attributes were found.</div>
+locations of all attributes found in the tag.</div>
 							</td>
 						</tr>
 					
@@ -574,7 +581,7 @@ one or more document type declarations.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#features">features</a></b>(token, offset, length)
 								</div>
-								<div class="description">Throws events for the secondary tokens of a tag if the feature
+								<div class="description">Throws events for the secondary tokens of a tag for the features
 is turned on.</div>
 							</td>
 						</tr>
@@ -601,6 +608,16 @@ and fires start-row, end-row, empty row and namespace events.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#namespaces">namespaces</a></b>(xml)
+								</div>
+								<div class="description">Streams over a start-tag or a empty tag and returns an array of 
+locations of all namespaces found in the tag.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#pi">pi</a></b>(xml)
 								</div>
 								<div class="description">Streams over some XML content and returns the location of 
@@ -620,9 +637,28 @@ one or more processing instructions (PI).</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#secondaries">secondaries</a></b>(xml)
+								</div>
+								<div class="description">Streams over a start-tag or a empty tag and returns an array of 
+locations of all attributes and namespaces found in the tag.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#setFeature">setFeature</a></b>(feature, flag)
 								</div>
-								<div class="description">Function to turn events on an off.</div>
+								<div class="description">Function to turn events on and off.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/xrx.stream.html#setFeatures">setFeatures</a></b>(flag)
+								</div>
+								<div class="description">Convenience function to turn all events on or off.</div>
 							</td>
 						</tr>
 					
@@ -1007,14 +1043,13 @@ of the n'th attribute, or null if the attribute does not exist.
 					<a name="attributes"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Array.<string>|null}</span>
+					<span class="light">{Array.<xrx.location>}</span>
 					<b>attributes</b>(xml)
 					
 					</div>
 					<div class="description">
 						Streams over a start-tag or a empty tag and returns an array of 
-locations of all attributes found in the tag or null if no 
-attributes were found.
+locations of all attributes found in the tag.
 						
 						
 					</div>
@@ -1040,7 +1075,7 @@ attributes were found.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Array.<string>|null}</span> The attribute array.</dd>
+								<dd><span class="light fixedFont">{Array.<xrx.location>}</span> The location array.</dd>
 							
 							</dl>
 						
@@ -1052,7 +1087,7 @@ attributes were found.
 					<a name="attrName"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{!string}</span>
+					<span class="light">{!<a href="../symbols/xrx.location.html">xrx.location</a>}</span>
 					<b>attrName</b>(xml, pos)
 					
 					</div>
@@ -1090,7 +1125,7 @@ of the name of the n'th attribute.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{!string}</span> The attribute name.</dd>
+								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.location.html">xrx.location</a>}</span> The attribute name location.</dd>
 							
 							</dl>
 						
@@ -1308,7 +1343,7 @@ one or more document type declarations.
 					
 					</div>
 					<div class="description">
-						Throws events for the secondary tokens of a tag if the feature
+						Throws events for the secondary tokens of a tag for the features
 is turned on.
 TODO(jochen): can we avoid reparsing of tokens?
 						
@@ -1432,6 +1467,50 @@ fragment by default or optionally at an offset.
 
 					<hr />
 				
+					<a name="namespaces"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array.<xrx.location>}</span>
+					<b>namespaces</b>(xml)
+					
+					</div>
+					<div class="description">
+						Streams over a start-tag or a empty tag and returns an array of 
+locations of all namespaces found in the tag.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{!string}</span> <b>xml</b>
+									
+								</dt>
+								<dd>The start-tag or empty tag.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array.<xrx.location>}</span> The location array.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="pi"> </a>
 					<div class="fixedFont">
 					
@@ -1512,6 +1591,50 @@ one or more processing instructions (PI).
 
 					<hr />
 				
+					<a name="secondaries"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array.<xrx.location>}</span>
+					<b>secondaries</b>(xml)
+					
+					</div>
+					<div class="description">
+						Streams over a start-tag or a empty tag and returns an array of 
+locations of all attributes and namespaces found in the tag.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{!string}</span> <b>xml</b>
+									
+								</dt>
+								<dd>The start-tag or empty tag.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array.<xrx.location>}</span> The location array.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="setFeature"> </a>
 					<div class="fixedFont">
 					
@@ -1520,7 +1643,7 @@ one or more processing instructions (PI).
 					
 					</div>
 					<div class="description">
-						Function to turn events on an off.
+						Function to turn events on and off.
 						
 						
 					</div>
@@ -1536,6 +1659,42 @@ one or more processing instructions (PI).
 									
 								</dt>
 								<dd>The name of the feature.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{!boolean}</span> <b>flag</b>
+									
+								</dt>
+								<dd>On or off.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setFeatures"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setFeatures</b>(flag)
+					
+					</div>
+					<div class="description">
+						Convenience function to turn all events on or off.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
 							
 								<dt>
 									<span class="light fixedFont">{!boolean}</span> <b>flag</b>
@@ -1582,7 +1741,7 @@ one or more processing instructions (PI).
 					<a name="tagName"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{!string}</span>
+					<span class="light">{!<a href="../symbols/xrx.location.html">xrx.location</a>}</span>
 					<b>tagName</b>(xml, opt_reader)
 					
 					</div>
@@ -1620,7 +1779,7 @@ returns the location of the name of the tag.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{!string}</span> The tag-name.</dd>
+								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.location.html">xrx.location</a>}</span> The tag-name.</dd>
 							
 							</dl>
 						
@@ -1732,7 +1891,7 @@ returns the location of the name of the tag.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:11 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

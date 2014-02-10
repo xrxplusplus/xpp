@@ -5,10 +5,11 @@
 var _allTests = [
     "./core/xrx_test.html", // core
     "./mvc/view/codemirror_test.html", // view
-    "./mvc/view/input_test.html",
-    "./mvc/view/richxml_test.html",
-    "./mvc/view/textarea_test.html",
     "./mvc/view/view_test.html",
+    "./ui/wysiwym/input_test.html", // wysiwym
+    "./ui/wysiwym/richxml_test.html",
+    "./ui/wysiwym/textarea_test.html",
+    "./ui/wysiwym/wysiwymCursor_test.html",
     "./xml/label_test.html", // xml
     "./xml/parse_test.html",
     "./xml/pilot_test.html",

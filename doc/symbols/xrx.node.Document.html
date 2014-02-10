@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -325,7 +333,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_xpath_node_document.js.html">document.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_xml_node_document.js.html">document.js</a>.
 				
 			</p>
 
@@ -344,7 +352,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/xrx.node.Document.html#constructor">xrx.node.Document</a></b>(instance)
+								<b><a href="../symbols/xrx.node.Document.html#constructor">xrx.node.Document</a></b>()
 							</div>
 							<div class="description"></div>
 						</td>
@@ -358,51 +366,6 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class xrx.node.Document.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.node.Document.html#accAttributes">accAttributes</a></b>()
-								</div>
-								<div class="description">XDM Accessors</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.node.Document.html#getNodeAncestor">getNodeAncestor</a></b>()
-								</div>
-								<div class="description">Overwrite node functions which always evaluate to an empty node-set</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.node.Document.html#xml">xml</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
 <!-- ============================== events summary ======================== -->
 			
 
@@ -414,7 +377,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>xrx.node.Document</b>(instance)
+						<b>xrx.node.Document</b>()
 				</div>
 				
 				<div class="description">
@@ -425,17 +388,6 @@ ul.inheritsList
 				
 				
 				
-					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								 <b>instance</b>
-								
-							</dt>
-								<dd></dd>
-						
-						</dl>
 					
 					
 					
@@ -452,86 +404,6 @@ ul.inheritsList
 
 <!-- ============================== method details ========================= -->		
 			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="accAttributes"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>accAttributes</b>()
-					
-					</div>
-					<div class="description">
-						XDM Accessors
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNodeAncestor"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNodeAncestor</b>()
-					
-					</div>
-					<div class="description">
-						Overwrite node functions which always evaluate to an empty node-set
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="xml"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>xml</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
-			
 			
 <!-- ============================== event details ========================= -->		
 			
@@ -543,7 +415,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:09 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

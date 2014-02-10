@@ -6,6 +6,7 @@
 goog.provide('xrx.codemirror');
 
 
+
 goog.require('xrx.model');
 goog.require('xrx.view');
 
@@ -41,12 +42,16 @@ goog.inherits(xrx.codemirror, xrx.view);
 
 
 
+/**
+ *
+ */
 xrx.codemirror.prototype.setOptions = function() {
 
   for(var opt in this.options) {
     this.codemirror_.setOption(opt, this.options[opt]);
   }
 };
+
 
 
 /**
@@ -58,8 +63,8 @@ xrx.codemirror.prototype.createDom = function() {
   var cm = this.codemirror_ = window.CodeMirror.fromTextArea(this.element_);
 
   cm.on('beforeChange', function(cm, change) { self.eventBeforeChange(cm, change); });
-  //cm.on('blur', function(cm, change) { self.eventBlur(); });
-  //cm.on('cursorActivity', function() { self.eventCursorActivity(); });
+  cm.on('blur', function(cm, change) { self.eventBlur(); });
+  cm.on('cursorActivity', function() { self.eventCursorActivity(); });
   cm.on('focus', function() { self.eventFocus(); });
 };
 
@@ -91,19 +96,41 @@ xrx.codemirror.prototype.eventFocus = function()  {
 
 
 
+/**
+ * 
+ */
+xrx.codemirror.prototype.eventCursorActivity = function() {};
 
+
+
+/**
+ * 
+ */
+xrx.codemirror.prototype.eventBlur = function() {};
+
+
+
+/**
+ * 
+ */
 xrx.codemirror.prototype.setFocus = function() {
   this.codemirror_.focus();
 };
 
 
 
+/**
+ * 
+ */
 xrx.codemirror.prototype.getValue = function() {
   return this.codemirror_.getValue();
 };
 
 
 
+/**
+ * 
+ */
 xrx.codemirror.prototype.setValue = function(xml, internal) {
   this.internalUpdate = internal || false;
   this.codemirror_.setValue(xml);
@@ -121,3 +148,4 @@ xrx.codemirror.prototype.refresh = function() {
 
   this.setValue(xml, true);
 };
+

@@ -9,7 +9,7 @@ goog.provide('xrx.richxml');
 goog.require('goog.dom');
 goog.require('xrx.codemirror');
 goog.require('xrx.label');
-goog.require('xrx.richxml.cursor');
+goog.require('xrx.ui.wysiwym.cursor');
 goog.require('xrx.richxml.mode');
 goog.require('xrx.richxml.tagname');
 goog.require('xrx.stream');
@@ -21,19 +21,7 @@ goog.require('xrx.view');
  * @constructor
  */
 xrx.richxml = function(element, opt_tagname) {
-
-
-
   goog.base(this, element);
-
-
-
-  /**
-   * @private
-   */
-  this.cursor_;
-
-
 
   /**
    * @private
@@ -44,17 +32,18 @@ goog.inherits(xrx.richxml, xrx.codemirror);
 
 
 
-xrx.richxml.prototype.cursor = function() {
-  return this.cursor_ || new xrx.richxml.cursor(this);
-};
-
-
-
+/**
+ *
+ */
 xrx.richxml.prototype.tagname = function() {
   return this.tagname_ ? this.tagname_ : this.tagname_ = new xrx.richxml.tagname();
 };
 
 
+
+/**
+ *
+ */
 xrx.richxml.placeholder = {
   startTag: unescape('%BB'),
   endTag: unescape('%AB'),
@@ -63,6 +52,9 @@ xrx.richxml.placeholder = {
 
 
 
+/**
+ *
+ */
 xrx.richxml.placeholder.matches = function(ch) {
 
   for(var p in xrx.richxml.placeholder) {
@@ -75,12 +67,19 @@ xrx.richxml.placeholder.matches = function(ch) {
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.cursorIsNearTag = function() {
-  return xrx.richxml.placeholder.matches(this.cursor().leftTokenOutside().string);
+  return xrx.richxml.placeholder.matches(
+      xrx.ui.wysiwym.cursor.leftTokenOutside(this).string);
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.className = {
   startTag: 'richxml-start-tag',
   startTagActive: 'richxml-start-tag-active',
@@ -124,12 +123,18 @@ xrx.richxml.prototype.transformXml_ = function(xml) {
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.options = {
   'mode': 'richxml'
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.refresh = function() {
   var visualXml = this.transformXml_(this.getNode().getXml());
   this.codemirror_.setValue(visualXml);
@@ -137,6 +142,9 @@ xrx.richxml.prototype.refresh = function() {
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.clear = function() {
   this.unmarkActiveTags();
   this.hideElements();
@@ -146,16 +154,22 @@ xrx.richxml.prototype.clear = function() {
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.unmarkActiveTags = function() {
   this.markActiveTags(true);
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.markActiveTags = function(unmarkflag) {
 
   var cm = this.codemirror_;
-  var cursor = this.cursor();
+  var cursor = xrx.ui.wysiwym.cursor;
   var self = this;
   
   var markedElements = function() { 
@@ -168,7 +182,7 @@ xrx.richxml.prototype.markActiveTags = function(unmarkflag) {
     var ch;
     var stack = 0;
 
-    if(cursor.leftTokenOutside().string === xrx.richxml.placeholder.startTag) {
+    if(cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.startTag) {
 
       for(var i = index; i < text.length; i++) {
         ch = text[i];
@@ -179,7 +193,7 @@ xrx.richxml.prototype.markActiveTags = function(unmarkflag) {
           break;
         } 
       }
-    } else if(cursor.leftTokenOutside().string === xrx.richxml.placeholder.endTag) {
+    } else if(cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.endTag) {
 
       for(var i = index; i >= 0; i--) {
         ch = text[i];
@@ -213,19 +227,19 @@ xrx.richxml.prototype.markActiveTags = function(unmarkflag) {
   if (!this.cursorIsNearTag()) return;
   if (unmarkflag) return;
 
-  var firstMark = cursor.leftTokenOutside().string === xrx.richxml.placeholder.startTag ? 
+  var firstMark = cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.startTag ? 
       xrx.richxml.className.startTagActive : xrx.richxml.className.endTagActive;
-  var secondMark = cursor.leftTokenOutside().string === xrx.richxml.placeholder.startTag ? 
+  var secondMark = cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.startTag ? 
       xrx.richxml.className.endTagActive : xrx.richxml.className.startTagActive;
 
   // mark matched element
   mark(
-      { line: cursor.leftPosition().line, ch: cursor.leftPosition().ch - 1 }, 
-      { line: cursor.leftPosition().line, ch: cursor.leftPosition().ch }, 
+      { line: cursor.leftPosition(self).line, ch: cursor.leftPosition(self).ch - 1 }, 
+      { line: cursor.leftPosition(self).line, ch: cursor.leftPosition(self).ch }, 
       { className: firstMark }
   );
   
-  if (cursor.leftTokenOutside().string === xrx.richxml.placeholder.emptyTag) return;
+  if (cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.emptyTag) return;
   
   // mark corresponding element
   var corresponding = correspondingTag();
@@ -236,52 +250,73 @@ xrx.richxml.prototype.markActiveTags = function(unmarkflag) {
   );
   
   // mark text
-  var from = { line: cursor.leftPosition().line, ch: cursor.leftPosition().ch };
+  var from = { line: cursor.leftPosition(self).line, ch: cursor.leftPosition(self).ch };
   var to = { line: corresponding.line, ch: corresponding.ch - 1 };
-  cursor.leftTokenOutside().string === xrx.richxml.placeholder.startTag ? 
+  cursor.leftTokenOutside(self).string === xrx.richxml.placeholder.startTag ? 
       mark(from, to, { className: xrx.richxml.className.notTagActive }) : 
       mark(to, from, { className: xrx.richxml.className.notTagActive });
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.showElements = function() {
   
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.hideElements = function() {
   
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.showAttributes = function() {
   
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.hideAttributes = function() {
   
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.showTagName = function() {
-  this.cursorIsNearTag() ? this.tagname().show(this.cursor().getNode()) : 
+  this.cursorIsNearTag() ? this.tagname().show(this.getNode()) : 
       this.hideTagName();
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.hideTagName = function() {
   this.tagname().hide();
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.setReadonly = function(readonly) {
   readonly ? this.codemirror_.setOption('readOnly', true) : 
       this.codemirror_.setOption('readOnly', false);
@@ -289,23 +324,29 @@ xrx.richxml.prototype.setReadonly = function(readonly) {
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.eventBlur = function() {
   this.clear();
 };
 
 
 
+/**
+ *
+ */
 xrx.richxml.prototype.cursorActivitySelection = function() {
   var cm = this.codemirror_;
-  var cursor = this.cursor();
+  var cursor = xrx.ui.wysiwym.cursor;
   var valid = false;
 
-  if(cursor.leftAtStartPosition() || cursor.rightAtEndPosition()) return;
+  if(cursor.leftAtStartPosition(this) || cursor.rightAtEndPosition(this)) return;
 
-  var leftTokenOutside = cursor.leftTokenOutside().state.context.token;
-  var rightTokenInside = cursor.rightTokenInside().state.context.token;
-  var leftToken
-  var rightToken
+  var leftTokenOutside = cursor.leftTokenOutside(this).state.context.token;
+  var rightTokenInside = cursor.rightTokenInside(this).state.context.token;
+  var leftToken;
+  var rightToken;
 };
 
 
@@ -327,8 +368,4 @@ xrx.richxml.prototype.eventCursorActivity = function() {
     this.showTagName();
   }
 };
-
-
-
-
 

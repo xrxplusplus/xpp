@@ -201,6 +201,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.control.html">xrx.control</a></li>
 	
+	<li><a href="../symbols/xrx.index.html">xrx.index</a></li>
+	
 	<li><a href="../symbols/xrx.input.html">xrx.input</a></li>
 	
 	<li><a href="../symbols/xrx.instance.html">xrx.instance</a></li>
@@ -213,21 +215,27 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.node.html">xrx.node</a></li>
 	
-	<li><a href="../symbols/xrx.node.Attribute.html">xrx.node.Attribute</a></li>
+	<li><a href="../symbols/xrx.node.AttributeB.html">xrx.node.AttributeB</a></li>
 	
 	<li><a href="../symbols/xrx.node.Document.html">xrx.node.Document</a></li>
 	
-	<li><a href="../symbols/xrx.node.Element.html">xrx.node.Element</a></li>
+	<li><a href="../symbols/xrx.node.DocumentB.html">xrx.node.DocumentB</a></li>
 	
-	<li><a href="../symbols/xrx.node.Text.html">xrx.node.Text</a></li>
+	<li><a href="../symbols/xrx.node.ElementB.html">xrx.node.ElementB</a></li>
+	
+	<li><a href="../symbols/xrx.node.ElementS.html">xrx.node.ElementS</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextB.html">xrx.node.TextB</a></li>
+	
+	<li><a href="../symbols/xrx.node.TextS.html">xrx.node.TextS</a></li>
+	
+	<li><a href="../symbols/xrx.nodeB.html">xrx.nodeB</a></li>
 	
 	<li><a href="../symbols/xrx.nodeS.html">xrx.nodeS</a></li>
 	
 	<li><a href="../symbols/xrx.pilot.html">xrx.pilot</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.html">xrx.richxml</a></li>
-	
-	<li><a href="../symbols/xrx.richxml.cursor.html">xrx.richxml.cursor</a></li>
 	
 	<li><a href="../symbols/xrx.richxml.tagname.html">xrx.richxml.tagname</a></li>
 	
@@ -355,6 +363,34 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class xrx.pilot.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/xrx.pilot.html#traverse_">traverse_</a></b>
+								</div>
+								<div class="description">Initialize XML traversing.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -411,7 +447,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#backward">backward</a></b>(target, target)
 								</div>
-								<div class="description">Backward tree traversing.</div>
+								<div class="description">Backward traversing.</div>
 							</td>
 						</tr>
 					
@@ -420,7 +456,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#currentPath">currentPath</a></b>()
 								</div>
-								<div class="description">Returns the path lastly used to traverse the XML tree 
+								<div class="description">Returns the path lastly used to traverse the XML instance 
 (for debugging only).</div>
 							</td>
 						</tr>
@@ -446,9 +482,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#forward">forward</a></b>(target, target)
+								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#forward">forward</a></b>(context, target)
 								</div>
-								<div class="description">Forward tree traversing.</div>
+								<div class="description">Forward traversing.</div>
 							</td>
 						</tr>
 					
@@ -536,8 +572,8 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Constructs a new pilot. A pilot is able to traverse a XML tree
-in forward and backward direction.
+					Constructs a new pilot. A pilot is able to traverse a labeled 
+XML instance in forward and backward direction.
 					
 				</div>
 				
@@ -567,6 +603,33 @@ in forward and backward direction.
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="traverse_"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>traverse_</b>
+					
+					</div>
+					<div class="description">
+						Initialize XML traversing.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -803,7 +866,7 @@ in forward and backward direction.
 					
 					</div>
 					<div class="description">
-						Backward tree traversing.
+						Backward traversing.
 						
 						
 					</div>
@@ -845,7 +908,7 @@ in forward and backward direction.
 					
 					</div>
 					<div class="description">
-						Returns the path lastly used to traverse the XML tree 
+						Returns the path lastly used to traverse the XML instance 
 (for debugging only).
 						
 						
@@ -970,11 +1033,11 @@ in forward and backward direction.
 					<div class="fixedFont">
 					
 					
-					<b>forward</b>(target, target)
+					<b>forward</b>(context, target)
 					
 					</div>
 					<div class="description">
-						Forward tree traversing.
+						Forward traversing.
 						
 						
 					</div>
@@ -986,16 +1049,16 @@ in forward and backward direction.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{?}</span> <b>target</b>
+									<b>context</b>
 									
 								</dt>
-								<dd>The target token.</dd>
+								<dd>The context token.</dd>
 							
 								<dt>
 									<b>target</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The target token.</dd>
 							
 							</dl>
 						
@@ -1362,7 +1425,7 @@ the tag-name belongs.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jan 12 2014 13:09:15 GMT+0100 (MEZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 11 2014 00:34:10 GMT+0100 (CET)
 		</div>
 	</body>
 </html>
