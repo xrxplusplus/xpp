@@ -7,7 +7,7 @@ goog.addDependency('../../../../src/core/xrx.js', ['xrx'], ['goog.dom', 'xrx.bin
 goog.addDependency('../../../../src/mvc/model/bind.js', ['xrx.bind'], ['xrx.model', 'xrx.xpath']);
 goog.addDependency('../../../../src/mvc/model/component.js', ['xrx.component'], ['goog.events.EventHandler', 'goog.ui.IdGenerator']);
 goog.addDependency('../../../../src/mvc/model/controller.js', ['xrx.controller'], ['xrx.update']);
-goog.addDependency('../../../../src/mvc/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.index', 'xrx.model', 'xrx.node', 'xrx.parse', 'xrx.pilot', 'xrx.stream']);
+goog.addDependency('../../../../src/mvc/model/instance.js', ['xrx.instance'], ['goog.dom', 'goog.events', 'goog.net.XhrIo', 'xrx.index', 'xrx.model', 'xrx.node', 'xrx.node.DocumentB', 'xrx.parse', 'xrx.pilot', 'xrx.stream']);
 goog.addDependency('../../../../src/mvc/model/model.js', ['xrx.model'], ['xrx.component']);
 goog.addDependency('../../../../src/mvc/view/codemirror.js', ['xrx.codemirror'], ['xrx.model', 'xrx.view']);
 goog.addDependency('../../../../src/mvc/view/console.js', ['xrx.console'], ['goog.dom', 'xrx.serialize', 'xrx.view']);

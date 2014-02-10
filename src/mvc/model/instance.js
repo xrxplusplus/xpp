@@ -13,6 +13,7 @@ goog.require('goog.net.XhrIo');
 goog.require('xrx.index');
 goog.require('xrx.model');
 goog.require('xrx.node');
+goog.require('xrx.node.DocumentB');
 goog.require('xrx.parse');
 goog.require('xrx.stream');
 goog.require('xrx.pilot');

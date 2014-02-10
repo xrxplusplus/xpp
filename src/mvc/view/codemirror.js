@@ -58,8 +58,8 @@ xrx.codemirror.prototype.createDom = function() {
   var cm = this.codemirror_ = window.CodeMirror.fromTextArea(this.element_);
 
   cm.on('beforeChange', function(cm, change) { self.eventBeforeChange(cm, change); });
-  cm.on('blur', function(cm, change) { self.eventBlur(); });
-  cm.on('cursorActivity', function() { self.eventCursorActivity(); });
+  //cm.on('blur', function(cm, change) { self.eventBlur(); });
+  //cm.on('cursorActivity', function() { self.eventCursorActivity(); });
   cm.on('focus', function() { self.eventFocus(); });
 };
 
@@ -117,7 +117,7 @@ xrx.codemirror.prototype.setValue = function(xml, internal) {
  * 
  */
 xrx.codemirror.prototype.refresh = function() {
-  var xml = this.getNode().xml();
+  var xml = this.getNode().getXml();
 
   this.setValue(xml, true);
 };

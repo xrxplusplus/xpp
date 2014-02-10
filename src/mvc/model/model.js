@@ -65,6 +65,22 @@ xrx.model.getComponents = function() {
 
 
 
+xrx.model.getInstanceDefault = function() {
+  var instance;
+
+  for(var i in xrx.model.components_) {
+    var component = xrx.model.components_[i];
+    if (component instanceof xrx.instance) {
+      instance = component;
+      break;
+    }
+  }
+
+  return instance;
+};
+
+
+
 xrx.model.cursor = {};
 
 

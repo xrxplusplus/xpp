@@ -31,6 +31,7 @@ goog.inherits(xrx.node.TextB, xrx.nodeB);
 
 
 
+
 xrx.node.TextB.prototype.getToken = function() {
   // TODO: implement this.
   return undefined;

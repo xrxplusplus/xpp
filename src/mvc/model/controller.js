@@ -19,12 +19,9 @@ xrx.controller = function() {};
  */
 xrx.controller.update = function(control, update) {
   var node = control.getNode();
-  var stream = new xrx.stream(xrx.model.getComponent(node.instance()).xml());
-  var token = node.token();
-
-  var diff = xrx.update.notTag(stream, token, update);
-  xrx.model.getComponent(node.instance()).xml(stream.xml());
-  xrx.controller.valueUpdate(control, diff, update);
+  console.log(node);
+  var diff = xrx.update.replaceNotTag(node.getInstance(), node.getToken(), update);
+  //xrx.controller.valueUpdate(control, diff, update);
 };
 
 
@@ -34,7 +31,7 @@ xrx.controller.update = function(control, update) {
  */
 xrx.controller.valueUpdate = function(control, diff, update) {
   var node = control.getNode();
-  var offset = node.token().offset();
+  var offset = node.getToken().offset();
 
   // Recalculate the Model:
   //   Update the offset of each bind's node which appears
@@ -45,7 +42,7 @@ xrx.controller.valueUpdate = function(control, diff, update) {
 
       var o = component.node.offset();
       if (o > offset) {
-        var token = component.node.token();
+        var token = component.node.getToken();
         token.offset(o += diff);
       }
     }

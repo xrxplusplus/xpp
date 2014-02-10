@@ -35,7 +35,7 @@ goog.inherits(xrx.bind, xrx.model);
  * @override
  */
 xrx.bind.prototype.recalculate = function() {
-  var result = xrx.xpath.evaluate(this.getRefExpression(), new xrx.node.Document(), null, 
+  var result = xrx.xpath.evaluate(this.getRefExpression(), xrx.model.getInstanceDefault(), null, 
       xrx.xpath.XPathResultType.ANY_TYPE);
 
   this.node = result.iterateNext();
