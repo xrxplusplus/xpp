@@ -75,6 +75,7 @@ var doRequest = function(name, file, func, table) {
 
   goog.events.listen(request, 'complete', function() {
     xml = request.getResponseText();
+    console.log(xml.length);
     parse = new xrx.parse();
     xml = parse.normalize(xml);
 

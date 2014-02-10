@@ -4,11 +4,11 @@
 
 var _allTests = [
     "./core/xrx_test.html", // core
-    "./view/codemirror_test.html", // view
-    "./view/input_test.html",
-    "./view/richxml_test.html",
-    "./view/textarea_test.html",
-    "./view/view_test.html",
+    "./mvc/view/codemirror_test.html", // view
+    "./mvc/view/input_test.html",
+    "./mvc/view/richxml_test.html",
+    "./mvc/view/textarea_test.html",
+    "./mvc/view/view_test.html",
     "./xml/label_test.html", // xml
     "./xml/parse_test.html",
     "./xml/pilot_test.html",
