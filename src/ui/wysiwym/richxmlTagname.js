@@ -1,5 +1,5 @@
 /**
- * @fileoverview A tag-name UI component used by xrx.richxml.
+ * @fileoverview A tag-name UI component used by xrx.wysiwym.richxml.
  */
 goog.provide('xrx.richxml.tagname');
 
@@ -8,14 +8,14 @@ goog.provide('xrx.richxml.tagname');
 goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('xrx.i18n');
-goog.require('xrx.richxml');
+goog.require('xrx.wysiwym.richxml');
 
 
 
 /**
- * Constructs a tag-name UI component.s
+ * Constructs a tag-name UI component.
  * The tag-name is shown when the cursor moves near to a 
- * tag in a xrx.richxml component.
+ * tag in a xrx.wysiwym.richxml component.
  * @constructor
  */
 xrx.richxml.tagname = function(element)  {

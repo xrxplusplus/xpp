@@ -8,13 +8,14 @@ goog.require('goog.dom');
 goog.require('xrx.func');
 goog.require('xrx.bind');
 goog.require('xrx.console');
-goog.require('xrx.input');
 goog.require('xrx.instance');
 goog.require('xrx.model');
 goog.require('xrx.output');
-goog.require('xrx.richxml');
-goog.require('xrx.textarea');
 goog.require('xrx.view');
+goog.require('xrx.wysiwym');
+goog.require('xrx.wysiwym.input');
+goog.require('xrx.wysiwym.richxml');
+goog.require('xrx.wysiwym.textarea');
 
 
 xrx.install_ = function(className) {

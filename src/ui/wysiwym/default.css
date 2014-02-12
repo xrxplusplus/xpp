@@ -35,8 +35,12 @@
   border: solid black 1px;
 }
 
+.richxml-selection-invalid {
+  border: dotted red 3px;
+}
+
 .richxml-start-tag-active {
-	color: #F39814;
+  color: #F39814;
   border-bottom: solid #F39814 1px;
 }
 
@@ -53,3 +57,4 @@
 .richxml-not-tag-active {
   border-bottom: solid #F39814 1px;
 }
+

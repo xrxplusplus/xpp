@@ -4,12 +4,12 @@
 
 var _allTests = [
     "./core/xrx_test.html", // core
-    "./mvc/view/codemirror_test.html", // view
-    "./mvc/view/view_test.html",
-    "./ui/wysiwym/input_test.html", // wysiwym
-    "./ui/wysiwym/richxml_test.html",
-    "./ui/wysiwym/textarea_test.html",
+    "./mvc/view/view_test.html",  // view
+    "./ui/wysiwym/wysiwym_test.html", // wysiwym
     "./ui/wysiwym/wysiwymCursor_test.html",
+    "./ui/wysiwym/wysiwymInput_test.html",
+    "./ui/wysiwym/wysiwymRichxml_test.html",
+    "./ui/wysiwym/wysiwymTextarea_test.html",
     "./xml/label_test.html", // xml
     "./xml/parse_test.html",
     "./xml/pilot_test.html",

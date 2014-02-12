@@ -54,10 +54,10 @@ xrx.view.prototype.refresh = goog.abstractMethod;
 
 xrx.view.classes = [
   'xrx-console',
-  'xrx-input',
   'xrx-output',
-  'xrx-textarea',
-  'xrx-richxml',
+  'xrx-wysiwym-input',
+  'xrx-wysiwym-richxml',
+  'xrx-wysiwym-textarea',
   'xrx-richxml-tagname'
 ];
 

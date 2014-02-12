@@ -167,7 +167,7 @@
   <!-- #                                                   # -->
   <!-- ##################################################### -->
   <xsl:template match="xrx:input">
-    <textarea class="xrx-input">
+    <textarea class="xrx-wysiwym-input">
       <xsl:call-template name="copy-attributes" select="./self::*"/>
     </textarea>
   </xsl:template>
@@ -189,7 +189,7 @@
   <!-- #                                                   # -->
   <!-- ##################################################### -->
   <xsl:template match="xrx:textarea">
-    <textarea class="xrx-textarea">
+    <textarea class="xrx-wysiwym-textarea">
       <xsl:call-template name="copy-attributes" select="./self::*"/>
     </textarea>
   </xsl:template>

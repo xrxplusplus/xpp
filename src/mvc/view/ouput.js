@@ -49,7 +49,7 @@ xrx.output.prototype.setValue = function(value) {
 
 
 xrx.output.prototype.refresh = function() {
-  var value = this.getNode().stringValue();
+  var value = this.getNode().getStringValue();
 
   this.setValue(value);
 };

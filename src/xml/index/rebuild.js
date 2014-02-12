@@ -131,6 +131,18 @@ xrx.rebuild.replaceAttrValue = function(index, token, diff) {
 
 
 
+/**
+ * Rebuilds an index after a XML instance has been updated by
+ * a insertNotTag update operation.
+ * 
+ * @param {!xrx.index} index The index.
+ * @param {!xrx.token.NotTag} token The not-tag token which was updated.
+ * @param {!integer} diff The length difference of the updated token.
+ */
+xrx.rebuild.insertNotTag = xrx.rebuild.replaceNotTag;
+
+
+
 
 /**
  * Rebuilds an index after a XML instance has been updated by

@@ -51,7 +51,7 @@ xrx.console.prototype.setValue = function(xml) {
 
 
 xrx.console.prototype.refresh = function() {
-  var xml = this.getNode().xml();
+  var xml = this.getNode().getXml();
 
   this.setValue(xml);
 };

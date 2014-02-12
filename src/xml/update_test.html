@@ -165,7 +165,19 @@ function test03replaceAttrValue() {
   assertEquals(_testStringStream(instance), _testStringBinary(instance));
 };
 
-function test04insertEmptyTag() {
+function test04insertNotTag() {
+  resetForNextTest();
+  
+  var expected = '<a>test1<b>2</b>3<c attr1="test" attr2="">4<d/>55<e/>6</c><f/></a>';
+  var t = instance.getPilot().location(null, new xrx.token.NotTag(new xrx.label([1,0])));
+  var diff = xrx.update.insertNotTag(instance, t, 4, '1');
+  assertEquals(expected, instance.xml());
+
+  xrx.rebuild.insertNotTag(instance.getIndex(), t, diff);
+  assertEquals(_testStringStream(instance), _testStringBinary(instance));
+};
+
+function test05insertEmptyTag() {
   resetForNextTest();
 
   // start-tag, offset 0
@@ -196,7 +208,7 @@ function test04insertEmptyTag() {
   assertEquals(_testStringStream(instance), _testStringBinary(instance));
 };
 
-function test04insertEmptyTagNs() {
+function test05insertEmptyTagNs() {
   resetForNextTest();
 
   // default namespace
@@ -226,7 +238,7 @@ function test04insertEmptyTagNs() {
   assertEquals(_testStringStream(instanceNs), _testStringBinary(instanceNs));
 };
 
-function test05insertStartEndTag() {
+function test06insertStartEndTag() {
   resetForNextTest();
 
   // start-tag, offset 0
@@ -250,7 +262,7 @@ function test05insertStartEndTag() {
   assertEquals(expected3, instance.xml());
 };
 
-function test05insertStartEndTagNs() {
+function test06insertStartEndTagNs() {
   resetForNextTest();
 
   // default namespace
@@ -271,7 +283,7 @@ function test05insertStartEndTagNs() {
   assertEquals(expected3, instanceNs.xml());
 };
 
-function test06insertAttribute() {
+function test07insertAttribute() {
   resetForNextTest();
 
   // start-tag, attribute exists
@@ -293,7 +305,7 @@ function test06insertAttribute() {
   assertEquals(_testStringStream(instance), _testStringBinary(instance));
 };
 
-function test06insertAttributeNs() {
+function test07insertAttributeNs() {
   resetForNextTest();
 
   // prefix is defined
@@ -320,7 +332,7 @@ function test06insertAttributeNs() {
       goog.partial(xrx.update.insertAttribute, instanceNs, t3, 'c:a', 'http://www.example.org/b'));
 };
 
-function test07removeEmptyTag() {
+function test08removeEmptyTag() {
   resetForNextTest();
 
   var expected = '<a>test<b>2</b>3<c attr1="test" attr2="">455<e/>6</c><f/></a>';
@@ -332,7 +344,7 @@ function test07removeEmptyTag() {
   assertEquals(_testStringStream(instance), _testStringBinary(instance));
 };
 
-function test08removeStartEndTag() {
+function test09removeStartEndTag() {
   resetForNextTest();
 
   var expected1 = '<a>test23<c attr1="test" attr2="">4<d/>55<e/>6</c><f/></a>';
@@ -354,7 +366,7 @@ function test08removeStartEndTag() {
   assertEquals(_testStringStream(instance), _testStringBinary(instance));
 };
 
-function test09removeAttribute() {
+function test10removeAttribute() {
   resetForNextTest();
 
   var expected = '<a>test<b>2</b>3<c attr1="test">4<d/>55<e/>6</c><f/></a>';

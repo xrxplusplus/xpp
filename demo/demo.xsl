@@ -1,5 +1,7 @@
+<?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xrx="http://www.monasterium.net/NS/xrx" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xrx="http://www.monasterium.net/NS/xrx"
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:demo="http://www.monasterium.net/NS/demo">
   <xsl:import href="../src/ui/xrx2html.xsl"/>
@@ -13,6 +15,60 @@
       <head>
         <meta charset="utf-8"/>
         <title>XRX++ - A JavaScript Library for Native and Visual in-Browser XML Editing.</title>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/SAXScanner.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/XMLFilterImpls.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/ReaderWrapper.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/Reader.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/AttributesImpl.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/LocatorImpls.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/NamespaceSupport.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/sax.js</xsl:text>
+          </xsl:attribute>
+        </script>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/DefaultHandlers.js</xsl:text>
+          </xsl:attribute>
+        </script>
         <script>
           <xsl:attribute name="src">
             <xsl:value-of select="$relativepath"/>
@@ -283,12 +339,23 @@
   </xsl:template>
 
   <xsl:template match="demo:heading">
+    <div><span>&#160;</span></div>
+    <div><span>&#160;</span></div>
     <h3>
       <xsl:apply-templates/>
     </h3>
   </xsl:template>
 
+  <xsl:template match="demo:description">
+    <div class="demo-description">
+      <span>
+        <xsl:apply-templates/>
+      </span>
+    </div>
+  </xsl:template>
+
   <xsl:template match="demo:app">
+    <div class="source-heading">Demo:</div>
     <div class="demo">
       <div class="demo-source">
         <xsl:apply-templates/>
@@ -317,7 +384,7 @@
   </xsl:template>
 
   <xsl:template match="demo:source">
-    <!--div class="source-heading">Source: </div-->
+    <div class="source-heading">Source: </div>
     <textarea class="demo-source" readonly="readonly">
       <xsl:copy-of select="@rows"/>
       <xsl:apply-templates/>

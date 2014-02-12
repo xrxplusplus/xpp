@@ -94,6 +94,21 @@ xrx.update.replaceAttrValue = function(instance, target, value) {
 };
 
 
+
+/**
+ * Inserts a not-tag token into another not-tag token at an offset.
+ * 
+ * @param {!xrx.instance} instance The instance to be updated.
+ * @param {!xrx.token.NotTag} target The token to be replaced.
+ * @param {!integer} target The offset relative to the not-tag token.
+ * @param {!string} string The new not-tag string. 
+ */
+xrx.update.insertNotTag = function(instance, target, offset, string) {
+  return xrx.update.insert_(instance, target.offset() + offset, string);
+};
+
+
+
 /**
  * Inserts a new empty tag into a not-tag token.
  * 
@@ -210,6 +225,20 @@ xrx.update.insertAttribute = function(instance, parent, qName,
   }
 
   return diff;
+};
+
+
+
+/**
+ * Removes characters from a not-tag token.
+ * 
+ * @param {!xrx.instance} instance The instance to be updated.
+ * @param {!xrx.token.NotTag} target The token to be replaced.
+ * @param {!integer} target The offset relative to the not-tag token.
+ * @param {!integer} string The number of characters to be removed. 
+ */
+xrx.update.reduceNotTag = function(instance, target, offset, length) {
+  return xrx.update.remove_(instance, target.offset() + offset, length);
 };
 
 

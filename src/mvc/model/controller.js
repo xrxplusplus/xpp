@@ -19,60 +19,104 @@ xrx.controller = function() {};
 /**
  * 
  */
-xrx.controller.update = function(control, update) {
+xrx.controller.update = function(control, operation, token, update) {
   var node = control.getNode();
-  var token = node.getToken();
+  var tok = token || node.getToken();
+
+  var diff = xrx.update[operation](node.getInstance(), tok, update);
+
+  if (node instanceof xrx.nodeB) xrx.rebuild[operation](node.getInstance().getIndex(),
+      tok, diff);
+
+  xrx.controller.refresh(control, diff, update);
+};
+
+
+
+xrx.controller.replaceNotTag = function(control, token, update) {
+  var node = control.getNode();
 
   var diff = xrx.update.replaceNotTag(node.getInstance(), token, update);
 
   if (node instanceof xrx.nodeB) xrx.rebuild.replaceNotTag(node.getInstance().getIndex(),
       token, diff);
+
+  xrx.controller.refresh(control);
+};
+
+
+
+xrx.controller.insertNotTag = function(control, token, offset, update) {
+  var node = control.getNode();
+  var tok = token || node.getToken();
+
+  var diff = xrx.update.insertNotTag(node.getInstance(), tok, offset, update);
+
+  if (node instanceof xrx.nodeB) xrx.rebuild.insertNotTag(node.getInstance().getIndex(),
+      tok, diff);
+
+  xrx.controller.refresh(control, diff, update);
+};
+
+
+
+xrx.controller.reduceNotTag = function(control, token, offset, length) {
+  var node = control.getNode();
+  var tok = token || node.getToken();
+
+  var diff = xrx.update.reduceNotTag(node.getInstance(), tok, offset, length);
+
+  //if (node instanceof xrx.nodeB) xrx.rebuild.reduceNotTag(node.getInstance().getIndex(),
+  //    tok, diff);
+
+  xrx.controller.refresh(control, diff, '');
+};
+
+
+
+xrx.controller.removeEmptyTag = function(control, token) {
+  var node = control.getNode();
+
+  var diff = xrx.update.removeEmptyTag(node.getInstance(), token);
+
+  if (node instanceof xrx.nodeB) xrx.rebuild.removeEmptyTag(node.getInstance().getIndex(),
+      token, diff);
+
+  xrx.controller.refresh(control);
+};
+
+
+
+xrx.controller.removeStartEndTag = function(control, token1, token2) {
+  var node = control.getNode();
+
+  var diff = xrx.update.removeStartEndTag(node.getInstance(), token1, token2);
+
+  //if (node instanceof xrx.nodeB) xrx.rebuild.removeStartEndTag(node.getInstance().getIndex(),
+  //    token1, diff);
+
+  xrx.controller.refresh(control);
 };
 
 
 
 /**
- * Handles a value update.
+ * Refreshes all other controls which are affected by the update.
  */
-xrx.controller.valueUpdate = function(control, diff, update) {
+xrx.controller.refresh = function(control) {
   var node = control.getNode();
   var offset = node.getToken().offset();
 
-  // Recalculate the Model:
-  //   Update the offset of each bind's node which appears
-  //   after the updated node's offset (in document order) 
-  for (var c in xrx.model.getComponents()) {
-    var component = xrx.model.getComponent(c);
-    if (component instanceof xrx.bind) {
-
-      var o = component.node.offset();
-      if (o > offset) {
-        var token = component.node.getToken();
-        token.offset(o += diff);
-      }
-    }
-  }
-
-  // Refresh the View:
-  //   Update the value of each control bound to the same node
-  //   as the updated node, but not the updated node itself
   for (var c in xrx.view.getComponents()) {
     var contr = xrx.view.getComponent(c);
-    if (contr.getNode().sameAs(node) && c != control.getId()) {
-      contr.setValue(update, true);
-    } else if (control.getNode().label().isDescendantOf(contr.getNode().label()) && c != control.getId() ) {
+    if (contr.getNode() && contr.getNode().isSameAs(node) && 
+        c != control.getId()) {
+      contr.refresh()
+    } else if (contr.getNode() && control.getNode().getLabel().isDescendantOf(
+        contr.getNode().getLabel()) && c != control.getId() ) {
       contr.refresh();
-    }
+    } else {}
   }
-};
-
-
-
-/**
- * Handles a structural update.
- */
-xrx.controller.structuralUpdate = function() {
-  
 };
 
 
