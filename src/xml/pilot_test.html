@@ -9,14 +9,6 @@
   goog.require('xrx.label');
   goog.require('xrx.pilot');
   goog.require('xrx.token');
-  goog.require('xrx.token.Attribute');
-  goog.require('xrx.token.AttrName');
-  goog.require('xrx.token.AttrValue');
-  goog.require('xrx.token.EndTag');
-  goog.require('xrx.token.EmptyTag');
-  goog.require('xrx.token.NotTag');
-  goog.require('xrx.token.StartEmptyTag');
-  goog.require('xrx.token.StartTag');
 </script>
 </head>
 <body>
@@ -106,7 +98,6 @@ function test04StartTagWithContext() {
   assertEquals('xrx.pilot.prototype.forward', pilot.currentPath());
 
   // context: '<b>', forward
-  /*
   var label2 = new xrx.label([1, 1]);
   var startEmptyTag2 = new xrx.token.StartEmptyTag(label2);
   startEmptyTag2.offset(4);
@@ -117,8 +108,6 @@ function test04StartTagWithContext() {
   assertEquals(25, token2.length());
   assertEquals(true, token2.label().sameAs(label));
   assertEquals('xrx.pilot.prototype.forward', pilot.currentPath());
-  */
-  /*
   // context: '<e/>', zigzag
   var label3 = new xrx.label([1, 4]);
   var startEmptyTag3 = new xrx.token.StartEmptyTag(label3);
@@ -130,7 +119,6 @@ function test04StartTagWithContext() {
   assertEquals(25, token3.length());
   assertEquals(true, token3.label().sameAs(label));
   assertEquals('xrx.pilot.prototype.zigzag', pilot.currentPath());
-  */
 };
 
 function test05EndTag() {
@@ -244,7 +232,6 @@ function test12StartEmptyTag() {
 };
 
 function test13Tag() {
-  // TODO: update by xrx.token.TAG, not start-tag, empty-tag and end-tag separately
 };
 
 function test14Attributes() {
@@ -296,11 +283,7 @@ function stest16PathForward() {
   assertEquals(true, xrx.pilot.prototype.forward == pilot.currentPath());
 };
 
-function test17Goto() {
-  
-};
-
-function stest18SameTag() {
+function stest17SameTag() {
   var pilot = new xrx.pilot(xml);
   // move to '<d attr1="test" attr2="">'
   var first = new xrx.token.StartEmptyTag(new xrx.label([1, 3]));

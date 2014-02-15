@@ -7,6 +7,7 @@ goog.provide('xrx.token.NotTag');
 
 
 goog.require('xrx.token');
+goog.require('xrx.token.Abstract');
 
 
 
@@ -22,4 +23,4 @@ goog.require('xrx.token');
 xrx.token.NotTag = function(label, opt_offset, opt_length) {
   goog.base(this, xrx.token.NOT_TAG, label, opt_offset, opt_length);
 };
-goog.inherits(xrx.token.NotTag, xrx.token);
+goog.inherits(xrx.token.NotTag, xrx.token.Abstract);

@@ -8,6 +8,9 @@ goog.provide('xrx.token.Tag');
 
 
 goog.require('xrx.token');
+goog.require('xrx.token.Abstract');
+
+
 
 /**
  * Constructs a new tag token. The tag token is a generic 
@@ -20,7 +23,7 @@ goog.require('xrx.token');
 xrx.token.Tag = function(label) {
   goog.base(this, xrx.token.TAG, label);
 };
-goog.inherits(xrx.token.Tag, xrx.token);
+goog.inherits(xrx.token.Tag, xrx.token.Abstract);
 
 
 

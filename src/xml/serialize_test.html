@@ -14,8 +14,8 @@
 
 function test01attribute() {
   assertEquals(' attr="v"', xrx.serialize.attribute('attr', 'v'));
-  //assertEquals(' x:attr="v"', xrx.serialize.attributeNs('x', 'attr', 'http://example.org/x'));
-  //assertEquals(' x:attr="v"', xrx.serialize.attributeNs(undefined, 'attr', 'http://example.org/x'));
+  assertEquals(' x:attr=""', xrx.serialize.attributeNs('x', 'x:attr', 'http://example.org/x'));
+  assertEquals(' xmlns:x="http://example.org/x" x:attr=""', xrx.serialize.attributeNs(undefined, 'x:attr', 'http://example.org/x'));
 };
 
 function test02startTag() {
@@ -30,6 +30,35 @@ function test03endTag() {
   assertEquals('</a>', xrx.serialize.endTagNs('xmlns', 'a', 'http://example.org/a'));
   assertEquals('</a:a>', xrx.serialize.endTagNs('xmlns:a', 'a', 'http://example.org/a'));
   assertEquals('</a>', xrx.serialize.endTagNs(undefined, 'a', 'http://example.org/a'));
+};
+
+function test04indent1() {
+  var xml1 = '<a><b>1</b><c>2</c><d>3</d></a>';
+  var expected1 =
+      '<a>\n' +
+      '  <b>1</b>\n' +
+      '  <c>2</c>\n' +
+      '  <d>3</d>\n' +
+      '</a>';
+  assertEquals(expected1, xrx.serialize.indent.forward(xml1, 2));
+  assertEquals(expected1, xrx.serialize.indent.backward(xml1, 2));
+};
+
+function test05indent2() {
+  var xml1 = '<a><b>1</b><c>2</c><d><e>3</e><f>4</f><g></g><h/></d></a>';
+  var expected1 =
+      '<a>\n' +
+      '  <b>1</b>\n' +
+      '  <c>2</c>\n' +
+      '  <d>\n' +
+      '    <e>3</e>\n' +
+      '    <f>4</f>\n' +
+      '    <g></g>\n' +
+      '    <h/>\n' +
+      '  </d>\n' +
+      '</a>';
+  assertEquals(expected1, xrx.serialize.indent.forward(xml1, 2));
+  assertEquals(expected1, xrx.serialize.indent.backward(xml1, 2));
 };
 
 </script>

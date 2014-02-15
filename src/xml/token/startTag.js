@@ -7,6 +7,7 @@ goog.provide('xrx.token.StartTag');
 
 
 goog.require('xrx.token');
+goog.require('xrx.token.Abstract');
 
 
 
@@ -18,7 +19,7 @@ goog.require('xrx.token');
 xrx.token.StartTag = function(label, opt_offset, opt_length) {
   goog.base(this, xrx.token.START_TAG, label, opt_offset, opt_length);
 };
-goog.inherits(xrx.token.StartTag, xrx.token);
+goog.inherits(xrx.token.StartTag, xrx.token.Abstract);
 
 
 

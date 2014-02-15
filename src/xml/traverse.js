@@ -36,6 +36,15 @@ xrx.traverse.prototype.stream = function() {
 /**
  * 
  */
+xrx.traverse.prototype.xml = function() {
+  return this.stream_.xml();
+};
+
+
+
+/**
+ * 
+ */
 xrx.traverse.prototype.stop = function() {
   this.stream_.stop();
 };
@@ -172,7 +181,7 @@ xrx.traverse.prototype.traverse = function(opt_token, forward) {
   var traverse = this;
   var label = opt_token ? opt_token.label().clone() : new xrx.label();
   var start = opt_token ? opt_token.offset() : undefined;
-  var lastTag = opt_token ? opt_token.type() : xrx.token.ROOT;
+  var lastTag = opt_token ? opt_token.type() : xrx.token.UNDEFINED;
   var attrLabel = new xrx.label();
   var nsLabel = new xrx.label();
   var firstTag = opt_token ? true : false;
@@ -182,7 +191,7 @@ xrx.traverse.prototype.traverse = function(opt_token, forward) {
       if (firstTag) {
         firstTag = false;
       } else {
-        lastTag === xrx.token.START_TAG || lastTag === xrx.token.ROOT ? 
+        lastTag === xrx.token.START_TAG || lastTag === xrx.token.UNDEFINED ? 
             label.child() : label.nextSibling();
       }
     } else {
@@ -200,13 +209,13 @@ xrx.traverse.prototype.traverse = function(opt_token, forward) {
       if (firstTag) {
         firstTag = false;
       } else {
-        lastTag === xrx.token.START_TAG || lastTag === xrx.token.ROOT ? 
+        lastTag === xrx.token.START_TAG || lastTag === xrx.token.UNDEFINED ? 
             label.child() : label.nextSibling();
       }
     } else {
       // note: this is valid for the preceding-sibling and the ancestor axis but
       // not for the preceding axis
-      lastTag === xrx.token.END_TAG || lastTag === xrx.token.ROOT ? 
+      lastTag === xrx.token.END_TAG || lastTag === xrx.token.UNDEFINED ? 
           label.child() : label.precedingSibling();
     }
 
@@ -225,7 +234,7 @@ xrx.traverse.prototype.traverse = function(opt_token, forward) {
         if (lastTag !== xrx.token.START_TAG) label.parent();
       }
     } else {
-      lastTag === xrx.token.END_TAG || lastTag === xrx.token.ROOT ? 
+      lastTag === xrx.token.END_TAG || lastTag === xrx.token.UNDEFINED ? 
           label.child() : label.precedingSibling();
     }
 

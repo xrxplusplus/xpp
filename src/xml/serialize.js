@@ -9,13 +9,14 @@ goog.provide('xrx.serialize');
 
 goog.require('xrx.stream');
 goog.require('xrx.token');
+goog.require('xrx.traverse');
 
 
 
 /**
  * Function module for XML serializazion.
  */
-xrx.serialize = {};
+xrx.serialize = function() {};
 
 
 
@@ -123,7 +124,8 @@ xrx.serialize.endTagNs = function(nsPrefix, localName, namespaceUri) {
 
 
 /**
- *
+ * Serialize a start-empty-tag token.
+ * @return {string} The start-empty-tag token string.
  */
 xrx.serialize.startEmptyTag = function(qName, opt_namespaces, opt_attributes) {
   var namespaces = opt_namespaces || '';
@@ -169,53 +171,168 @@ xrx.serialize.namespace = function(prefix, uri) {
 
 
 /**
- * Serialize a XML document with indentation.
+ *
+ */
+xrx.serialize.indent = {};
+
+
+
+/**
+ * Serialize a XML document with indentation in forward direction.
  * @return {string} The indented XML document.
  */
-xrx.serialize.indent = function(xml, indent) {
-  var stream = new xrx.stream(xml);
-  var level = 0;
-  var lastRow = xrx.token.UNDEFINED;
-  var lastToken = xrx.token.UNDEFINED;
+xrx.serialize.indent.forward = function(xml, indent, opt_start, opt_maxLines) {
+  var traverse = new xrx.traverse(xml);
+  var lastToken = opt_start ? opt_start.type() : xrx.token.UNDEFINED;
   var output = '';
-  
-  var newLine = function(offset, length1, length2) {
-    for(var i = 0, ind = level * indent; i < ind; i++) {
-      output += ' ';
-    }
-    output += stream.xml().substr(offset, length1);
+  var lines = 0;
+
+  var line = function(label, offset, length1, length2) {
+
+    output += traverse.xml().substr(offset, length1);
+
     if (length1 !== length2) {
-      output += stream.xml().substr(offset + length1, length2 - length1);
+      output += traverse.xml().substr(offset + length1, length2 - length1);
     }
   };
   
-  stream.rowStartTag = function(offset, length1, length2) {
-    if (lastRow === xrx.token.START_TAG) level += 1;
-    if (lastToken === xrx.token.START_TAG || lastToken === xrx.token.EMPTY_TAG) output += '\n';
-    newLine(offset, length1, length2);
-    lastRow = xrx.token.START_TAG;
+  var newLine = function(label, offset, length1, length2) {
+    var level = label.length() - 1;
+
+    output += '\n';
+
+    for(var i = 0, ind = level * indent; i < ind; i++) {
+      output += ' ';
+    }
+    line(label, offset, length1, length2);
+    if (opt_maxLines && (++lines >= opt_maxLines)) traverse.stop();
+  };
+
+  var inLine = function(label, offset, length1, length2) {
+
+    line(label, offset, length1, length2);
+  };
+  
+  traverse.rowStartTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.START_TAG || lastToken === xrx.token.END_TAG) {
+      newLine(label, offset, length1, length2);
+    } else {
+      inLine(label, offset, length1, length2);
+    };
+
     length1 !== length2 ? lastToken = xrx.token.NOT_TAG : 
         lastToken = xrx.token.START_TAG;
   };
   
-  stream.rowEmptyTag = function(offset, length1, length2) {
-    if(lastRow === xrx.token.START_TAG) level += 1;
-    newLine(offset, length1, length2);
-    lastRow = xrx.token.END_TAG;
-    length1 !== length2 ? lastToken = xrx.token.NOT_TAG : 
-      lastToken = xrx.token.EMPTY_TAG;
-  };
-  
-  stream.rowEndTag = function(offset, length1, length2) {
-    if (lastRow !== xrx.token.START_TAG) level -= 1;
-    output += stream.xml().substr(offset, length1);
-    if (level !== 0) output += '\n';
-    lastRow = xrx.token.END_TAG;
+  traverse.rowEmptyTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.START_TAG || lastToken === xrx.token.END_TAG) {
+      newLine(label, offset, length1, length2);
+    } else {
+      inLine(label, offset, length1, length2);
+    };
+
     length1 !== length2 ? lastToken = xrx.token.NOT_TAG : 
       lastToken = xrx.token.END_TAG;
   };
   
-  stream.forward();
+  traverse.rowEndTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.NOT_TAG || lastToken === xrx.token.START_TAG) {
+      inLine(label, offset, length1, length2);
+    } else {
+      newLine(label, offset, length1, length2);
+    }
+
+    length1 !== length2 ? lastToken = xrx.token.NOT_TAG : 
+      lastToken = xrx.token.END_TAG;
+  };
+  
+  traverse.forward(opt_start);
+  
+  return output;
+};
+
+
+
+/**
+ * Serialize a XML document with indentation in backward direction.
+ * @return {string} The indented XML document.
+ */
+xrx.serialize.indent.backward = function(xml, indent, opt_start, opt_maxLines) {
+  var traverse = new xrx.traverse(xml);
+  var lastToken = opt_start ? opt_start.type() : xrx.token.UNDEFINED;
+  var output = '';
+  var lines = 0;
+
+  var line = function(label, offset, length1, length2) {
+
+    if (length1 !== length2) {
+      output = traverse.xml().substr(offset + length1, length2 - length1) + output;
+    }
+
+    output = traverse.xml().substr(offset, length1) + output;
+  };
+  
+  var newLine = function(label, offset, length1, length2) {
+    var level = label.length() - 1;
+
+    for(var i = 0, ind = level * indent; i < ind; i++) {
+      output = ' ' + output;
+    }
+
+    output = '\n' + output;
+
+    line(label, offset, length1, length2);
+
+    if (opt_maxLines && (++lines >= opt_maxLines)) traverse.stop();
+  };
+
+  var inLine = function(label, offset, length1, length2) {
+
+    line(label, offset, length1, length2);
+  };
+  
+  traverse.rowStartTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.START_TAG) {
+      label.push(0);
+      newLine(label, offset, length1, length2);
+    } else {
+      inLine(label, offset, length1, length2);
+    }
+
+    lastToken = xrx.token.START_TAG;
+  };
+  
+  traverse.rowEmptyTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.END_TAG) {
+      label.parent();
+      newLine(label, offset, length1, length2);
+    } else {
+      newLine(label, offset, length1, length2);
+    }
+
+    lastToken = xrx.token.START_TAG;
+  };
+  
+  traverse.rowEndTag = function(label, offset, length1, length2) {
+
+    if (lastToken === xrx.token.UNDEFINED) {
+      inLine(label, offset, length1, length2);
+    } else if (lastToken === xrx.token.END_TAG) {
+      label.parent();
+      newLine(label, offset, length1, length2);
+    } else {
+      newLine(label, offset, length1, length2);
+    }
+
+    lastToken = xrx.token.END_TAG;
+  };
+  
+  traverse.backward(opt_start);
   
   return output;
 };

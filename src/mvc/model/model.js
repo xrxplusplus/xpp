@@ -23,10 +23,6 @@ xrx.model = function(element) {
 
 
   this.element_ = element;
-  
-
-
-  this.recalculate();
 };
 goog.inherits(xrx.model, xrx.component);
 
@@ -37,7 +33,6 @@ xrx.model.prototype.recalculate = goog.abstractMethod;
 
 
 xrx.model.classes = [
-  'xrx-instance',
   'xrx-bind'
 ];
 

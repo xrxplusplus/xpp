@@ -2,8 +2,16 @@
 <html>
 <head>
 <title>XRX++ Unit Tests - xrx.bind</title>
-<script src='../../lib/closure-library/closure/goog/base.js'></script>
-<script src='../deps.js'></script>
+<script src='../../../lib/codemirror/lib/codemirror.js'></script>
+<link rel="stylesheet" href="../../../lib/codemirror/lib/codemirror.css"/>
+<script type="text/javascript" src="../../lib/jssaxparser/SAXException.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/AttributesImpl.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/LocatorImpls.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/NamespaceSupport.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/sax.js"></script>
+<script type="text/javascript" src="../../../lib/jssaxparser/DefaultHandlers.js"></script>
+<script src='../../../lib/closure-library/closure/goog/base.js'></script>
+<script src='../../deps.js'></script>
 <script type="text/javascript">
   goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
@@ -12,7 +20,7 @@
   goog.require('xrx.label');
   goog.require('xrx.node');
 </script>
-<link rel="stylesheet" type="text/css" href="../view/default.css"/>
+<link rel="stylesheet" type="text/css" href="../../ui/wysiwym/default.css"/>
 </head>
 <body>
 
@@ -21,24 +29,16 @@
 
 <script type="text/javascript">
 
-function test01() {
-  var element = goog.dom.getElement('b1');
-  var bind = new xrx.bind(element);
-  
-
-};
-
-function test02() {
+function test() {
   var expectedLabel = new xrx.label([1, 2, 0]);
 
-  assertEquals(xrx.node.TEXT, xrx.Model['b1'].node.type());
-  assertEquals(true, xrx.Model['b1'].node.label().sameAs(expectedLabel));
+  assertEquals(xrx.node.TEXT, xrx.model.getComponent('b1').node_[0].getType());
+  assertEquals(true, xrx.model.getComponent('b1').node_[0].getLabel().sameAs(expectedLabel));
 };
 
 </script>
 <script>
   xrx.install();
-  console.log(xrx);
 </script>
 
 </body>

@@ -424,7 +424,6 @@ xrx.stream.prototype.forward = function(opt_offset) {
  * and fires start-row, end-row, empty row and namespace events. The 
  * streaming starts at the end of the XML document / fragment by 
  * default or optionally at an offset.
- * TODO(jochen): do we need length2 in backward streaming events?
  * 
  * @param {?number} opt_offset The offset.
  */
@@ -434,6 +433,7 @@ xrx.stream.prototype.backward = function(opt_offset) {
   var token;
   var offset;
   var length;
+  var pos = !opt_offset ? reader.length() : opt_offset;
 
   !opt_offset ? reader.last() : reader.set(opt_offset);
   this.stopped_ = false;
@@ -453,10 +453,12 @@ xrx.stream.prototype.backward = function(opt_offset) {
       if (reader.peek(1) !== '/') {
         var off = reader.pos();
         var len1 = offset - reader.pos() + 1;
-        stream.rowStartTag(off, len1);
+        stream.rowStartTag(off, len1, pos - reader.pos());
+        pos = reader.pos();
         stream.features(xrx.token.START_TAG, off, len1);
       } else {
-        stream.rowEndTag(reader.pos(), offset - reader.pos() + 1);
+        stream.rowEndTag(reader.pos(), offset - reader.pos() + 1, pos - reader.pos());
+        pos = reader.pos();
         stream.features(xrx.token.END_TAG, reader.pos(), offset - reader.pos() + 1);
       }
       reader.previous();
@@ -468,7 +470,8 @@ xrx.stream.prototype.backward = function(opt_offset) {
       state = xrx.stream.State_.NOT_TAG;
       var off = reader.pos();
       var len1 = offset - reader.pos() + 1;
-      stream.rowEmptyTag(off, len1);
+      stream.rowEmptyTag(off, len1, pos - reader.pos());
+      pos = reader.pos();
       stream.features(xrx.token.EMPTY_TAG, off, len1);
       reader.previous();
       if (reader.finished()) state = xrx.stream.State_.XML_END;
@@ -479,7 +482,6 @@ xrx.stream.prototype.backward = function(opt_offset) {
       } else {
         offset = reader.pos();
         reader.backwardExclusive('>');
-        //stream.tokenNotTag.call(this, reader.pos(), offset - reader.pos() + 1);
         reader.previous();
         state = xrx.stream.State_.GT_SEEN;
       }

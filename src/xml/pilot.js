@@ -1,5 +1,5 @@
 /**
- * @fileoverview A class representing a pilot to traverse the 
+ * @fileoverview A class representing a pilot to reach the 
  * tokens of a XML tree.
  */
 
@@ -10,64 +10,39 @@ goog.provide('xrx.pilot');
 goog.require('xrx.label');
 goog.require('xrx.stream');
 goog.require('xrx.token');
-goog.require('xrx.token.Attribute');
-goog.require('xrx.token.AttrName');
-goog.require('xrx.token.AttrValue');
-goog.require('xrx.token.EmptyTag');
-goog.require('xrx.token.EndTag');
-goog.require('xrx.token.Namespace');
-goog.require('xrx.token.NotTag');
-goog.require('xrx.token.NsPrefix');
-goog.require('xrx.token.NsUri');
-goog.require('xrx.token.Root');
-goog.require('xrx.token.StartEmptyTag');
-goog.require('xrx.token.StartTag');
-goog.require('xrx.token.Tag');
-goog.require('xrx.token.TagName');
 goog.require('xrx.traverse');
 
 
 
 /**
- * Constructs a new pilot. A pilot is able to traverse a labeled 
- * XML instance in forward and backward direction.
+ * Constructs a new XML pilot.
  * 
  * @param {!string} xml A XML string. 
  * @constructor
  */
 xrx.pilot = function(xml) {
 
-
-
   /**
-   * Initialize XML traversing.
+   * Traverse object.
+   * @type {xrx.traverse}
+   * @private
    */
   this.traverse_ = new xrx.traverse(xml);
 
-
-
   /**
-   * Reference the XML stream.
-   * 
+   * Stream object.
    * @type {xrx.stream}
    * @private
    */
   this.stream_ = this.traverse_.stream();
 
-
-
   /**
    * Path lastly used to traverse the XML instance 
    * (for debugging only).
-   * 
+   * @type {string}
    * @private
    */
   this.currentPath_;
-};
-
-
-xrx.pilot.prototype.stream = function() {
-  return this.stream_;
 };
 
 
@@ -87,8 +62,8 @@ xrx.pilot.prototype.currentPath = function() {
  * @return {!string}
  */
 xrx.pilot.prototype.xml = function(token) {
-  return token === undefined ? this.stream_.xml() : 
-    this.stream_.xml().substr(token.offset(), token.length());
+  return token ? this.traverse_.xml() : 
+    this.traverse_.xml().substr(token.offset(), token.length());
 };
 
 
@@ -98,13 +73,13 @@ xrx.pilot.prototype.xml = function(token) {
  * @private
  */
 xrx.pilot.prototype.stop = function() {
-  this.stream_.stop();
+  this.traverse_.stop();
 };
 
 
 
 /**
- * Forward traversing.
+ * Forward piloting.
  * 
  * @param context The context token.
  * @param target The target token.
@@ -172,62 +147,46 @@ xrx.pilot.prototype.forward = function(context, target) {
 
 
 /**
- * Backward traversing.
+ * Backward piloting.
  * 
- * @param {?} target The target token.
+ * @param context The context token.
+ * @param target The target token.
  */
 xrx.pilot.prototype.backward = function(context, target) {
-  var tok, startAt = 0;
+  var tok;
   var pilot = this;
-  var label; 
-  if (context === null) {
-    label = new xrx.label();
-  } else {
-    label = context.label().clone();
-    startAt = context.offset();
-  }
-  var lastTag = xrx.token.START_TAG;
   
-  pilot.stream_.rowStartTag = function(offset, length1, length2) {
-    lastTag === xrx.token.END_TAG ? null : label.parent();
+  pilot.traverse_.rowStartTag = function(label, offset, length1, length2) {
+
     if (target.compare(xrx.token.START_TAG, label)) {
       tok = new xrx.token.StartTag(label.clone());
       tok.offset(offset);
       tok.length(length1);
       pilot.stop();
     }
-    lastTag = xrx.token.START_TAG;
   };
   
-  pilot.stream_.rowEndTag = function(offset, length1, length2) {
-    lastTag === xrx.token.UNDEFINED || lastTag === xrx.token.END_TAG ?
-        label.child() : label.precedingSibling();
+  pilot.traverse_.rowEndTag = function(label, offset, length1, length2) {
+
     if (target.compare(xrx.token.END_TAG, label)) {
       tok = new xrx.token.EndTag(label.clone());
       tok.offset(offset);
       tok.length(length1);
       pilot.stop();
     }
-    lastTag = xrx.token.END_TAG;
   };
   
-  pilot.stream_.rowEmptyTag = function(offset, length1, length2) {
-    lastTag === xrx.token.UNDEFINED || lastTag === xrx.token.END_TAG ?
-        label.child() : label.precedingSibling();
+  pilot.traverse_.rowEmptyTag = function(label, offset, length1, length2) {
+
     if (target.compare(xrx.token.EMPTY_TAG, label)) {
       tok = new xrx.token.EmptyTag(label.clone());
       tok.offset(offset);
       tok.length(length1);
       pilot.stop();
     }
-    lastTag = xrx.token.START_TAG;
-  };
-  
-  pilot.stream_.rowNotTag = function(offset, length1, length2) {
-    // not used for backward streams
   };
 
-  pilot.stream_.backward(startAt);
+  pilot.traverse_.backward(context);
 
   return tok;
 };
@@ -399,16 +358,18 @@ xrx.pilot.prototype.emptyTag = function(context, target, opt_update) {
 
 
 /**
- * Get the location and optionally update a xrx.token.TagName.
+ * Get the location of a tag-name token.
  * 
- * @param {?} context
+ * @param {(!xrx.token.StartTag|!xrx.token.EndTag|!xrx.token.EmptyTag
+ * |!xrx.token.StartEmptyTag)} context The context token at which to 
+ * start piloting.
  * @param {(!xrx.token.StartTag|!xrx.token.EndTag|!xrx.token.EmptyTag
  * |!xrx.token.StartEmptyTag|!xrx.token.Tag)} target The tag to which 
  * the tag-name belongs. 
- * @param {?string} opt_update The new tag-name.
- * @return {!xrx.token.TagName}
+ * @return {xrx.token.TagName} The tag-name token with offset and length
+ * information.
  */
-xrx.pilot.prototype.tagName = function(context, target, opt_update) {
+xrx.pilot.prototype.tagName = function(context, target) {
   var pos = this.stream_.pos();
   var tag = this.path(context, target);
   var xml = this.stream_.xml().substr(tag.offset(), tag.length());
@@ -419,21 +380,23 @@ xrx.pilot.prototype.tagName = function(context, target, opt_update) {
   // reset the stream reader position, important!
   this.stream_.pos(pos);
 
-  return !opt_update ? tagName : 
-      xrx.update.tagName(this.stream_, tagName, opt_update);
+  return tagName;
 };
 
 
 
 /**
- * Get the location and optionally update a xrx.token.Attribute.
+ * Get the location of a attribute token.
  * 
- * @param {?} context
- * @param {!xrx.token.Attribute} target The attribute token.
- * @param {?string} opt_update The new attribute.
- * @return {!xrx.token.Attribute}
+ * @param {(!xrx.token.StartTag|!xrx.token.EndTag|!xrx.token.EmptyTag
+ * |!xrx.token.StartEmptyTag)} context The context token at which to 
+ * start piloting.
+ * @param {!xrx.token.Attribute} target The attribute token without
+ * offset and length information.
+ * @return {xrx.token.Attribute} The attribute token with offset and
+ * length information.
  */
-xrx.pilot.prototype.attribute = function(context, target, opt_update) {
+xrx.pilot.prototype.attribute = function(context, target) {
   var pos = this.stream_.pos();
   var tag = this.path(context, target.tag());
   var xml = this.stream_.xml().substr(tag.offset(), tag.length());
@@ -444,21 +407,23 @@ xrx.pilot.prototype.attribute = function(context, target, opt_update) {
   // reset the stream reader position, important!
   this.stream_.pos(pos);
   
-  return !opt_update ? attribute :
-      xrx.update.attribute(this.stream_, attribute, opt_update);
+  return attribute;
 };
 
 
 
 /**
- * Get the location and optionally update a xrx.token.AttrName.
+ * Get the location of a attribute name token.
  * 
- * @param {?} context
- * @param {!xrx.token.AttrName} target The attribute-name token.
- * @param {?string} opt_update The new attribute-name.
- * @return {!xrx.token.AttrName}
+ * @param {(!xrx.token.StartTag|!xrx.token.EndTag|!xrx.token.EmptyTag
+ * |!xrx.token.StartEmptyTag)} context The context token at which to 
+ * start piloting.
+ * @param {!xrx.token.AttrName} target The attribute-name token without
+ * offset and length information.
+ * @return {xrx.token.AttrName} the attribute-name token with offset and
+ * length information.
  */
-xrx.pilot.prototype.attrName = function(context, target, opt_update) {
+xrx.pilot.prototype.attrName = function(context, target) {
   var pos = this.stream_.pos();
   var tag = this.path(context, target.tag());
   var xml = this.stream_.xml().substr(tag.offset(), tag.length());
@@ -469,8 +434,7 @@ xrx.pilot.prototype.attrName = function(context, target, opt_update) {
   // reset the stream reader position, important!
   this.stream_.pos(pos);
 
-  return opt_update === undefined ? attrName :
-      xrx.update.attrName(this.stream_, attrName, opt_update);  
+  return attrName;  
 };
 
 

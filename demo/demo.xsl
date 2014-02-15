@@ -4,7 +4,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:demo="http://www.monasterium.net/NS/demo">
-  <xsl:import href="../src/ui/xrx2html.xsl"/>
+  <xsl:import href="xrx2html.xsl"/>
   <xsl:output method="html" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="filename" select="/xhtml:div/@data-filename"/>
   <xsl:variable name="relativepath" select="/xhtml:div/@data-relativepath"/>
@@ -15,6 +15,12 @@
       <head>
         <meta charset="utf-8"/>
         <title>XRX++ - A JavaScript Library for Native and Visual in-Browser XML Editing.</title>
+        <script>
+          <xsl:attribute name="src">
+            <xsl:value-of select="$relativepath"/>
+            <xsl:text>lib/jssaxparser/SAXException.js</xsl:text>
+          </xsl:attribute>
+        </script>
         <script>
           <xsl:attribute name="src">
             <xsl:value-of select="$relativepath"/>
@@ -103,7 +109,6 @@
           goog.require('goog.dom');
           goog.require('goog.dom.forms');
           goog.require('goog.userAgent.product');
-          goog.require('client');
           goog.require('xrx');
         </script>
         <link rel="stylesheet" type="text/css">
@@ -125,7 +130,7 @@
             <a>
               <xsl:attribute name="href">
                 <xsl:value-of select="$relativepath"/>
-                <xsl:text>index.xml</xsl:text>
+                <xsl:text>index.html</xsl:text>
               </xsl:attribute>
               <xrx:text>XRX++</xrx:text>
             </a>
@@ -134,47 +139,11 @@
           <div style="height: 3em"><span>&#160;</span></div>
           <h3>Basic Features</h3>
           <ul class="nostyle">
-            <!--li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/xml-cursor.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'xml-cursor.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>XML Cursor</xsl:text>
-              </a>
-            </li>
             <li>
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/model-view-controller.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'model-view-controller.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Model-View-Controller</xsl:text>
-              </a>
-            </li>
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/drag-and-drop.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'drag-and-drop.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Edit XML with Drag and Drop</xsl:text>
-              </a>
-            </li-->
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/wysiwym-xml-authoring.xml</xsl:text>
+                  <xsl:text>demo/wysiwym-xml-authoring.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'wysiwym-xml-authoring.xml'">
                   <xsl:attribute name="class">active</xsl:attribute>
@@ -186,7 +155,7 @@
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/data-binding.xml</xsl:text>
+                  <xsl:text>demo/data-binding.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'data-binding.xml'">
                   <xsl:attribute name="class">active</xsl:attribute>
@@ -194,35 +163,11 @@
                 <xsl:text>Data Binding</xsl:text>
               </a>
             </li>
-            <!--li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/undo-redo-history.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'undo-redo-history.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Undo Redo XML History</xsl:text>
-              </a>
-            </li>
             <li>
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/real-time-editing.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'real-time-editing.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Collaborative Real-Time XML Editing</xsl:text>
-              </a>
-            </li-->
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/large-document-support.xml</xsl:text>
+                  <xsl:text>demo/large-document-support.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'large-document-support.xml'">
                   <xsl:attribute name="class">active</xsl:attribute>
@@ -237,7 +182,7 @@
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/getting-started.xml</xsl:text>
+                  <xsl:text>demo/getting-started.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'getting-started.xml'">
                   <xsl:attribute name="class">active</xsl:attribute>
@@ -245,63 +190,17 @@
                 <xsl:text>Getting Started</xsl:text>
               </a>
             </li>
-            <!--li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/basic-controls.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'basic-controls.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Basic Controls</xsl:text>
-              </a>
-            </li>
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/textual-ui-controls.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'textual-ui-controls.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>Textual UI Controls</xsl:text>
-              </a>
-            </li>
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>demo/xpath-function-reference.xml</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="$filename = 'xpath-function-reference.xml'">
-                  <xsl:attribute name="class">active</xsl:attribute>
-                </xsl:if>
-                <xsl:text>XPath Function Reference</xsl:text>
-              </a>
-            </li-->
           </ul>
           <h3>Developer's Guide</h3>
           <ul class="nostyle">
-            <!--li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>doc/custom-xpath-functions.html</xsl:text>
-                </xsl:attribute>
-                <xsl:text>Custom Controls</xsl:text>
-              </a>
-            </li>
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
-                  <xsl:text>doc/custom-controls.html</xsl:text>
+                  <xsl:text>http://github.com/xrxplusplus</xsl:text>
                 </xsl:attribute>
-                <xsl:text>Custom XPath Functions</xsl:text>
+                <xsl:text>Source</xsl:text>
               </a>
-            </li-->
+            </li>
             <li>
               <a>
                 <xsl:attribute name="href">
@@ -326,7 +225,7 @@
           <xsl:apply-templates/>
         </div>
         <script type="text/javascript">
-          client.install();
+          xrx.install();
         </script>
       </body>
     </html>

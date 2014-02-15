@@ -24,10 +24,11 @@
 <script type="text/javascript">
 
 var xml           =         '<a>1<b>2</b>3<c/>4<d><e>5</e>6</d></a>';
-var startTagsTest =         '0   4             18 21               '.replace(/ /g, '');  
-var endTagsTest   =         '        8                25   30  34  '.replace(/ /g, ''); 
-var emptyTagsTest =         '             13                       '.replace(/ /g, '');
-var notTagsTest   =         '   3   7    12   17     24   29       '.replace(/ /g, '');
+var startTagsTest =         '0   4             18 21                 '.replace(/ /g, '');  
+var endTagsTest   =         '        8                25   30  34    '.replace(/ /g, ''); 
+var emptyTagsTest =         '             13                         '.replace(/ /g, '');
+var notTagsTest   =         '   3   7    12   17  21 24   29   34  38'.replace(/ /g, '');
+var length2Test   =         '4   4   5    5    3  4   5    4   4     '.replace(/ /g, '');
 
 var startTags, endTags, emptyTags, notTags;
 
@@ -95,19 +96,25 @@ function test03StopAtEmptyTagWithOffset() {
 };
 
 function test04Forward() {
-  var startTags = [], endTags = [], emptyTags = [];
+  var startTags = [], endTags = [], emptyTags = [], notTags = [], len2 = [];
   var stream = new xrx.stream(xml);
 
-  stream.rowStartTag = function(offset) {
+  stream.rowStartTag = function(offset, length1, length2) {
     startTags.push(offset.toString());
+    notTags.push((offset + length1).toString());
+    len2.push(length2.toString());
   };
 
-  stream.rowEndTag = function(offset) {
+  stream.rowEndTag = function(offset, length1, length2) {
     endTags.push(offset.toString());
+    notTags.push((offset + length1).toString());
+    len2.push(length2.toString());
   };
 
-  stream.rowEmptyTag = function(offset) {
+  stream.rowEmptyTag = function(offset, length1, length2) {
     emptyTags.push(offset.toString());
+    notTags.push((offset + length1).toString());
+    len2.push(length2.toString());
   };
   
   stream.forward();
@@ -115,6 +122,8 @@ function test04Forward() {
   assertEquals(startTagsTest, startTags.join(''));
   assertEquals(endTagsTest, endTags.join(''));
   assertEquals(emptyTagsTest, emptyTags.join(''));
+  assertEquals(notTagsTest, notTags.join(''));
+  assertEquals(length2Test, len2.join(''));
 };
 
 function test05ForwardWithOffset() {
@@ -149,19 +158,25 @@ function test05ForwardWithOffset() {
 };
 
 function test06Backward() {
-  var startTags = [], endTags = [], emptyTags = [];
+  var startTags = [], endTags = [], emptyTags = [], notTags = [], len2 = [];
   var stream = new xrx.stream(xml);
 
-  stream.rowStartTag = function(offset) {
+  stream.rowStartTag = function(offset, length1, length2) {
     startTags.unshift(offset.toString());
+    notTags.unshift((offset + length1).toString());
+    len2.unshift(length2.toString());
   };
 
-  stream.rowEndTag = function(offset) {
+  stream.rowEndTag = function(offset, length1, length2) {
     endTags.unshift(offset.toString());
+    notTags.unshift((offset + length1).toString());
+    len2.unshift(length2.toString());
   };
 
-  stream.rowEmptyTag = function(offset) {
+  stream.rowEmptyTag = function(offset, length1, length2) {
     emptyTags.unshift(offset.toString());
+    notTags.unshift((offset + length1).toString());
+    len2.unshift(length2.toString());
   };
   
   stream.backward();
@@ -169,6 +184,8 @@ function test06Backward() {
   assertEquals(startTagsTest, startTags.join(''));
   assertEquals(endTagsTest, endTags.join(''));
   assertEquals(emptyTagsTest, emptyTags.join(''));
+  assertEquals(notTagsTest, notTags.join(''));
+  assertEquals(length2Test, len2.join(''));
 };
 
 function test07BackwardWithOffset() {

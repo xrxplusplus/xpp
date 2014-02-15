@@ -23,7 +23,7 @@ goog.require('xrx.pilot');
 /**
  * @constructor
  */
-xrx.instance = function(element, callback) {
+xrx.instance = function(element) {
   goog.base(this, element);
 
 
@@ -37,10 +37,6 @@ xrx.instance = function(element, callback) {
 
 
   this.pilot_;
-
-
-
-  this.recalculate(callback);
 };
 goog.inherits(xrx.instance, xrx.model);
 
@@ -80,22 +76,12 @@ xrx.instance.prototype.getDataInline = function() {
 /**
  * 
  */
-xrx.instance.prototype.getDataRemote = function(callback) {
-  var self = this;
-  var request = new goog.net.XhrIo();
+xrx.instance.prototype.getDataRemote = function(xml) {
   var parse = new xrx.parse();
 
-  goog.events.listen(request, 'complete', function() {
-    if(request.getResponseHeader('Content-Type') != 'text/plain') 
-        throw Error('Expected content type is "text/plain."');
-    self.xml_ = parse.normalize(request.getResponseText());
-    self.stream_ = new xrx.stream(self.xml_);
-    self.pilot_ = new xrx.pilot(this.xml_);
-
-    if (callback) callback(self);
-  });
-
-  request.send(this.getSrcUri(), 'GET');
+  this.xml_ = parse.normalize(xml);
+  this.stream_ = new xrx.stream(this.xml_);
+  this.pilot_ = new xrx.pilot(this.xml_);
 };
 
 
@@ -104,8 +90,8 @@ xrx.instance.prototype.getDataRemote = function(callback) {
 /**
  * @override
  */
-xrx.instance.prototype.recalculate = function(callback) {
-  this.getSrcUri() ? this.getDataRemote(callback) : this.getDataInline();
+xrx.instance.prototype.recalculate = function(xml) {
+  this.getSrcUri() ? this.getDataRemote(xml) : this.getDataInline();
 };
 
 
@@ -115,6 +101,7 @@ xrx.instance.prototype.recalculate = function(callback) {
  */
 xrx.instance.prototype.xml = function(xml) {
   if (xml) this.xml_ = xml;
+  if (!this.xml_) this.recalculate();
   return this.xml_;
 };
 
@@ -151,6 +138,7 @@ xrx.instance.prototype.getDocument = function(id) {
  * @return {!xrx.index}
  */
 xrx.instance.prototype.getIndex = function() {
+  if (!this.xml_) this.recalculate();
   if (this.index_ === undefined) this.index_ = new xrx.index(this.xml_);
 
   return this.index_;

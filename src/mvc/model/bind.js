@@ -15,14 +15,15 @@ goog.require('xrx.xpath');
  * @constructor
  */
 xrx.bind = function(element) {
-
-
-
   goog.base(this, element);
 
 
 
-  this.node;
+  this.node_;
+
+
+
+  this.recalculate()
 };
 goog.inherits(xrx.bind, xrx.model);
 
@@ -37,7 +38,11 @@ goog.inherits(xrx.bind, xrx.model);
 xrx.bind.prototype.recalculate = function() {
   var result = xrx.xpath.evaluate(this.getRefExpression(), xrx.model.getInstanceDefault(), null, 
       xrx.xpath.XPathResultType.ANY_TYPE);
+  this.node_ = [];
+  var node;
 
-  this.node = result.iterateNext();
+  while(node = result.iterateNext()) {
+    this.node_.push(node);
+  };
 };
 

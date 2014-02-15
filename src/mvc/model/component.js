@@ -12,6 +12,7 @@ goog.require('goog.ui.IdGenerator');
 
 
 /**
+ * Constructs a new model-view-controller component.
  * @constructor
  */
 xrx.component = function(element) {
@@ -23,6 +24,10 @@ xrx.component = function(element) {
 
 
 
+/**
+ * Function is called by the model-view-controller when the component
+ * is inizialized the first time. Each component must implement this.
+ */
 xrx.component.prototype.createDom = goog.abstractMethod;
 
 

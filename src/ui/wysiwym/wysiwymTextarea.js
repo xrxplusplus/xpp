@@ -118,7 +118,7 @@ xrx.wysiwym.textarea.prototype.eventBeforeChange = function(cm, change) {
 
 /**
  * Function is called after the content of the WYSIWYM control has changed as
- * a result of user interactions or as a result of a internal update by the
+ * a result of a user interaction or as a result of a internal update by the
  * model-view-controller.
  * @param {!CodeMirror} cm The codemirror instance.
  * @param {!Object} change An object containing information about the changes.
@@ -126,11 +126,12 @@ xrx.wysiwym.textarea.prototype.eventBeforeChange = function(cm, change) {
 xrx.wysiwym.textarea.prototype.eventChange = function(cm, change) {
 
   if (this.internalUpdate === false) {
-    var label = this.getNode().getLabel();
+    var node = xrx.model.cursor.getNode(0);
+    var label = node.getLabel().clone();
     label.push(0);
-    var pilot = this.getNode().getInstance().getPilot();
-    var notTag = new xrx.token.NotTag(label)
-    notTag = pilot.location(this.getNode().getToken(), notTag);
+    var pilot = node.getInstance().getPilot();
+    var notTag = new xrx.token.NotTag(label);
+    notTag = pilot.location(node.getToken(), notTag);
 
     xrx.controller.replaceNotTag(this, notTag, this.getValue());
   }

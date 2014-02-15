@@ -6,6 +6,7 @@
 goog.provide('xrx.view');
 
 
+
 goog.require('goog.string');
 goog.require('xrx.control');
 
@@ -53,12 +54,13 @@ xrx.view.prototype.refresh = goog.abstractMethod;
 
 
 xrx.view.classes = [
+  'xrx-repeat',
   'xrx-console',
   'xrx-output',
+  'xrx-richxml-tagname',
   'xrx-wysiwym-input',
   'xrx-wysiwym-richxml',
-  'xrx-wysiwym-textarea',
-  'xrx-richxml-tagname'
+  'xrx-wysiwym-textarea'
 ];
 
 
@@ -71,6 +73,7 @@ xrx.view.addClass = function(name) {
   }
   xrx.view.classes.push(name);
 };
+
 
 
 xrx.view.components_ = {};

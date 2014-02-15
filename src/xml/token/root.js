@@ -6,7 +6,7 @@ goog.provide('xrx.token.Root');
 
 
 
-goog.require('xrx.token');
+goog.require('xrx.token.Abstract');
 
 
 
@@ -18,4 +18,4 @@ goog.require('xrx.token');
 xrx.token.Root = function() {
   goog.base(this, xrx.token.ROOT, new xrx.label(), 0, 0);
 };
-goog.inherits(xrx.token.Root, xrx.token);
+goog.inherits(xrx.token.Root, xrx.token.Abstract);
