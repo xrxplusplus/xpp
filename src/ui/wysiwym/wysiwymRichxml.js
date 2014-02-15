@@ -143,7 +143,7 @@ xrx.wysiwym.richxml.prototype.refresh = function() {
   }
 
   var visualXml = this.transformXml_(this.getNode().getXml());
-  this.codemirror_.setValue(visualXml);
+  this.setValue(visualXml, true);
 };
 
 

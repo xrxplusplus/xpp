@@ -20,7 +20,7 @@ goog.addDependency('../../../../src/ui/wysiwym/wysiwymCursor.js', ['xrx.wysiwym.
 goog.addDependency('../../../../src/ui/wysiwym/wysiwymInput.js', ['xrx.wysiwym.input'], ['xrx.wysiwym', 'xrx.wysiwym.textarea']);
 goog.addDependency('../../../../src/ui/wysiwym/wysiwymRichxml.js', ['xrx.wysiwym.richxml'], ['goog.dom', 'xrx.label', 'xrx.node', 'xrx.pilot', 'xrx.richxml.mode', 'xrx.stream', 'xrx.token', 'xrx.token.EndTag', 'xrx.token.StartTag', 'xrx.view', 'xrx.wysiwym', 'xrx.wysiwym.cursor']);
 goog.addDependency('../../../../src/ui/wysiwym/wysiwymTextarea.js', ['xrx.wysiwym.textarea'], ['goog.string', 'xrx.node', 'xrx.token.NotTag', 'xrx.wysiwym']);
-goog.addDependency('../../../../src/xml/index/index.js', ['xrx.index', 'xrx.index.Namespace'], ['goog.array', 'xrx.index.row', 'xrx.label', 'xrx.token', 'xrx.traverse']);
+goog.addDependency('../../../../src/xml/index/index.js', ['xrx.index', 'xrx.index.Namespace'], ['goog.array', 'xrx.index.row', 'xrx.label', 'xrx.token', 'xrx.token.Abstract', 'xrx.traverse']);
 goog.addDependency('../../../../src/xml/index/rebuild.js', ['xrx.rebuild'], ['goog.object', 'xrx.token', 'xrx.token.StartEmptyTag']);
 goog.addDependency('../../../../src/xml/index/row.js', ['xrx.index.row', 'xrx.index.row.format', 'xrx.index.row.mask'], ['goog.math.Long', 'xrx.index']);
 goog.addDependency('../../../../src/xml/label.js', ['xrx.label'], []);

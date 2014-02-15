@@ -13,6 +13,7 @@ goog.require('goog.array');
 goog.require('xrx.index.row');
 goog.require('xrx.label');
 goog.require('xrx.token');
+goog.require('xrx.token.Abstract');
 goog.require('xrx.traverse');
 
 
@@ -209,7 +210,7 @@ xrx.index.prototype.getLabel = function(key) {
  */
 xrx.index.prototype.getTag = function(row) {
   var r = this.rows_[row];
-  var tag = new xrx.token(r.getType(), this.getLabel(row),
+  var tag = new xrx.token.Abstract(r.getType(), this.getLabel(row),
       r.getOffset(), r.getLength1());
   
   return xrx.token.native(tag);

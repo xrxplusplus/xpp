@@ -5,6 +5,7 @@
 <script src='../lib/closure-library/closure/goog/base.js'></script>
 <link rel="stylesheet" type="text/css" 
     href="../lib/closure-library/closure/goog/testing/performancetable.css" />
+<script type="text/javascript" src="../lib/jssaxparser/SAXException.js"></script>
 <script type="text/javascript" src="../lib/jssaxparser/LocatorImpls.js"></script>
 <script type="text/javascript" src="../lib/jssaxparser/NamespaceSupport.js"></script>
 <script type="text/javascript" src="../lib/jssaxparser/sax.js"></script>
@@ -82,6 +83,7 @@ var doRequest = function(name, file, func, table) {
     xml = request.getResponseText();
     parse = new xrx.parse();
     xml = parse.normalize(xml);
+    console.log(xml.length);
 
     table.run(goog.partial(func, xml), name);
   
