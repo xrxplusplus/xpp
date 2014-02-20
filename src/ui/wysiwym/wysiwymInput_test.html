@@ -23,9 +23,12 @@
 <body>
 
 <div id="i1" class="xrx-instance">&lt;data&gt;test&lt;a/&gt;&lt;b&gt;OK!&lt;/b&gt;&lt;c/&gt;&lt;/data&gt;</div>
+<div id="i2" class="xrx-instance" data-xrx-src="../../../data/entity.xml.txt"></div>
 <div id="b1" class="xrx-bind" data-xrx-ref="xrx:instance('i1')//b"></div>
+<div id="b2" class="xrx-bind" data-xrx-ref="xrx:instance('i2')/a"></div>
 <div id="b3" class="xrx-bind" data-xrx-ref="xrx:instance('i1')/data/b"></div>
 <textarea id="in1" class="xrx-wysiwym-input" data-xrx-bind="b1"></textarea>
+<textarea id="in2" class="xrx-wysiwym-input" data-xrx-bind="b2"></textarea>
 <textarea id="in3" class="xrx-wysiwym-input" data-xrx-bind="b3"></textarea>
 
 <script type="text/javascript">
@@ -54,11 +57,15 @@ function test03sequentialModelUpdate() {
   assertEquals(expected2, xrx.model.getComponent('i1').xml());
 };
 
-function stest04synchronizeSameNodeInputs() {
+function test04synchronizeSameNodeInputs() {
   var in1 = xrx.view.getComponent('in1');
   var in3 = xrx.view.getComponent('in3');
 
   assertTrue(in1.getNode().isSameAs(in3.getNode()));
+};
+
+function test05entity() {
+  
 };
 
 </script>

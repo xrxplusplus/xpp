@@ -7,119 +7,19 @@
   <xsl:import href="xrx2html.xsl"/>
   <xsl:output method="html" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="filename" select="/xhtml:div/@data-filename"/>
-  <xsl:variable name="relativepath" select="/xhtml:div/@data-relativepath"/>
+  <xsl:variable name="relativepath_" select="/xhtml:div/@data-relativepath"/>
 
   <xsl:template match="/">
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <html>
       <head>
-        <meta charset="utf-8"/>
         <title>XRX++ - A JavaScript Library for Native and Visual in-Browser XML Editing.</title>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/SAXException.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/SAXScanner.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/XMLFilterImpls.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/ReaderWrapper.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/Reader.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/AttributesImpl.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/LocatorImpls.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/NamespaceSupport.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/sax.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/jssaxparser/DefaultHandlers.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/codemirror/lib/codemirror.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/codemirror/mode/javascript/javascript.js</xsl:text>
-          </xsl:attribute>
-        </script>
+        <xsl:call-template name="xrx.resources">
+          <xsl:with-param name="relativepath" select="$relativepath_"/>
+        </xsl:call-template>
         <link rel="stylesheet" type="text/css">
           <xsl:attribute name="href">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/codemirror/lib/codemirror.css</xsl:text>
-          </xsl:attribute>
-        </link>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>lib/closure-library/closure/goog/base.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          <xsl:attribute name="src">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>src/deps.js</xsl:text>
-          </xsl:attribute>
-        </script>
-        <script>
-          goog.require('goog.dom');
-          goog.require('goog.dom.forms');
-          goog.require('goog.userAgent.product');
-          goog.require('xrx');
-        </script>
-        <link rel="stylesheet" type="text/css">
-          <xsl:attribute name="href">
-            <xsl:value-of select="$relativepath"/>
-            <xsl:text>src/ui/wysiwym/default.css</xsl:text>
-          </xsl:attribute>
-        </link>
-        <link rel="stylesheet" type="text/css">
-          <xsl:attribute name="href">
-            <xsl:value-of select="$relativepath"/>
+            <xsl:value-of select="$relativepath_"/>
             <xsl:text>demo/demo.css</xsl:text>
           </xsl:attribute>
         </link>
@@ -129,10 +29,10 @@
           <h1>
             <a>
               <xsl:attribute name="href">
-                <xsl:value-of select="$relativepath"/>
+                <xsl:value-of select="$relativepath_"/>
                 <xsl:text>index.html</xsl:text>
               </xsl:attribute>
-              <xrx:text>XRX++</xrx:text>
+              <xsl:text>XRX++</xsl:text>
             </a>
           </h1>
           <i>A JavaScript Library for Native and Visual in-Browser XML Editing</i>
@@ -142,7 +42,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>demo/wysiwym-xml-authoring.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'wysiwym-xml-authoring.xml'">
@@ -154,7 +54,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>demo/data-binding.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'data-binding.xml'">
@@ -166,7 +66,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>demo/large-document-support.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'large-document-support.xml'">
@@ -181,7 +81,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>demo/getting-started.html</xsl:text>
                 </xsl:attribute>
                 <xsl:if test="$filename = 'getting-started.xml'">
@@ -196,7 +96,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:text>http://github.com/xrxplusplus</xsl:text>
+                  <xsl:text>http://github.com/xrxplusplus/xpp</xsl:text>
                 </xsl:attribute>
                 <xsl:text>Source</xsl:text>
               </a>
@@ -204,7 +104,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>doc/index.html</xsl:text>
                 </xsl:attribute>
                 <xsl:text>API Reference</xsl:text>
@@ -213,7 +113,7 @@
             <li>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:value-of select="$relativepath"/>
+                  <xsl:value-of select="$relativepath_"/>
                   <xsl:text>src/alltests.html</xsl:text>
                 </xsl:attribute>
                 <xsl:text>Unit Tests</xsl:text>

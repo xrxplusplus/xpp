@@ -1,6 +1,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xrx="http://www.monasterium.net/NS/xrx" xmlns="http://www.w3.org/1999/xhtml">
-  <xsl:strip-space elements="*"/>
+    xmlns:xrx="http://www.monasterium.net/NS/xrx"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns="http://www.w3.org/1999/xhtml">
+  <xsl:output method="html" encoding="UTF-8" indent="yes"/>
   
   <!-- ##################################################### -->
   <!-- #                                                   # -->
@@ -16,6 +18,128 @@
       <entity value="&apos;" escaped="&amp;apos;"/>
     </entities>
   </xsl:variable>
+
+  <xsl:template match="/">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="xhtml:head">
+    <head xmlns="http://www.w3.org/1999/xhtml">
+      <xsl:copy-of select="@*"/>
+      <xsl:call-template name="xrx.resources">
+        <xsl:with-param name="relativepath" select="'/xpp/'"/>
+      </xsl:call-template>
+      <xsl:copy-of select="./*"/>
+    </head>
+  </xsl:template>
+
+  <xsl:template match="xhtml:body">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+      <script type="text/javascript">
+        xrx.install();
+      </script>
+    </body>
+  </xsl:template>
+
+  <xsl:template name="xrx.resources">
+    <xsl:param name="relativepath"/>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/SAXException.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/SAXScanner.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/XMLFilterImpls.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/ReaderWrapper.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/Reader.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/AttributesImpl.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/LocatorImpls.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/NamespaceSupport.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/sax.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/jssaxparser/DefaultHandlers.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/codemirror/lib/codemirror.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <link rel="stylesheet" type="text/css">
+      <xsl:attribute name="href">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/codemirror/lib/codemirror.css</xsl:text>
+      </xsl:attribute>
+    </link>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>lib/closure-library/closure/goog/base.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>src/deps.js</xsl:text>
+      </xsl:attribute>
+    </script>
+    <script>
+      goog.require('xrx');
+    </script>
+    <link rel="stylesheet" type="text/css">
+      <xsl:attribute name="href">
+        <xsl:value-of select="$relativepath"/>
+        <xsl:text>src/ui/wysiwym/default.css</xsl:text>
+      </xsl:attribute>
+    </link>
+  </xsl:template>
 
   <xsl:template match="xrx:instance">
     <div class="xrx-instance">
