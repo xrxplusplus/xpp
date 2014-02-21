@@ -4,7 +4,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:demo="http://www.monasterium.net/NS/demo">
-  <xsl:import href="xrx2html.xsl"/>
+  <xsl:import href="../src/xrx2html.xsl"/>
   <xsl:output method="html" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="filename" select="/xhtml:div/@data-filename"/>
   <xsl:variable name="relativepath_" select="/xhtml:div/@data-relativepath"/>
@@ -32,7 +32,12 @@
                 <xsl:value-of select="$relativepath_"/>
                 <xsl:text>index.html</xsl:text>
               </xsl:attribute>
-              <xsl:text>XRX++</xsl:text>
+              <img border="0" alt="XRX++">
+                <xsl:attribute name="src">
+                  <xsl:value-of select="$relativepath_"/>
+                  <xsl:text>demo/icon-xrxplusplus-128.gif</xsl:text>
+                </xsl:attribute>
+              </img>
             </a>
           </h1>
           <i>A JavaScript Library for Native and Visual in-Browser XML Editing</i>

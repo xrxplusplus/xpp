@@ -49,7 +49,7 @@
 
 
   <demo:heading>Hello XRX++ 2! - A Basic HTML5 Document.</demo:heading>
-  <demo:description>An HTML5 example document, which can be directly presented in a browser.</demo:description>
+  <demo:description>An HTML5 example document that can be directly presented in a browser.</demo:description>
   <demo:source rows="48">
 &lt;!DOCTYPE html&gt;
 &lt;html xmlns:xrx="http://www.monasterium.net/NS/xrx"
