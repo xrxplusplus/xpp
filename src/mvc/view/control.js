@@ -81,7 +81,7 @@ xrx.control.prototype.getNode = function(num) {
 
     return this.getNodeBind(n);
 
-  } else if (this.getNodeRef()) {
+  } else if (this.getRefExpression()) {
 
     return this.getNodeRef(n);
 

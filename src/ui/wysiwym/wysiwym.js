@@ -94,7 +94,7 @@ xrx.wysiwym.prototype.getValue = function() {
 xrx.wysiwym.prototype.setValue = function(string, opt_internal) {
   this.internalUpdate = opt_internal || false;
   this.codemirror_.setValue(string);
-  //this.codemirror_.refresh();
+  this.codemirror_.refresh();
   this.internalUpdate = false;
 };
 

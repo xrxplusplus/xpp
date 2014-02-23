@@ -16,9 +16,6 @@ goog.require('xrx.control');
  * @constructor
  */
 xrx.view = function(element) {
-
-
-
   goog.base(this, element);
 
 

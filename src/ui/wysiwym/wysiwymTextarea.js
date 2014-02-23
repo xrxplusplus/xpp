@@ -126,7 +126,7 @@ xrx.wysiwym.textarea.prototype.eventBeforeChange = function(cm, change) {
 xrx.wysiwym.textarea.prototype.eventChange = function(cm, change) {
 
   if (this.internalUpdate === false) {
-    var node = xrx.model.cursor.getNode(0);
+    var node = this.getNode();
     var label = node.getLabel().clone();
     label.push(0);
     var pilot = node.getInstance().getPilot();

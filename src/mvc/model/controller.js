@@ -105,17 +105,20 @@ xrx.controller.removeStartEndTag = function(control, token1, token2) {
  */
 xrx.controller.refresh = function(control) {
   var node = control.getNode();
-  var offset = node.getToken().offset();
 
   for (var c in xrx.view.getComponents()) {
     var contr = xrx.view.getComponent(c);
-    if (contr.getNode() && contr.getNode().isSameAs(node) && 
-        c != control.getId()) {
-      contr.refresh()
-    } else if (contr.getNode() && control.getNode().getLabel().isDescendantOf(
-        contr.getNode().getLabel()) && c != control.getId() ) {
-      contr.refresh();
-    } else {}
+    var nIter = contr.getNode();
+    if (nIter && node.getInstance() === nIter.getInstance()) {
+
+      if (nIter.isSameAs(node) && c != control.getId()) {
+        contr.refresh()
+      } else if (node.getLabel().isDescendantOf(nIter.getLabel())
+          && c != control.getId()) {
+        contr.refresh();
+      } else {}
+
+    }
   }
 };
 
