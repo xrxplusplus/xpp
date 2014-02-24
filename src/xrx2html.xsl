@@ -148,6 +148,8 @@
     </body>
   </xsl:template>
 
+
+
   <!-- ##################################################### -->
   <!-- #                                                   # -->
   <!-- # <xrx:input/>                                      # -->
@@ -158,6 +160,8 @@
       <xsl:call-template name="copy-attributes" select="./self::*"/>
     </textarea>
   </xsl:template>
+
+
 
   <!-- ##################################################### -->
   <!-- #                                                   # -->
@@ -170,6 +174,8 @@
     </span>
   </xsl:template>
 
+
+
   <!-- ##################################################### -->
   <!-- #                                                   # -->
   <!-- # <xrx:textarea/>                                   # -->
@@ -177,6 +183,19 @@
   <!-- ##################################################### -->
   <xsl:template match="xrx:textarea">
     <textarea class="xrx-wysiwym-textarea">
+      <xsl:call-template name="copy-attributes" select="./self::*"/>
+    </textarea>
+  </xsl:template>
+
+
+
+  <!-- ##################################################### -->
+  <!-- #                                                   # -->
+  <!-- # <xrx:textarea/>                                   # -->
+  <!-- #                                                   # -->
+  <!-- ##################################################### -->
+  <xsl:template match="xrx:wysiwym">
+    <textarea class="xrx-wysiwym-richxml">
       <xsl:call-template name="copy-attributes" select="./self::*"/>
     </textarea>
   </xsl:template>

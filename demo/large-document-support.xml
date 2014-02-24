@@ -11,12 +11,13 @@
     <xrx:bind id="b1" ref="xrx:instance('i')"/>
     <xrx:bind id="b2" ref="xrx:instance('i')/PLAY/TITLE"/>
     <xrx:bind id="b3" ref="xrx:instance('i')/PLAY/PERSONAE//PERSONA"/>
+    <xrx:bind id="b4" ref="xrx:instance('i')/PLAY/ACT[1]/SCENE/SPEECH/SPEAKER"/>
     <h4>Title:</h4>
-    <div style="position:relative;float:none;width:100px;"><xrx:input bind="b2"/></div>
+    <div style="position:relative;float:none;width:50%;"><xrx:input bind="b2"/></div>
     <br/>
     <h4>Persons:</h4>
-    <xrx:repeat id="r2" bind="b3">
-      <div style="position:relative;float:none;width:100px;"><xrx:input ref="./self::*"/></div>
+    <xrx:repeat id="r1" bind="b3">
+      <div style="position:relative;float:none;width:50%;"><xrx:input ref="./self::*"/></div>
     </xrx:repeat>
   </div>
 </div>

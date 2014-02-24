@@ -7,6 +7,7 @@ goog.provide('xrx.parse');
 
 
 
+goog.require('goog.string');
 goog.require('xrx.serialize');
 
 
@@ -58,7 +59,7 @@ xrx.parse.prototype.normalize = function(xml) {
 
     completeStartTag();
 
-    normalized += ch;
+    normalized += goog.string.trim(ch.split('\n').join(''));
     idx = -2;
 
     lastToken = xrx.token.NOT_TAG;

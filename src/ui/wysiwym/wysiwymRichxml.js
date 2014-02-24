@@ -123,7 +123,8 @@ xrx.wysiwym.richxml.prototype.transformXml_ = function(xml) {
  *
  */
 xrx.wysiwym.richxml.prototype.options = {
-  'mode': 'richxml'
+  'mode': 'richxml',
+  'lineWrapping': true
 };
 
 
@@ -190,12 +191,12 @@ xrx.wysiwym.richxml.prototype.getCorrespondingPosition = function(token) {
       } 
     }
   } else if(token.string === placeholder.endTag) {
-
+    console.log('test');
     for(var i = index; i >= 0; i--) {
       ch = text[i];
-      if(ch == placeholder.endTag) stack += 1;
-      if(ch == placeholder.startTag) stack -= 1;
-      if(stack == 0) {
+      if(ch === placeholder.startTag) stack += 1;
+      if(ch === placeholder.endTag) stack -= 1;
+      if(stack === 0) {
         index = i + 1;
         break;
       } 
@@ -447,9 +448,10 @@ xrx.wysiwym.richxml.prototype.doSomethingRemoved = function(change) {
 
         this.internalUpdate = true;
         cm.replaceRange('', from, to);
+        cm.replaceRange('', change.from, change.to);
         this.internalUpdate = false;
 
-        return;
+        change.cancel();
       }
       // end tag?
       else {
@@ -461,11 +463,12 @@ xrx.wysiwym.richxml.prototype.doSomethingRemoved = function(change) {
         xrx.controller.removeStartEndTag(this, startTag, tag);
 
         this.internalUpdate = true;
+        cm.replaceRange('', change.from, change.to);
         cm.replaceRange('', from, to);
         cm.setCursor({line: change.from.line, ch: change.from.ch - removed.length});
         this.internalUpdate = false;
 
-        return;
+        change.cancel();
       }
     }
   }
