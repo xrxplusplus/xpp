@@ -235,7 +235,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/xrx.stream.html">xrx.stream</a></li>
 	
-	<li><a href="../symbols/xrx.token.html">xrx.token</a></li>
+	<li><a href="../symbols/xrx.token.Abstract.html">xrx.token.Abstract</a></li>
 	
 	<li><a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a></li>
 	
@@ -354,7 +354,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/xrx.pilot.html#constructor">xrx.pilot</a></b>(xml)
 							</div>
-							<div class="description">Constructs a new pilot.</div>
+							<div class="description">Constructs a new XML pilot.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -362,34 +362,6 @@ ul.inheritsList
 			
 
 <!-- ============================== properties summary ===================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class xrx.pilot.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/xrx.pilot.html#traverse_">traverse_</a></b>
-								</div>
-								<div class="description">Initialize XML traversing.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
 			
 
 <!-- ============================== methods summary ======================== -->
@@ -409,9 +381,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#attribute">attribute</a></b>(context, target, opt_update)
+								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#attribute">attribute</a></b>(context, target)
 								</div>
-								<div class="description">Get the location and optionally update a xrx.token.Attribute.</div>
+								<div class="description">Get the location of a attribute token.</div>
 							</td>
 						</tr>
 					
@@ -427,9 +399,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#attrName">attrName</a></b>(context, target, opt_update)
+								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#attrName">attrName</a></b>(context, target)
 								</div>
-								<div class="description">Get the location and optionally update a xrx.token.AttrName.</div>
+								<div class="description">Get the location of a attribute name token.</div>
 							</td>
 						</tr>
 					
@@ -445,9 +417,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#backward">backward</a></b>(target, target)
+								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#backward">backward</a></b>(context, target)
 								</div>
-								<div class="description">Backward traversing.</div>
+								<div class="description">Backward piloting.</div>
 							</td>
 						</tr>
 					
@@ -484,7 +456,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#forward">forward</a></b>(context, target)
 								</div>
-								<div class="description">Forward traversing.</div>
+								<div class="description">Forward piloting.</div>
 							</td>
 						</tr>
 					
@@ -527,9 +499,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#tagName">tagName</a></b>(context, target, opt_update)
+								<div class="fixedFont"><b><a href="../symbols/xrx.pilot.html#tagName">tagName</a></b>(context, target)
 								</div>
-								<div class="description">Get the location and optionally update a xrx.token.TagName.</div>
+								<div class="description">Get the location of a tag-name token.</div>
 							</td>
 						</tr>
 					
@@ -572,8 +544,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Constructs a new pilot. A pilot is able to traverse a labeled 
-XML instance in forward and backward direction.
+					Constructs a new XML pilot.
 					
 				</div>
 				
@@ -604,33 +575,6 @@ XML instance in forward and backward direction.
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="traverse_"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>traverse_</b>
-					
-					</div>
-					<div class="description">
-						Initialize XML traversing.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -641,12 +585,12 @@ XML instance in forward and backward direction.
 					<a name="attribute"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{!<a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a>}</span>
-					<b>attribute</b>(context, target, opt_update)
+					<span class="light">{<a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a>}</span>
+					<b>attribute</b>(context, target)
 					
 					</div>
 					<div class="description">
-						Get the location and optionally update a xrx.token.Attribute.
+						Get the location of a attribute token.
 						
 						
 					</div>
@@ -658,22 +602,19 @@ XML instance in forward and backward direction.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{?}</span> <b>context</b>
+									<span class="light fixedFont">{(!<a href="../symbols/xrx.token.StartTag.html">xrx.token.StartTag</a>|!xrx.token.EndTag|!xrx.token.EmptyTag
+|!xrx.token.StartEmptyTag)}</span> <b>context</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The context token at which to 
+start piloting.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{!<a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a>}</span> <b>target</b>
 									
 								</dt>
-								<dd>The attribute token.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{?string}</span> <b>opt_update</b>
-									
-								</dt>
-								<dd>The new attribute.</dd>
+								<dd>The attribute token without
+offset and length information.</dd>
 							
 							</dl>
 						
@@ -684,7 +625,8 @@ XML instance in forward and backward direction.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a>}</span> </dd>
+								<dd><span class="light fixedFont">{<a href="../symbols/xrx.token.Attribute.html">xrx.token.Attribute</a>}</span> The attribute token with offset and
+length information.</dd>
 							
 							</dl>
 						
@@ -751,12 +693,12 @@ XML instance in forward and backward direction.
 					<a name="attrName"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{!<a href="../symbols/xrx.token.AttrName.html">xrx.token.AttrName</a>}</span>
-					<b>attrName</b>(context, target, opt_update)
+					<span class="light">{<a href="../symbols/xrx.token.AttrName.html">xrx.token.AttrName</a>}</span>
+					<b>attrName</b>(context, target)
 					
 					</div>
 					<div class="description">
-						Get the location and optionally update a xrx.token.AttrName.
+						Get the location of a attribute name token.
 						
 						
 					</div>
@@ -768,22 +710,19 @@ XML instance in forward and backward direction.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{?}</span> <b>context</b>
+									<span class="light fixedFont">{(!<a href="../symbols/xrx.token.StartTag.html">xrx.token.StartTag</a>|!xrx.token.EndTag|!xrx.token.EmptyTag
+|!xrx.token.StartEmptyTag)}</span> <b>context</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The context token at which to 
+start piloting.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{!<a href="../symbols/xrx.token.AttrName.html">xrx.token.AttrName</a>}</span> <b>target</b>
 									
 								</dt>
-								<dd>The attribute-name token.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{?string}</span> <b>opt_update</b>
-									
-								</dt>
-								<dd>The new attribute-name.</dd>
+								<dd>The attribute-name token without
+offset and length information.</dd>
 							
 							</dl>
 						
@@ -794,7 +733,8 @@ XML instance in forward and backward direction.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.token.AttrName.html">xrx.token.AttrName</a>}</span> </dd>
+								<dd><span class="light fixedFont">{<a href="../symbols/xrx.token.AttrName.html">xrx.token.AttrName</a>}</span> the attribute-name token with offset and
+length information.</dd>
 							
 							</dl>
 						
@@ -862,11 +802,11 @@ XML instance in forward and backward direction.
 					<div class="fixedFont">
 					
 					
-					<b>backward</b>(target, target)
+					<b>backward</b>(context, target)
 					
 					</div>
 					<div class="description">
-						Backward traversing.
+						Backward piloting.
 						
 						
 					</div>
@@ -878,16 +818,16 @@ XML instance in forward and backward direction.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{?}</span> <b>target</b>
+									<b>context</b>
 									
 								</dt>
-								<dd>The target token.</dd>
+								<dd>The context token.</dd>
 							
 								<dt>
 									<b>target</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The target token.</dd>
 							
 							</dl>
 						
@@ -1037,7 +977,7 @@ XML instance in forward and backward direction.
 					
 					</div>
 					<div class="description">
-						Forward traversing.
+						Forward piloting.
 						
 						
 					</div>
@@ -1268,12 +1208,12 @@ XML instance in forward and backward direction.
 					<a name="tagName"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{!<a href="../symbols/xrx.token.TagName.html">xrx.token.TagName</a>}</span>
-					<b>tagName</b>(context, target, opt_update)
+					<span class="light">{<a href="../symbols/xrx.token.TagName.html">xrx.token.TagName</a>}</span>
+					<b>tagName</b>(context, target)
 					
 					</div>
 					<div class="description">
-						Get the location and optionally update a xrx.token.TagName.
+						Get the location of a tag-name token.
 						
 						
 					</div>
@@ -1285,10 +1225,12 @@ XML instance in forward and backward direction.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{?}</span> <b>context</b>
+									<span class="light fixedFont">{(!<a href="../symbols/xrx.token.StartTag.html">xrx.token.StartTag</a>|!xrx.token.EndTag|!xrx.token.EmptyTag
+|!xrx.token.StartEmptyTag)}</span> <b>context</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The context token at which to 
+start piloting.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{(!<a href="../symbols/xrx.token.StartTag.html">xrx.token.StartTag</a>|!xrx.token.EndTag|!xrx.token.EmptyTag
@@ -1297,12 +1239,6 @@ XML instance in forward and backward direction.
 								</dt>
 								<dd>The tag to which 
 the tag-name belongs.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{?string}</span> <b>opt_update</b>
-									
-								</dt>
-								<dd>The new tag-name.</dd>
 							
 							</dl>
 						
@@ -1313,7 +1249,8 @@ the tag-name belongs.</dd>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{!<a href="../symbols/xrx.token.TagName.html">xrx.token.TagName</a>}</span> </dd>
+								<dd><span class="light fixedFont">{<a href="../symbols/xrx.token.TagName.html">xrx.token.TagName</a>}</span> The tag-name token with offset and length
+information.</dd>
 							
 							</dl>
 						
@@ -1425,7 +1362,7 @@ the tag-name belongs.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 12 2014 21:06:08 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 24 2014 11:03:19 GMT+0100 (MEZ)
 		</div>
 	</body>
 </html>
